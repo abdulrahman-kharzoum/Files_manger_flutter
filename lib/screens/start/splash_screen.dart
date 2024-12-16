@@ -4,17 +4,14 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:files_manager/cubits/splash/splash_cubit.dart';
 import 'package:files_manager/theme/color.dart';
-
 import '../../core/animation/dialogs/dialogs.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SplashCubit>();
     final mediaQuery = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: AppColors.dark,
       body: BlocConsumer<SplashCubit, SplashState>(

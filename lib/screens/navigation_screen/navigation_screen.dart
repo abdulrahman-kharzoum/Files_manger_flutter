@@ -57,7 +57,7 @@ class NavigationScreen extends StatelessWidget {
                       NavigationDestination(
                         icon: Icon(
                           Icons.home_rounded,
-                          color: Colors.white,
+                          color: Theme.of(context).iconTheme.color,
                           size: mediaQuery.width / 15,
                         ),
                         label: S.of(context).home,
@@ -65,7 +65,7 @@ class NavigationScreen extends StatelessWidget {
                       NavigationDestination(
                         icon: Icon(
                           Icons.notifications,
-                          color: Colors.white,
+                          color: Theme.of(context).iconTheme.color,
                           size: mediaQuery.width / 15,
                         ),
                         label: S.of(context).notifications,
@@ -81,7 +81,7 @@ class NavigationScreen extends StatelessWidget {
                       NavigationDestination(
                         icon: Icon(
                           Icons.settings,
-                          color: Colors.white,
+                          color: Theme.of(context).iconTheme.color,
                           size: mediaQuery.width / 15,
                         ),
                         label: S.of(context).settings,

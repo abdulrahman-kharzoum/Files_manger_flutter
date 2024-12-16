@@ -99,6 +99,7 @@ dependencies:
   googleapis_auth: ^1.6.0
   share_plus: ^10.0.2
   flutter_launcher_icons: ^0.14.1
+  pointycastle: ^3.9.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

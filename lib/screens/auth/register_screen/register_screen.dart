@@ -104,30 +104,22 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: mediaQuery.height / 50),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: mediaQuery.width / 2.2,
-                              child: CustomFormTextField(
-                                keyboardType: TextInputType.text,
-                                controller: cubit.firstNameController,
-                                colorIcon: Colors.grey,
-                                hintText: '',
-                                nameLabel: S.of(context).first_name,
-                              ),
-                            ),
-                            SizedBox(
-                              width: mediaQuery.width / 2.2,
-                              child: CustomFormTextField(
-                                keyboardType: TextInputType.text,
-                                controller: cubit.lastNameController,
-                                colorIcon: Colors.grey,
-                                hintText: '',
-                                nameLabel: S.of(context).last_name,
-                              ),
-                            ),
-                          ],
+                        CustomFormTextField(
+                          keyboardType: TextInputType.text,
+                          controller: cubit.nameController,
+                          colorIcon: Colors.grey,
+                          hintText: '',
+                          nameLabel: S.of(context).first_name,
+                          validator: validator.validateName,
+                        ),
+                        SizedBox(height: mediaQuery.height / 50),
+                        CustomFormTextField(
+                          keyboardType: TextInputType.text,
+                          controller: cubit.userNameController,
+                          colorIcon: Colors.grey,
+                          hintText: '',
+                          nameLabel: S.of(context).last_name,
+                            validator:validator.validateUsername,
                         ),
                         SizedBox(height: mediaQuery.height / 50),
                         CustomFormTextField(
@@ -138,13 +130,7 @@ class RegisterScreen extends StatelessWidget {
                           nameLabel: S.of(context).email,
                           validator: validator.validateEmail,
                         ),
-                        PhonFormFieldWidget(
-                          initialCountryCode: '',
-                          controller: cubit.whatsappNumberController,
-                          onCountryCodeChanged: (value) {
-                            cubit.countryCode = value;
-                          },
-                        ),
+
                         // SizedBox(height: mediaQuery.height / 50),
                         Column(
                           mainAxisSize: MainAxisSize.min,
@@ -169,25 +155,25 @@ class RegisterScreen extends StatelessWidget {
                             //   },
                             // ),
                             // SizedBox(height: mediaQuery.height / 50),
-                            Text(S.of(context).select_language,
-                                style: const TextStyle(color: Colors.white)),
-                            DropdownButtonFormField<String>(
-                              decoration: decoration,
-                              value: cubit.selectedLanguage,
-                              hint: Text(S.of(context).language),
-                              items: cubit.languages.map((Language language) {
-                                return DropdownMenuItem<String>(
-                                  value: language.id,
-                                  child: Text(
-                                    language.name,
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                cubit.setSelectedLanguage(newValue);
-                              },
-                            ),
+                            // Text(S.of(context).select_language,
+                            //     style: const TextStyle(color: Colors.white)),
+                            // DropdownButtonFormField<String>(
+                            //   decoration: decoration,
+                            //   value: cubit.selectedLanguage,
+                            //   hint: Text(S.of(context).language),
+                            //   items: cubit.languages.map((Language language) {
+                            //     return DropdownMenuItem<String>(
+                            //       value: language.id,
+                            //       child: Text(
+                            //         language.name,
+                            //         style: const TextStyle(color: Colors.black),
+                            //       ),
+                            //     );
+                            //   }).toList(),
+                            //   onChanged: (String? newValue) {
+                            //     cubit.setSelectedLanguage(newValue);
+                            //   },
+                            // ),
                             // SizedBox(height: mediaQuery.height / 50),
                             // Text(S.of(context).select_gender,
                             //     style: const TextStyle(color: Colors.white)),
@@ -276,9 +262,8 @@ class RegisterScreen extends StatelessWidget {
                           mediaQuery: mediaQuery,
                           title: S.of(context).sign_up,
                           onPressed: () {
-                            // print('Country ${cubit.selectedCountry}');
-                            // print('Gender ${cubit.selectedGender}');
-                            print('Language ${cubit.selectedLanguage}');
+
+                            // print('Language ${cubit.selectedLanguage}');
                             if (cubit.formKey.currentState!.validate()) {
                               if (cubit.reEnterPasswordController.text !=
                                   cubit.passwordController.text) {

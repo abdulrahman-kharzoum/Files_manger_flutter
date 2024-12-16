@@ -297,7 +297,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "field_empty": MessageLookupByLibrary.simpleMessage("حقل البحث فارغ"),
         "filter_by": MessageLookupByLibrary.simpleMessage("تصفية حسب:"),
         "finish": MessageLookupByLibrary.simpleMessage("إنهاء"),
-        "first_name": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
+        "first_name": MessageLookupByLibrary.simpleMessage("الاسم "),
         "flat": MessageLookupByLibrary.simpleMessage("شقة"),
         "flat_number": MessageLookupByLibrary.simpleMessage("رقم الشقة"),
         "flights": MessageLookupByLibrary.simpleMessage("الرحلات"),
@@ -365,7 +365,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "join_with_code": MessageLookupByLibrary.simpleMessage("الانضمام برمز"),
         "language": MessageLookupByLibrary.simpleMessage("اللغة"),
         "last_modified": MessageLookupByLibrary.simpleMessage("آخر تعديل"),
-        "last_name": MessageLookupByLibrary.simpleMessage("الاسم الأخير"),
+        "last_name": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
         "leave_the_board":
             MessageLookupByLibrary.simpleMessage("مغادرة اللوحة"),
         "leaving": MessageLookupByLibrary.simpleMessage("جاري المغادرة"),
@@ -397,6 +397,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "my_reservations": MessageLookupByLibrary.simpleMessage("حجوزاتي"),
         "n_a": MessageLookupByLibrary.simpleMessage("لا يوجد"),
         "name": MessageLookupByLibrary.simpleMessage("الاسم"),
+        "name_length": MessageLookupByLibrary.simpleMessage(
+            "يجب أن يكون الاسم مكونًا من 3 أحرف على الأقل"),
         "nationality": MessageLookupByLibrary.simpleMessage("الجنسية"),
         "new_in": MessageLookupByLibrary.simpleMessage("جديد في"),
         "new_task_is_being_added":
@@ -482,7 +484,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "overview": MessageLookupByLibrary.simpleMessage("نظرة عامة"),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
         "password_length": MessageLookupByLibrary.simpleMessage(
-            "كلمة المرور يجب أن لا تقل عن 6 محارف"),
+            "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل وتتضمن حرفًا واحدًا على الأقل ورقمًا واحدًا وحرفًا خاصًا واحدًا"),
         "password_message_success": MessageLookupByLibrary.simpleMessage(
             "لقد قمت بإعادة تعيين كلمة المرور الخاصة بك بنجاح. الرجاء استخدام كلمة المرور الجديدة عند تسجيل الدخول."),
         "password_must_match":
@@ -520,6 +522,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "الرجاء إدخال كلمة واحدة على الأقل"),
         "please_enter_location":
             MessageLookupByLibrary.simpleMessage("رجاء ادخل الموقع الخاص بك"),
+        "please_enter_name":
+            MessageLookupByLibrary.simpleMessage("الرجاء إدخال الاسم"),
         "please_enter_password":
             MessageLookupByLibrary.simpleMessage("رجاء ادخل كلمة المرور"),
         "please_enter_phone": MessageLookupByLibrary.simpleMessage(
@@ -528,6 +532,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "الرجاء إدخال كلمة المرور مرة أخرى"),
         "please_enter_user_name":
             MessageLookupByLibrary.simpleMessage("رجاء ادخل الاسم الخاص بك"),
+        "please_enter_username":
+            MessageLookupByLibrary.simpleMessage("الرجاء إدخال اسم المستخدم"),
         "please_enter_your_email_so_you_can_continue_resetting_your_password":
             MessageLookupByLibrary.simpleMessage(
                 "الرجاء إدخال بريدك الإلكتروني حتى تتمكن من مواصلة إعادة تعيين كلمة المرور الخاصة بك"),
@@ -841,6 +847,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "upload_trade_license":
             MessageLookupByLibrary.simpleMessage("تحميل رخصة التجارة"),
         "user": MessageLookupByLibrary.simpleMessage("المستخدم"),
+        "userName_length": MessageLookupByLibrary.simpleMessage(
+            "يجب أن يكون اسم المستخدم مكونًا من 5 أحرف على الأقل"),
         "user_desc": MessageLookupByLibrary.simpleMessage(
             "يستطيع الإضافة و الحذف و التعديل داخل التطبيق, لكن لن يكون بإمكانه إضافة تطبيقات أو التحكم بالإعدادات"),
         "username": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),

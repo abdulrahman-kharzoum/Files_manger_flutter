@@ -307,7 +307,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Search field is empty"),
         "filter_by": MessageLookupByLibrary.simpleMessage("Filter by:"),
         "finish": MessageLookupByLibrary.simpleMessage("Finish"),
-        "first_name": MessageLookupByLibrary.simpleMessage("First name"),
+        "first_name": MessageLookupByLibrary.simpleMessage("Name"),
         "flat": MessageLookupByLibrary.simpleMessage("Flat"),
         "flat_number": MessageLookupByLibrary.simpleMessage("Flat Number"),
         "flights": MessageLookupByLibrary.simpleMessage("Flights"),
@@ -377,9 +377,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Join with Code"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "last_modified": MessageLookupByLibrary.simpleMessage("Last modified"),
-        "last_name": MessageLookupByLibrary.simpleMessage("Last name"),
+        "last_name": MessageLookupByLibrary.simpleMessage("User Name"),
         "leave_the_board":
-            MessageLookupByLibrary.simpleMessage("Leave the board"),
+            MessageLookupByLibrary.simpleMessage("Leave the group"),
         "leaving": MessageLookupByLibrary.simpleMessage("Leaving"),
         "lecturer": MessageLookupByLibrary.simpleMessage("Lecturer"),
         "left_in_stock_order_now":
@@ -404,13 +404,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Move the board"),
         "my_address": MessageLookupByLibrary.simpleMessage("Addresses"),
         "my_agenda": MessageLookupByLibrary.simpleMessage("My Agenda"),
-        "my_boards": MessageLookupByLibrary.simpleMessage("My Boards"),
+        "my_boards": MessageLookupByLibrary.simpleMessage("My Groups"),
         "my_booking": MessageLookupByLibrary.simpleMessage("My Booking"),
         "my_order": MessageLookupByLibrary.simpleMessage("My Order"),
         "my_reservations":
             MessageLookupByLibrary.simpleMessage("My Reservations"),
         "n_a": MessageLookupByLibrary.simpleMessage("N/A"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "name_length": MessageLookupByLibrary.simpleMessage(
+            "Name must be at least 3 characters long"),
         "nationality": MessageLookupByLibrary.simpleMessage("Nationality"),
         "new_in": MessageLookupByLibrary.simpleMessage("New In"),
         "new_task_is_being_added":
@@ -498,7 +500,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "overview": MessageLookupByLibrary.simpleMessage("Overview"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "password_length": MessageLookupByLibrary.simpleMessage(
-            "Password must be at least 6 characters"),
+            "Password must be at least 8 characters long and include at least one letter, one number, and one special character"),
         "password_message_success": MessageLookupByLibrary.simpleMessage(
             "You have successfully reset your password. Please use your new password when logging in."),
         "password_must_match":
@@ -541,6 +543,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please enter at least one word."),
         "please_enter_location":
             MessageLookupByLibrary.simpleMessage("Please enter your location"),
+        "please_enter_name":
+            MessageLookupByLibrary.simpleMessage("please enter name"),
         "please_enter_password":
             MessageLookupByLibrary.simpleMessage("Please Enter Your password"),
         "please_enter_phone": MessageLookupByLibrary.simpleMessage(
@@ -549,6 +553,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please enter the password again"),
         "please_enter_user_name":
             MessageLookupByLibrary.simpleMessage("Please enter your name"),
+        "please_enter_username":
+            MessageLookupByLibrary.simpleMessage("please enter username"),
         "please_enter_your_email_so_you_can_continue_resetting_your_password":
             MessageLookupByLibrary.simpleMessage(
                 "Please enter your email so you can continue resetting your password"),
@@ -878,6 +884,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "upload_trade_license":
             MessageLookupByLibrary.simpleMessage("Upload trade license"),
         "user": MessageLookupByLibrary.simpleMessage("User"),
+        "userName_length": MessageLookupByLibrary.simpleMessage(
+            "UserName must be at least 5 characters long"),
         "user_desc": MessageLookupByLibrary.simpleMessage(
             "He can add, delete and edit within the app, but he will not be able to add apps or control settings."),
         "username": MessageLookupByLibrary.simpleMessage("Username"),

@@ -11,6 +11,7 @@ import 'package:files_manager/widgets/custom_text_fields/custom_text_field.dart'
 import 'package:files_manager/widgets/helper/no_data.dart';
 
 import '../../core/functions/statics.dart';
+import '../../cubits/theme_cubit/app_theme_cubit.dart';
 
 class BoardUsersSection extends StatelessWidget {
   const BoardUsersSection(
@@ -22,7 +23,10 @@ class BoardUsersSection extends StatelessWidget {
     return BlocConsumer<BoardSettingsCubit, BoardSettingsState>(
       listener: (context, state) {},
       builder: (context, state) {
-        return Container(
+        return BlocBuilder<AppThemeCubit, AppThemeState>(
+  builder: (context, state) {
+    final isDarkTheme = state is AppThemeDark;
+    return Container(
           padding: EdgeInsets.symmetric(
             horizontal: mediaQuery.width / 30,
             vertical: mediaQuery.height / 90,
@@ -37,13 +41,13 @@ class BoardUsersSection extends StatelessWidget {
                       fillColor: Colors.transparent,
                       controller: boardSettingsCubit.searchController,
                       borderRadius: 15,
-                      borderColor: Colors.white10,
+                      borderColor: Theme.of(context).textTheme.labelSmall!.color!,
                       hintText: S.of(context).search_about_user,
                       nameLabel: '',
                       onChanged: (p0) async {
                         await boardSettingsCubit.search();
                       },
-                      styleInput: const TextStyle(color: Colors.white),
+                      styleInput:  TextStyle(color: Theme.of(context).textTheme.bodySmall!.color!),
                     ),
                   ),
                   IconButton(
@@ -65,7 +69,7 @@ class BoardUsersSection extends StatelessWidget {
                     },
                     icon: const Icon(
                       Icons.add_circle,
-                      color: Colors.white,
+
                     ),
                   ),
                 ],
@@ -90,14 +94,14 @@ class BoardUsersSection extends StatelessWidget {
                                             .searchMembers[index].image),
                                     title: Text(
                                       '${boardSettingsCubit.searchMembers[index].invitedEmail}',
-                                      style: const TextStyle(
-                                          color: Colors.white,
+                                      style:  TextStyle(
+                                          color: Theme.of(context).textTheme.bodySmall!.color,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     subtitle: Text(
                                       '${S.of(context).status}: ${boardSettingsCubit.searchMembers[index].status} ',
-                                      style: const TextStyle(
-                                          color: Colors.white54,
+                                      style:  TextStyle(
+                                          color:isDarkTheme? Colors.white54:Colors.black54,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   )
@@ -113,14 +117,14 @@ class BoardUsersSection extends StatelessWidget {
                                     ),
                                     title: Text(
                                       '${boardSettingsCubit.searchMembers[index].firstName} ${boardSettingsCubit.searchMembers[index].lastName}',
-                                      style: const TextStyle(
-                                          color: Colors.white,
+                                      style:  TextStyle(
+                                          color: Theme.of(context).textTheme.bodySmall!.color,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     subtitle: Text(
                                       '${boardSettingsCubit.searchMembers[index].role} ',
-                                      style: const TextStyle(
-                                          color: Colors.white54,
+                                      style:  TextStyle(
+                                          color:isDarkTheme? Colors.white54:Colors.black54,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     trailing: PopupMenuButton(
@@ -182,6 +186,8 @@ class BoardUsersSection extends StatelessWidget {
             ],
           ),
         );
+  },
+);
       },
     );
   }

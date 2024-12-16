@@ -14,8 +14,8 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   bool showPassword = false;
   final emailController = TextEditingController();
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
+  final nameController = TextEditingController();
+  final userNameController = TextEditingController();
   final reEnterPasswordController = TextEditingController();
   final passwordController = TextEditingController();
   final whatsappNumberController = TextEditingController();
@@ -55,39 +55,45 @@ class RegisterCubit extends Cubit<RegisterState> {
       print('step3');
 
       FormData formData = FormData.fromMap({
-        'first_name': firstNameController.text,
-        'last_name': lastNameController.text,
+        'name': nameController.text,
+        'username': userNameController.text,
         'email': emailController.text,
         'password': passwordController.text,
-        'phone': whatsappNumberController.text,
-        'country_code': countryCode,
-        // 'country_id': selectedCountry,
-        'country_id': '1',
-        'language_id': selectedLanguage,
-        // 'gender_id': selectedGender,
-        'gender_id': '1',
-        'date_of_birth': selectedDateOfBirth?.toIso8601String(),
       });
       print('Data Before Send Register is $formData');
       // print('Data Before Send Register1 Country  $selectedCountry');
       // print('Data Before Send Register2 Gender $selectedGender');
-      print('Data Before Send Register3 Language $selectedLanguage');
+      // print('Data Before Send Register3 Language $selectedLanguage');
       print('FCM Token To Send Is :=>  $fcmToken');
-      final response = await dio().post('auth/register', data: formData);
+      final response = await dio().post('user/register', data: formData);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        CashNetwork.insertToCash(key: 'email', value: emailController.text);
-        await CashNetwork.insertToCash(
-            key: 'first_name', value: response.data['user']['first_name']);
-        await CashNetwork.insertToCash(
-            key: 'last_name', value: response.data['user']['last_name']);
-        await CashNetwork.insertToCash(
-            key: 'phone', value: response.data['user']['phone']);
-        await CashNetwork.insertToCash(
-            key: 'country_code', value: response.data['user']['country_code']);
+      print(response.data['message']);
 
-        await CashNetwork.insertToCash(
-            key: 'role', value: response.data['user']['role'] ?? '');
+      final responseData = response.data['data'];
+      final userModel = responseData['model'];
+      final token = responseData['token'];
+
+      print('User ID: ${userModel['id']}');
+      print('Token: $token');
+
+      // Save the token and user data locally using SharedPreferences or Hive.
+      await CashNetwork.insertToCash(key: 'token', value: token);
+      await CashNetwork.insertToCash(key: 'userId', value: userModel['id']);
+
+      emit(RegisterSuccessState());
+        // CashNetwork.insertToCash(key: 'email', value: emailController.text);
+        // await CashNetwork.insertToCash(
+        //     key: 'first_name', value: response.data['user']['first_name']);
+        // await CashNetwork.insertToCash(
+        //     key: 'last_name', value: response.data['user']['last_name']);
+        // await CashNetwork.insertToCash(
+        //     key: 'phone', value: response.data['user']['phone']);
+        // await CashNetwork.insertToCash(
+        //     key: 'country_code', value: response.data['user']['country_code']);
+        //
+        // await CashNetwork.insertToCash(
+        //     key: 'role', value: response.data['user']['role'] ?? '');
         // print('register success');
         // final User userData = User.fromJson(response.data['data']);
         // box.put('user', userData);

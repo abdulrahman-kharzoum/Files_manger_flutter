@@ -115,28 +115,35 @@ class ShowApplicationsData extends StatelessWidget {
                                 ],
                               ),
                               title: Row(
+                             
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  SizedBox(
-                                    width: Statics.isPlatformDesktop
-                                        ? mediaQuery.width / 2.5
-                                        : mediaQuery.width / 1.5,
-                                    child: Text(boardCubit
-                                        .currentBoard.allFiles[index]
-                                        .getApplicationName()),
+                                  Flexible(
+                                    child: SizedBox(
+                                      width: Statics.isPlatformDesktop
+                                          ? mediaQuery.width / 2.5
+                                          : mediaQuery.width / 1.5,
+                                      child: Text(
+                                        boardCubit.currentBoard.allFiles[index].getApplicationName(),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    ),
                                   ),
                                   Statics.isPlatformDesktop
-                                      ? Text(
-                                          DateFormat('yyyy-MM-d HH:mm:ss')
-                                              .format(boardCubit
-                                                  .currentBoard.allFiles[index]
-                                                  .getApplicationCreateDate()),
-                                          style:
-                                              TextStyle(color: Colors.black38),
-                                        )
-                                      : const SizedBox()
+                                      ? Flexible(
+                                    child: Text(
+                                      DateFormat('yyyy-MM-d HH:mm:ss').format(
+                                        boardCubit.currentBoard.allFiles[index]
+                                            .getApplicationCreateDate(),
+                                      ),
+                                      style: TextStyle(color: Colors.black38),
+                                    ),
+                                  )
+                                      : const SizedBox(),
                                 ],
                               ),
+
                               subtitle: Text(
                                 'Count of file ${boardCubit.currentBoard.allFiles[index].getApplicationFilesCount()}',
                                 style: TextStyle(color: Colors.black26),
@@ -232,13 +239,15 @@ class ShowApplicationsData extends StatelessWidget {
                               ),
                               title: Row(
                                 children: [
-                                  SizedBox(
-                                    width: Statics.isPlatformDesktop
-                                        ? mediaQuery.width / 2.5
-                                        : mediaQuery.width / 1.5,
-                                    child: Text(boardCubit
-                                        .currentBoard.allFiles[index]
-                                        .getApplicationName()),
+                                  Flexible(
+                                    child: SizedBox(
+                                      width: Statics.isPlatformDesktop
+                                          ? mediaQuery.width / 2.5
+                                          : mediaQuery.width / 1.5 ,
+                                      child: Text(boardCubit
+                                          .currentBoard.allFiles[index]
+                                          .getApplicationName()),
+                                    ),
                                   ),
                                   Statics.isPlatformDesktop
                                       ? Text(

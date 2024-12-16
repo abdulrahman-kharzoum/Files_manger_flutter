@@ -25,18 +25,18 @@ class BoardPrivacySection extends StatelessWidget {
                   await boardSettingsCubit.changePrivacy(value: 'private');
                 },
                 leading: Radio(
-                    activeColor: Colors.white,
+                    activeColor: Theme.of(context).textTheme.bodySmall!.color,
                     value: 'private',
                     groupValue: boardSettingsCubit.currentBoard.visibility,
                     onChanged: (value) async {
                       await boardSettingsCubit.changePrivacy(value: value!);
                     }),
                 title: Text(S.of(context).private,
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
+                    style:  TextStyle(
+                        color: Theme.of(context).textTheme.bodySmall!.color, fontWeight: FontWeight.bold)),
                 subtitle: Text(
                   S.of(context).only_board_users_can_view_it,
-                  style: const TextStyle(color: Colors.white54),
+                  style:  TextStyle(color: Theme.of(context).textTheme.labelMedium!.color),
                 ),
               ),
               ListTile(
@@ -44,18 +44,18 @@ class BoardPrivacySection extends StatelessWidget {
                   await boardSettingsCubit.changePrivacy(value: 'public');
                 },
                 leading: Radio(
-                    activeColor: Colors.white,
+                    activeColor:Theme.of(context).textTheme.bodySmall!.color,
                     value: 'public',
                     groupValue: boardSettingsCubit.currentBoard.visibility,
                     onChanged: (value) async {
                       await boardSettingsCubit.changePrivacy(value: value!);
                     }),
                 title: Text(S.of(context).general,
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
+                    style:  TextStyle(
+                        color: Theme.of(context).textTheme.bodySmall!.color, fontWeight: FontWeight.bold)),
                 subtitle: Text(
                   S.of(context).anyone_with_the_link_to_the_board_can_view_it,
-                  style: const TextStyle(color: Colors.white54),
+                  style:  TextStyle(color: Theme.of(context).textTheme.labelMedium!.color),
                 ),
               ),
             ],

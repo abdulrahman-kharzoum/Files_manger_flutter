@@ -106,7 +106,7 @@
   "enter_email_plz": "راجاء أدخل بريدك الإلكتروني",
   "invalid_email_address": "عنوان البريد الإلكتروني غير صالح",
   "please_enter_password": "رجاء ادخل كلمة المرور",
-  "password_length": "كلمة المرور يجب أن لا تقل عن 6 محارف",
+  "password_length": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل وتتضمن حرفًا واحدًا على الأقل ورقمًا واحدًا وحرفًا خاصًا واحدًا",
   "reset_password": "إعادة تعيين كلمة المرور",
   "newpassword": "كلمة المرور الجديدة",
   "reenter_password": "تأكيد كلمة المرور",
@@ -301,8 +301,8 @@
   "edit_image": "تعديل الصورة",
   "edit_profile": "تعديل الملف الشخصي",
   "select_image": "اختر صورة",
-  "first_name": "الاسم الأول",
-  "last_name": "الاسم الأخير",
+  "first_name": "الاسم ",
+  "last_name": "اسم المستخدم",
   "country_code": "رمز البلد",
   "edit_contact": "تعديل جهة الاتصال",
   "my_booking": "حجوزاتي",
@@ -645,5 +645,9 @@
   "replying_to": "الرد على",
   "add_board": "إضافة لوحة",
   "add_application": "إضافة تطبيق",
-  "settings_board": "إعدادات اللوحة"
+  "settings_board": "إعدادات اللوحة",
+  "please_enter_name": "الرجاء إدخال الاسم",
+  "name_length": "يجب أن يكون الاسم مكونًا من 3 أحرف على الأقل",
+  "please_enter_username": "الرجاء إدخال اسم المستخدم",
+  "userName_length": "يجب أن يكون اسم المستخدم مكونًا من 5 أحرف على الأقل"
 }

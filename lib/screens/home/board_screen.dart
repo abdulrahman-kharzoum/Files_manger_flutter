@@ -109,7 +109,7 @@ class BoardScreen extends StatelessWidget {
             },
             icon: Icon(
               Icons.edit_document,
-              color: Colors.white,
+
               size: Statics.isPlatformDesktop
                   ? mediaQuery.width / 50
                   : mediaQuery.width / 15,
@@ -124,7 +124,7 @@ class BoardScreen extends StatelessWidget {
                         Navigator.of(context).pushNamed('/report_screen');
                       },
                       icon: Icon(Icons.notifications,
-                          color: Colors.white, size: mediaQuery.width / 50),
+                          size: mediaQuery.width / 50),
                     ),
                     IconButton(
                       tooltip: S.of(context).logout,
@@ -132,12 +132,12 @@ class BoardScreen extends StatelessWidget {
                         // Navigator.of(context).pushNamed('/report_screen');
                       },
                       icon: Icon(Icons.logout,
-                          color: Colors.white, size: mediaQuery.width / 50),
+                          size: mediaQuery.width / 50),
                     ),
                   ],
                 )
               : PopupMenuButton<String>(
-                  iconColor: AppColors.white,
+
                   onSelected: (value) async {},
                   itemBuilder: (BuildContext context) {
                     return [
@@ -148,7 +148,7 @@ class BoardScreen extends StatelessWidget {
                           children: [
                             const Icon(
                               Icons.notifications,
-                              color: Colors.white,
+
                             ),
                             SizedBox(
                               width: mediaQuery.width / 90,
@@ -156,7 +156,7 @@ class BoardScreen extends StatelessWidget {
                             Text(
                               S.of(context).notifications,
                               style: const TextStyle(
-                                color: Colors.white,
+
                               ),
                             ),
                           ],
@@ -169,7 +169,7 @@ class BoardScreen extends StatelessWidget {
                           children: [
                             const Icon(
                               Icons.logout,
-                              color: Colors.white,
+
                             ),
                             SizedBox(
                               width: mediaQuery.width / 90,
@@ -177,7 +177,7 @@ class BoardScreen extends StatelessWidget {
                             Text(
                               S.of(context).logout,
                               style: const TextStyle(
-                                color: Colors.white,
+
                               ),
                             ),
                           ],

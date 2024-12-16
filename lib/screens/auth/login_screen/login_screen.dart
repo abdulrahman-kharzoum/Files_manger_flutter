@@ -18,7 +18,6 @@ class LoginScreen extends StatelessWidget {
       Navigator.of(context, rootNavigator: true).pop();
     }
   }
-
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
@@ -71,21 +70,21 @@ class LoginScreen extends StatelessWidget {
               ),
               SingleChildScrollView(
                 padding:
-                    EdgeInsets.symmetric(horizontal: mediaQuery.height / 20),
+                EdgeInsets.symmetric(horizontal: mediaQuery.height / 20),
                 child: Statics.isPlatformDesktop
                     ? LoginWebWidget(
-                        localeCubit: localeCubit,
-                        loginCubit: loginCubit,
-                        validator: validator,
-                        showPassword: showPassword)
+                    localeCubit: localeCubit,
+                    loginCubit: loginCubit,
+                    validator: validator,
+                    showPassword: showPassword)
                     : LoginMobileWidget(
-                        localeCubit: localeCubit,
-                        loginCubit: loginCubit,
-                        validator: validator,
-                        showPassword: showPassword),
+                    localeCubit: localeCubit,
+                    loginCubit: loginCubit,
+                    validator: validator,
+                    showPassword: showPassword),
               ).animate().fade(
-                    duration: const Duration(milliseconds: 500),
-                  ),
+                duration: const Duration(milliseconds: 500),
+              ),
             ],
           ),
         );

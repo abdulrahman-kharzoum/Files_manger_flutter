@@ -1090,10 +1090,10 @@ class S {
     );
   }
 
-  /// `Password must be at least 6 characters`
+  /// `Password must be at least 8 characters long and include at least one letter, one number, and one special character`
   String get password_length {
     return Intl.message(
-      'Password must be at least 6 characters',
+      'Password must be at least 8 characters long and include at least one letter, one number, and one special character',
       name: 'password_length',
       desc: '',
       args: [],
@@ -2880,20 +2880,20 @@ class S {
     );
   }
 
-  /// `First name`
+  /// `Name`
   String get first_name {
     return Intl.message(
-      'First name',
+      'Name',
       name: 'first_name',
       desc: '',
       args: [],
     );
   }
 
-  /// `Last name`
+  /// `User Name`
   String get last_name {
     return Intl.message(
-      'Last name',
+      'User Name',
       name: 'last_name',
       desc: '',
       args: [],
@@ -5602,10 +5602,10 @@ class S {
     );
   }
 
-  /// `My Boards`
+  /// `My Groups`
   String get my_boards {
     return Intl.message(
-      'My Boards',
+      'My Groups',
       name: 'my_boards',
       desc: '',
       args: [],
@@ -6002,10 +6002,10 @@ class S {
     );
   }
 
-  /// `Leave the board`
+  /// `Leave the group`
   String get leave_the_board {
     return Intl.message(
-      'Leave the board',
+      'Leave the group',
       name: 'leave_the_board',
       desc: '',
       args: [],
@@ -6457,6 +6457,46 @@ class S {
     return Intl.message(
       'Settings board',
       name: 'settings_board',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `please enter name`
+  String get please_enter_name {
+    return Intl.message(
+      'please enter name',
+      name: 'please_enter_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name must be at least 3 characters long`
+  String get name_length {
+    return Intl.message(
+      'Name must be at least 3 characters long',
+      name: 'name_length',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `please enter username`
+  String get please_enter_username {
+    return Intl.message(
+      'please enter username',
+      name: 'please_enter_username',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `UserName must be at least 5 characters long`
+  String get userName_length {
+    return Intl.message(
+      'UserName must be at least 5 characters long',
+      name: 'userName_length',
       desc: '',
       args: [],
     );

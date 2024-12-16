@@ -23,8 +23,8 @@ final ThemeData DarkThemeData = ThemeData(
     headlineMedium: GoogleFonts.cairo(color: Colors.white),
     headlineSmall: GoogleFonts.cairo(color: Colors.white),
     labelLarge: GoogleFonts.cairo(color: Colors.white),
-    labelMedium: GoogleFonts.cairo(color: Colors.white),
-    labelSmall: GoogleFonts.cairo(color: Colors.white),
+    labelMedium: GoogleFonts.cairo(color: Colors.white54),
+    labelSmall: GoogleFonts.cairo(color: Colors.white10),
   ),
 
   //==========Button Theme ========///
@@ -128,6 +128,9 @@ final ThemeData DarkThemeData = ThemeData(
     ),
   ),
 );
+
+
+
 final ThemeData LightThemeData = ThemeData(
   primaryColor: AppColors.primaryColor,
   scaffoldBackgroundColor: AppColors.white,
@@ -149,8 +152,10 @@ final ThemeData LightThemeData = ThemeData(
     headlineMedium: GoogleFonts.cairo(color: Colors.black),
     headlineSmall: GoogleFonts.cairo(color: Colors.black),
     labelLarge: GoogleFonts.cairo(color: Colors.black),
-    labelMedium: GoogleFonts.cairo(color: Colors.black),
-    labelSmall: GoogleFonts.cairo(color: Colors.black),
+    labelMedium: GoogleFonts.cairo(color: Colors.black54),
+    labelSmall: GoogleFonts.cairo(color: Colors.black54),
+
+
   ),
 
   //==========Button Theme ========///
@@ -160,7 +165,7 @@ final ThemeData LightThemeData = ThemeData(
 
   //======Icon Theme ========//
   iconTheme: const IconThemeData(
-    color: AppColors.primaryColor,
+    color: AppColors.dark,
     size: 30,
   ),
 
@@ -194,7 +199,7 @@ final ThemeData LightThemeData = ThemeData(
   appBarTheme: AppBarTheme(
     titleTextStyle: GoogleFonts.cairo(
       fontSize: 20,
-      color: AppColors.dark,
+      color: AppColors.primaryColor,
     ),
     backgroundColor: AppColors.primaryColor,
     iconTheme: const IconThemeData(
@@ -229,7 +234,7 @@ final ThemeData LightThemeData = ThemeData(
         borderRadius: BorderRadius.circular(8.0),
       ),
       textStyle: GoogleFonts.cairo(
-        color: Colors.white,
+        color: Colors.black,
         fontWeight: FontWeight.bold,
       ),
     ),
@@ -237,7 +242,7 @@ final ThemeData LightThemeData = ThemeData(
 
   //======= Card Theme =======//
   cardTheme: CardTheme(
-    color: AppColors.white,
+    color: Colors.white,
     elevation: 4,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8.0),
@@ -247,10 +252,19 @@ final ThemeData LightThemeData = ThemeData(
 
   //======= Popup Menu Theme =======//
   popupMenuTheme: PopupMenuThemeData(
-    color: AppColors.white,
+    color: AppColors.primaryColor,
     textStyle: GoogleFonts.cairo(color: AppColors.primaryColor),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8.0),
     ),
+  ),
+
+
+  dropdownMenuTheme: DropdownMenuThemeData(
+    menuStyle:MenuStyle(
+backgroundColor: MaterialStatePropertyAll<Color>(AppColors.dark),
+),
+
+    textStyle:GoogleFonts.cairo(color: Colors.black),
   ),
 );

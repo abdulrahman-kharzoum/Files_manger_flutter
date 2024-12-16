@@ -103,7 +103,7 @@
   "enter_email_plz": "Please enter an email address",
   "invalid_email_address": "Invalid email address",
   "please_enter_password": "Please Enter Your password",
-  "password_length": "Password must be at least 6 characters",
+  "password_length": "Password must be at least 8 characters long and include at least one letter, one number, and one special character",
   "reset_password": "Reset Password",
   "newpassword": "New password",
   "reenter_password": "Re-enter password",
@@ -282,8 +282,8 @@
   "edit_image": "Edit Image",
   "edit_profile": "Edit Profile",
   "select_image": "Select image",
-  "first_name": "First name",
-  "last_name": "Last name",
+  "first_name": "Name",
+  "last_name": "User Name",
   "country_code": "Country code",
   "type_description_here": "Type Description here",
   "enter_your_description_here": "Enter your description here",
@@ -639,5 +639,9 @@
   "replying_to": "Replying to",
   "add_board": "Add board",
   "add_application": "Add application",
-  "settings_board": "Settings board"
+  "settings_board": "Settings board",
+  "please_enter_name": "please enter name",
+  "name_length": "Name must be at least 3 characters long",
+  "please_enter_username": "please enter username",
+  "userName_length": "UserName must be at least 5 characters long"
 }
