@@ -7,11 +7,11 @@ final class ProfileInitial extends ProfileState {}
 
 final class SetProfileDetailsLoading extends ProfileState {}
 
-final class ProfileImageUpdated extends ProfileState {
-  final XFile? pickedFile;
-
-  ProfileImageUpdated({required this.pickedFile});
-}
+// final class ProfileImageUpdated extends ProfileState {
+//   final XFile? pickedFile;
+//
+//   ProfileImageUpdated({required this.pickedFile});
+// }
 
 final class SetProfileDetailsExpiredToken extends ProfileState {}
 
@@ -27,20 +27,20 @@ final class SetProfileDetailsFailure extends ProfileState {
   SetProfileDetailsFailure({required this.errorMessage});
 }
 
-final class FetchCountryLoading extends ProfileState {}
+// final class FetchCountryLoading extends ProfileState {}
+//
+// final class FetchCountrySuccess extends ProfileState {}
+//
+// final class FetchCountryServerError extends ProfileState {}
 
-final class FetchCountrySuccess extends ProfileState {}
+// final class FetchCountryNoInternet extends ProfileState {}
 
-final class FetchCountryServerError extends ProfileState {}
+// final class FetchCountryExpiredToken extends ProfileState {}
 
-final class FetchCountryNoInternet extends ProfileState {}
-
-final class FetchCountryExpiredToken extends ProfileState {}
-
-final class FetchCountryFailure extends ProfileState {
-  final String errorMessage;
-
-  FetchCountryFailure({required this.errorMessage});
-}
+// final class FetchCountryFailure extends ProfileState {
+//   final String errorMessage;
+//
+//   FetchCountryFailure({required this.errorMessage});
+// }
 
 final class ProfileUpdated extends ProfileState {}

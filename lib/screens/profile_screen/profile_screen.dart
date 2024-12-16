@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:files_manager/cubits/theme_cubit/app_theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +25,12 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     final profileCubit = context.read<ProfileCubit>();
+    return BlocBuilder<AppThemeCubit, AppThemeState>(
+  builder: (context, state) {
+    final isDarkTheme = state is AppThemeDark;
+
     return Scaffold(
+      backgroundColor:isDarkTheme? Theme.of(context).scaffoldBackgroundColor:Colors.white30,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: AppColors.primaryColor,
@@ -60,107 +66,103 @@ class ProfileScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          final imageProvider = profileCubit.selectedImagePath != null &&
-                  profileCubit.selectedImagePath!.path.isNotEmpty
-              ? FileImage(File(profileCubit.selectedImagePath!.path))
-              : CachedNetworkImageProvider(profileCubit.imagePicked)
-                  as ImageProvider;
-          if (state is FetchCountryLoading) {
-            return const EditProfileShimmer();
-          }
-          if (state is FetchCountrySuccess ||
-              state is ProfileUpdated ||
-              state is ProfileImageUpdated ||
-              state is SetProfileDetailsLoading ||
+          // final imageProvider = profileCubit.selectedImagePath != null &&
+          //         profileCubit.selectedImagePath!.path.isNotEmpty
+          //     ? FileImage(File(profileCubit.selectedImagePath!.path))
+          //     : CachedNetworkImageProvider(profileCubit.imagePicked)
+          //         as ImageProvider;
+
+          if (state is SetProfileDetailsLoading ||
               state is SetProfileDetailsSuccess) {
-            return Column(
+            return
+     Column(
               children: [
-                SizedBox(
-                  height: mediaQuery.height / 4,
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: mediaQuery.height / 4.5,
-                        decoration: const BoxDecoration(
-                          color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(80),
-                            bottomRight: Radius.circular(80),
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Stack(
-                          children: [
-                            GestureDetector(
-                              onTap: () => profileCubit.showImageDialog(
-                                  context, imageProvider),
-                              child: Container(
-                                width: mediaQuery.width / 2.3,
-                                height: mediaQuery.width / 2.3,
-                                margin: EdgeInsets.only(
-                                    bottom: mediaQuery.width / 8),
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0xffD6D6D6),
-                                ),
-                                child: ClipOval(
-                                  child: profileCubit.selectedImagePath !=
-                                              null &&
-                                          profileCubit.selectedImagePath!.path
-                                              .isNotEmpty
-                                      ? Image.file(
-                                          File(profileCubit
-                                              .selectedImagePath!.path),
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                        )
-                                      : CachedNetworkImage(
-                                          imageUrl: profileCubit.imagePicked,
-                                          placeholder: (context, url) =>
-                                              Shimmer.fromColors(
-                                            baseColor: Colors.grey[300]!,
-                                            highlightColor: Colors.grey[100]!,
-                                            child: Container(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                        ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 40,
-                              right: 15,
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: IconButton(
-                                  tooltip: S.of(context).select_profile_picture,
-                                  icon: const Icon(
-                                    Icons.camera_alt,
-                                    color: AppColors.primaryColor,
-                                    size: 30,
-                                  ),
-                                  onPressed: () => profileCubit.pickImage(),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // SizedBox(
+                //   height: mediaQuery.height / 4,
+                //   child: Stack(
+                //     children: [
+                //       Container(
+                //         height: mediaQuery.height / 4.5,
+                //         decoration: const BoxDecoration(
+                //           color: AppColors.primaryColor,
+                //           borderRadius: BorderRadius.only(
+                //             bottomLeft: Radius.circular(80),
+                //             bottomRight: Radius.circular(80),
+                //           ),
+                //         ),
+                //       ),
+                //       Align(
+                //         alignment: Alignment.bottomCenter,
+                //         child: Stack(
+                //           children: [
+                //             // GestureDetector(
+                //             //   onTap: () => profileCubit.showImageDialog(
+                //             //       context, imageProvider),
+                //             //   child: Container(
+                //             //     width: mediaQuery.width / 2.3,
+                //             //     height: mediaQuery.width / 2.3,
+                //             //     margin: EdgeInsets.only(
+                //             //         bottom: mediaQuery.width / 8),
+                //             //     decoration: const BoxDecoration(
+                //             //       shape: BoxShape.circle,
+                //             //       color: Color(0xffD6D6D6),
+                //             //     ),
+                //             //     child: ClipOval(
+                //             //       child: profileCubit.selectedImagePath !=
+                //             //                   null &&
+                //             //               profileCubit.selectedImagePath!.path
+                //             //                   .isNotEmpty
+                //             //           ? Image.file(
+                //             //               File(profileCubit
+                //             //                   .selectedImagePath!.path),
+                //             //               fit: BoxFit.cover,
+                //             //               width: double.infinity,
+                //             //               height: double.infinity,
+                //             //             )
+                //             //           : CachedNetworkImage(
+                //             //               imageUrl: profileCubit.imagePicked,
+                //             //               placeholder: (context, url) =>
+                //             //                   Shimmer.fromColors(
+                //             //                 baseColor: Colors.grey[300]!,
+                //             //                 highlightColor: Colors.grey[100]!,
+                //             //                 child: Container(
+                //             //                   color: Colors.white,
+                //             //                 ),
+                //             //               ),
+                //             //               errorWidget: (context, url, error) =>
+                //             //                   const Icon(Icons.error),
+                //             //               fit: BoxFit.cover,
+                //             //               width: double.infinity,
+                //             //               height: double.infinity,
+                //             //             ),
+                //             //     ),
+                //             //   ),
+                //             // ),
+                //             Positioned(
+                //               bottom: 40,
+                //               right: 15,
+                //               child: Container(
+                //                 decoration: const BoxDecoration(
+                //                   color: Colors.white,
+                //                   shape: BoxShape.circle,
+                //                 ),
+                //                 child: IconButton(
+                //                   tooltip: S.of(context).select_profile_picture,
+                //                   icon: const Icon(
+                //                     Icons.camera_alt,
+                //                     color: AppColors.primaryColor,
+                //                     size: 30,
+                //                   ),
+                //                   onPressed: () => profileCubit.pickImage(),
+                //                 ),
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -179,7 +181,7 @@ class ProfileScreen extends StatelessWidget {
                                   child: CustomFormTextField(
                                     keyboardType: TextInputType.text,
                                     controller:
-                                        profileCubit.firstNameController,
+                                        profileCubit.nameController,
                                     colorIcon: Colors.grey,
                                     hintText: '',
                                     nameLabel: S.of(context).first_name,
@@ -189,7 +191,7 @@ class ProfileScreen extends StatelessWidget {
                                   width: mediaQuery.width / 2.2,
                                   child: CustomFormTextField(
                                     keyboardType: TextInputType.text,
-                                    controller: profileCubit.lastNameController,
+                                    controller: profileCubit.userNameController,
                                     colorIcon: Colors.grey,
                                     hintText: '',
                                     nameLabel: S.of(context).last_name,
@@ -205,206 +207,180 @@ class ProfileScreen extends StatelessWidget {
                               enabled: false,
                             ),
                             // SizedBox(height: mediaQuery.height / 45),
-                            PhonFormFieldWidget(
-                              onCountryCodeChanged: (p0) {},
-                              controller: profileCubit.phoneNumber,
-                              initialCountryCode: profileCubit.countryCode,
-                            ),
+                            // PhonFormFieldWidget(
+                            //   onCountryCodeChanged: (p0) {},
+                            //   controller: profileCubit.phoneNumber,
+                            //   initialCountryCode: profileCubit.countryCode,
+                            // ),
                             // SizedBox(height: mediaQuery.height / 110),
                             // DropDown For City
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
-                                  child: Text('${S.of(context).city}:',
-                                      style:
-                                          const TextStyle(color: Colors.white)),
-                                ),
-                                DropdownButtonFormField<Country>(
-                                  value: profileCubit.selectedCountry,
-                                  items: profileCubit.countries.map((country) {
-                                    return DropdownMenuItem<Country>(
-                                      value: country,
-                                      child: Text(
-                                        country.name,
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      profileCubit.updateCity(
-                                          value.id, value.name);
-                                    }
-                                  },
-                                  decoration: InputDecoration(
-                                    // labelText: S.of(context).city,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     Padding(
+                            //       padding: const EdgeInsets.symmetric(
+                            //           horizontal: 10.0),
+                            //       child: Text('${S.of(context).city}:',
+                            //           style:
+                            //               const TextStyle(color: Colors.white)),
+                            //     ),
+                            //     DropdownButtonFormField<Country>(
+                            //       value: profileCubit.selectedCountry,
+                            //       items: profileCubit.countries.map((country) {
+                            //         return DropdownMenuItem<Country>(
+                            //           value: country,
+                            //           child: Text(
+                            //             country.name,
+                            //             style: const TextStyle(
+                            //                 color: Colors.black),
+                            //           ),
+                            //         );
+                            //       }).toList(),
+                            //       onChanged: (value) {
+                            //         if (value != null) {
+                            //           profileCubit.updateCity(
+                            //               value.id, value.name);
+                            //         }
+                            //       },
+                            //       decoration: InputDecoration(
+                            //         // labelText: S.of(context).city,
+                            //         border: OutlineInputBorder(
+                            //           borderRadius: BorderRadius.circular(10),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                             SizedBox(height: mediaQuery.height / 45),
                             //DropDown For Language
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
-                                  child: Text('${S.of(context).language}:',
-                                      style:
-                                          const TextStyle(color: Colors.white)),
-                                ),
-                                DropdownButtonFormField<Language>(
-                                  value: profileCubit.selectedLanguage,
-                                  items: profileCubit.languages.map((language) {
-                                    return DropdownMenuItem<Language>(
-                                      value: language,
-                                      child: Text(
-                                        language.name,
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      profileCubit.updateLanguage(
-                                          value.id, value.name);
-                                    }
-                                  },
-                                  decoration: InputDecoration(
-                                    // labelText: S.of(context).language,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: mediaQuery.height / 45),
-                            // DropDown For Gender
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
-                                  child: Text('${S.of(context).gender}:',
-                                      style:
-                                          const TextStyle(color: Colors.white)),
-                                ),
-                                DropdownButtonFormField<Gender>(
-                                  value: profileCubit.selectedGender,
-                                  items: profileCubit.genders.map((gender) {
-                                    return DropdownMenuItem<Gender>(
-                                      value: gender,
-                                      child: Text(
-                                        gender.name,
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      profileCubit.updateGender(
-                                          value.id, value.name);
-                                    }
-                                  },
-                                  decoration: InputDecoration(
-                                    // labelText: S.of(context).gender,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: mediaQuery.height / 45),
-                            // Date picker for birth date
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
-                                  child: Text('${S.of(context).birth_date}:',
-                                      style:
-                                          const TextStyle(color: Colors.white)),
-                                ),
-                                InkWell(
-                                  onTap: () async {
-                                    profileCubit.pickDate(context);
-                                  },
-                                  child: InputDecorator(
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      // labelText: S.of(context).birth_date,
-                                    ),
-                                    child: Text(
-                                      profileCubit.dateOfBirth,
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     Padding(
+                            //       padding: const EdgeInsets.symmetric(
+                            //           horizontal: 10.0),
+                            //       child: Text('${S.of(context).language}:',
+                            //           style:
+                            //               const TextStyle(color: Colors.white)),
+                            //     ),
+                            //     DropdownButtonFormField<Language>(
+                            //       value: profileCubit.selectedLanguage,
+                            //       items: profileCubit.languages.map((language) {
+                            //         return DropdownMenuItem<Language>(
+                            //           value: language,
+                            //           child: Text(
+                            //             language.name,
+                            //             style: const TextStyle(
+                            //                 color: Colors.black),
+                            //           ),
+                            //         );
+                            //       }).toList(),
+                            //       onChanged: (value) {
+                            //         if (value != null) {
+                            //           profileCubit.updateLanguage(
+                            //               value.id, value.name);
+                            //         }
+                            //       },
+                            //       decoration: InputDecoration(
+                            //         // labelText: S.of(context).language,
+                            //         border: OutlineInputBorder(
+                            //           borderRadius: BorderRadius.circular(10),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // SizedBox(height: mediaQuery.height / 45),
+                            // // DropDown For Gender
+                            // Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     Padding(
+                            //       padding: const EdgeInsets.symmetric(
+                            //           horizontal: 10.0),
+                            //       child: Text('${S.of(context).gender}:',
+                            //           style:
+                            //               const TextStyle(color: Colors.white)),
+                            //     ),
+                            //     DropdownButtonFormField<Gender>(
+                            //       value: profileCubit.selectedGender,
+                            //       items: profileCubit.genders.map((gender) {
+                            //         return DropdownMenuItem<Gender>(
+                            //           value: gender,
+                            //           child: Text(
+                            //             gender.name,
+                            //             style: const TextStyle(
+                            //                 color: Colors.black),
+                            //           ),
+                            //         );
+                            //       }).toList(),
+                            //       onChanged: (value) {
+                            //         if (value != null) {
+                            //           profileCubit.updateGender(
+                            //               value.id, value.name);
+                            //         }
+                            //       },
+                            //       decoration: InputDecoration(
+                            //         // labelText: S.of(context).gender,
+                            //         border: OutlineInputBorder(
+                            //           borderRadius: BorderRadius.circular(10),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // SizedBox(height: mediaQuery.height / 45),
+                            // // Date picker for birth date
+                            // Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     Padding(
+                            //       padding: const EdgeInsets.symmetric(
+                            //           horizontal: 10.0),
+                            //       child: Text('${S.of(context).birth_date}:',
+                            //           style:
+                            //               const TextStyle(color: Colors.white)),
+                            //     ),
+                            //     InkWell(
+                            //       onTap: () async {
+                            //         profileCubit.pickDate(context);
+                            //       },
+                            //       child: InputDecorator(
+                            //         decoration: InputDecoration(
+                            //           border: OutlineInputBorder(
+                            //             borderRadius: BorderRadius.circular(10),
+                            //           ),
+                            //           // labelText: S.of(context).birth_date,
+                            //         ),
+                            //         child: Text(
+                            //           profileCubit.dateOfBirth,
+                            //           style: const TextStyle(
+                            //               fontSize: 16, color: Colors.black),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                             SizedBox(height: mediaQuery.height / 45),
                             CustomButtonWidget(
                               color: AppColors.primaryColor,
                               mediaQuery: mediaQuery,
                               title: S.of(context).save,
                               onPressed: () {
-                                final firstName =
-                                    profileCubit.firstNameController.text;
-                                final lastName =
-                                    profileCubit.lastNameController.text;
-                                final dateOfBirth = profileCubit.dateOfBirth;
-                                final countryCode = profileCubit.countryCode;
-                                final phone = profileCubit.phoneNumber.text;
+                                final name =
+                                    profileCubit.nameController.text;
+                                final userName =
+                                    profileCubit.userNameController.text;
                                 final email = profileCubit.emailController.text;
-                                final image = (profileCubit.selectedImagePath !=
-                                            null &&
-                                        profileCubit.selectedImagePath!.path !=
-                                            profileCubit.imagePicked)
-                                    ? File(profileCubit.selectedImagePath!.path)
-                                    : null;
-
-                                print(
-                                    'Country ID: ${profileCubit.selectCountryId}');
-                                print(
-                                    'Language ID: ${profileCubit.selectLanguageId}');
-                                print(
-                                    'Gender ID: ${profileCubit.selectGenderId}');
-                                print('First Name: $firstName');
-                                print('Last Name: $lastName');
-                                print('Date of Birth: $dateOfBirth');
-                                print('Country Code: $countryCode');
-                                print('Phone: $phone');
+                                print('Name: $name');
+                                print('UserName: $userName');
                                 print('Email: $email');
-                                print('Image: ${image?.path}');
-                                profileCubit.setProfileDetailsFun(
+                               profileCubit.setProfileDetailsFun(
                                   context: context,
-                                  countryId: profileCubit.selectCountryId!,
-                                  languageId: profileCubit.selectLanguageId!,
-                                  genderId: profileCubit.selectGenderId!,
-                                  firstName: firstName,
-                                  lastName: lastName,
-                                  dateOfBirth: dateOfBirth,
-                                  phone: phone,
-                                  countryCode: countryCode,
+                                  userName: userName,
+                                  name: name,
                                   email: email,
-                                  image: image,
+
                                 );
                               },
                             ),
@@ -416,13 +392,13 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ],
             );
-          } else if (state is FetchCountryFailure) {
-            return NoData(
-                iconData: Icons.error, text: S.of(context).server_error);
+  
           }
           return Container();
         },
       ),
     );
+  },
+);
   }
 }

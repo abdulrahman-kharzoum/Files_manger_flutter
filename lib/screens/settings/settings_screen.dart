@@ -20,7 +20,7 @@ class SettingsScreen extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context).size;
     final localeCubit = context.read<LocaleCubit>();
     return Scaffold(
-      backgroundColor: AppColors.dark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         toolbarHeight: mediaQuery.height / 80,
       ),
@@ -65,17 +65,17 @@ class SettingsScreen extends StatelessWidget {
               },
               child: SettingsList(
                 applicationType: ApplicationType.both,
-                lightTheme: const SettingsThemeData(
+                lightTheme:  SettingsThemeData(
                   leadingIconsColor: AppColors.primaryColor,
-                  settingsListBackground: AppColors.dark,
+                  settingsListBackground: Theme.of(context).scaffoldBackgroundColor,
                   dividerColor: AppColors.primaryColor,
                   settingsSectionBackground: Colors.transparent,
                   titleTextColor: AppColors.primaryColor,
                   trailingTextColor: AppColors.primaryColor,
-                  settingsTileTextColor: AppColors.white,
+                  settingsTileTextColor: Theme.of(context).textTheme.bodySmall!.color,
                   inactiveTitleColor: AppColors.primaryColor,
                   inactiveSubtitleColor: AppColors.primaryColor,
-                  tileDescriptionTextColor: AppColors.white,
+                  tileDescriptionTextColor: Theme.of(context).textTheme.bodySmall!.color,
                   tileHighlightColor: Colors.transparent,
                 ),
                 platform: DevicePlatform.device,

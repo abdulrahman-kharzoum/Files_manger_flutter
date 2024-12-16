@@ -133,7 +133,7 @@ final ThemeData DarkThemeData = ThemeData(
 
 final ThemeData LightThemeData = ThemeData(
   primaryColor: AppColors.primaryColor,
-  scaffoldBackgroundColor: AppColors.white,
+  scaffoldBackgroundColor: Colors.white60,
   visualDensity: VisualDensity.standard,
   useMaterial3: true,
 
@@ -199,7 +199,7 @@ final ThemeData LightThemeData = ThemeData(
   appBarTheme: AppBarTheme(
     titleTextStyle: GoogleFonts.cairo(
       fontSize: 20,
-      color: AppColors.primaryColor,
+      color: AppColors.dark,
     ),
     backgroundColor: AppColors.primaryColor,
     iconTheme: const IconThemeData(

@@ -12,6 +12,8 @@ import 'package:files_manager/screens/home/board_screen.dart';
 import 'package:files_manager/screens/notifications/notification_screen.dart';
 import 'package:files_manager/screens/settings/settings_screen.dart';
 
+import '../board_cubit/board_cubit.dart';
+
 part 'navigation_state.dart';
 
 class NavigationCubit extends Cubit<NavigationState> {
@@ -30,6 +32,7 @@ class NavigationCubit extends Cubit<NavigationState> {
         BlocProvider(
           create: (context) => AddBoardCubit(),
         ),
+
       ],
       child: const BoardScreen(),
     ),

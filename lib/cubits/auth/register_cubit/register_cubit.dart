@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:files_manager/models/Api_user.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:files_manager/core/animation/dialogs/dialogs.dart';
@@ -7,6 +8,7 @@ import 'package:files_manager/core/functions/apis_error_handler.dart';
 import 'package:files_manager/core/server/dio_settings.dart';
 import 'package:files_manager/core/shared/connect.dart';
 import 'package:files_manager/core/shared/local_network.dart';
+import 'dart:convert';
 part 'register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
@@ -54,32 +56,53 @@ class RegisterCubit extends Cubit<RegisterState> {
       // );
       print('step3');
 
-      FormData formData = FormData.fromMap({
+      Map<String, dynamic> data = {
         'name': nameController.text,
         'username': userNameController.text,
         'email': emailController.text,
         'password': passwordController.text,
-      });
-      print('Data Before Send Register is $formData');
+
+      };
+
+      String jsonData = jsonEncode(data);
+
+      print('Data Before Send Register is $jsonData');
+
+
       // print('Data Before Send Register1 Country  $selectedCountry');
       // print('Data Before Send Register2 Gender $selectedGender');
       // print('Data Before Send Register3 Language $selectedLanguage');
       print('FCM Token To Send Is :=>  $fcmToken');
-      final response = await dio().post('user/register', data: formData);
+      final response = await dio().post('user/register', data: jsonData);
 
-      if (response.statusCode == 201 || response.statusCode == 200) {
+      if ( response.statusCode == 200) {
       print(response.data['message']);
 
       final responseData = response.data['data'];
+      UserResponse userResponse = UserResponse.fromJson(response.data);
+
+
       final userModel = responseData['model'];
       final token = responseData['token'];
 
       print('User ID: ${userModel['id']}');
       print('Token: $token');
 
-      // Save the token and user data locally using SharedPreferences or Hive.
+
       await CashNetwork.insertToCash(key: 'token', value: token);
-      await CashNetwork.insertToCash(key: 'userId', value: userModel['id']);
+      await CashNetwork.insertToCash(key: 'userId', value: userModel['id'].toString());
+
+
+      await CashNetwork.insertToCash(key: 'user_model', value:jsonEncode(userResponse.model));
+      var user_model = await CashNetwork.getCashData(key: 'user_model');
+     var uu=  UserModel.fromJson(jsonDecode(user_model));
+     print("email :${uu.email}");
+     print("username  :${uu.username}");
+      String tokenuser = userResponse.token;
+
+      // print('User Name: ${user.name}');
+      print('Token: $tokenuser');
+
 
       emit(RegisterSuccessState());
         // CashNetwork.insertToCash(key: 'email', value: emailController.text);
