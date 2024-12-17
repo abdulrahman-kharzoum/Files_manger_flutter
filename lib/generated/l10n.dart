@@ -6501,6 +6501,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Enter Group Name`
+  String get enterBoardTitle {
+    return Intl.message(
+      'Enter Group Name',
+      name: 'enterBoardTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

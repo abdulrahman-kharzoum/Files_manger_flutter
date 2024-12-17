@@ -133,7 +133,7 @@ final ThemeData DarkThemeData = ThemeData(
 
 final ThemeData LightThemeData = ThemeData(
   primaryColor: AppColors.primaryColor,
-  scaffoldBackgroundColor: Colors.white60,
+  scaffoldBackgroundColor: Colors.white,
   visualDensity: VisualDensity.standard,
   useMaterial3: true,
 

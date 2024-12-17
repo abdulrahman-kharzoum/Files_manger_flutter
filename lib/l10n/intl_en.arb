@@ -643,5 +643,6 @@
   "please_enter_name": "please enter name",
   "name_length": "Name must be at least 3 characters long",
   "please_enter_username": "please enter username",
-  "userName_length": "UserName must be at least 5 characters long"
+  "userName_length": "UserName must be at least 5 characters long",
+  "enterBoardTitle": "Enter Group Name"
 }

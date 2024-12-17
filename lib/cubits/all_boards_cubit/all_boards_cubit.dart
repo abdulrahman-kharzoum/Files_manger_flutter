@@ -126,7 +126,8 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
   ];
 
   Future<void> addBoard() async {
-    allBoards.add(Board(
+    allBoards.add(
+        Board(
         id: allBoards.last.id + 1,
         uuid: '2',
         parentId: null,

@@ -242,6 +242,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "end_time": MessageLookupByLibrary.simpleMessage("End time"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
+        "enterBoardTitle":
+            MessageLookupByLibrary.simpleMessage("Enter Group Name"),
         "enter_a_message":
             MessageLookupByLibrary.simpleMessage("Enter a message"),
         "enter_address": MessageLookupByLibrary.simpleMessage("Enter Address"),
