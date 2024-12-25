@@ -121,6 +121,7 @@ final ThemeData DarkThemeData = ThemeData(
 
   //======= Popup Menu Theme =======//
   popupMenuTheme: PopupMenuThemeData(
+    iconColor: AppColors.dark,
     color: AppColors.primaryColor,
     textStyle: GoogleFonts.cairo(color: Colors.white),
     shape: RoundedRectangleBorder(
@@ -252,7 +253,8 @@ final ThemeData LightThemeData = ThemeData(
 
   //======= Popup Menu Theme =======//
   popupMenuTheme: PopupMenuThemeData(
-    color: AppColors.primaryColor,
+    color: AppColors.white,
+    iconColor: AppColors.dark,
     textStyle: GoogleFonts.cairo(color: AppColors.primaryColor),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8.0),

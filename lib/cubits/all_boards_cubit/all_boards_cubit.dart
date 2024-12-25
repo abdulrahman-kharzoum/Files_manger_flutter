@@ -124,7 +124,7 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
         ],
         invitedUsers: []),
   ];
-
+  List<int> groupsId=[];
   Future<void> addBoard() async {
     allBoards.add(
         Board(

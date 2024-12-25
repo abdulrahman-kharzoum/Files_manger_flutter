@@ -121,16 +121,26 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
 
                           if (exists) {
                             boardSettingsCubit.saveBoard();
+                            boardSettingsCubit.updateBoard(
+                                context: context,
+                                title: newBoard.title,
+                                description: newBoard.description,
+                                color: newBoard.color,
+                                lang: newBoard.language.code,
+                            );
                           } else {
                             widget.allBoardCubit
                                 .addNewBoard(newBoard: newBoard);
-                            print("langauge code : "+ newBoard.language.code);
+
                             boardSettingsCubit.addBoard(
                                 context: context,
                                 title: newBoard.title,
                                 description: newBoard.description,
                                 color: newBoard.color,
-                                lang: newBoard.language.code);
+                                lang: newBoard.language.code,
+                              groupIds: widget.allBoardCubit.groupsId
+
+                            );
                           }
 
                           widget.allBoardCubit.refresh();

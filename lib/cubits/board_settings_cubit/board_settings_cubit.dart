@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -14,6 +15,7 @@ import 'package:files_manager/cubits/locale_cubit/locale_cubit.dart';
 import 'package:files_manager/models/board_model.dart';
 
 import '../../core/shared/local_network.dart';
+import '../../models/group.dart';
 import '../../models/user_model.dart';
 
 part 'board_settings_state.dart';
@@ -117,6 +119,7 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     required String description,
     required String color,
     required String lang,
+    required    List<int> groupIds,
   }) async {
     try {
       emit(BoardSettingsLoadingState());
@@ -138,7 +141,15 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       );
       print('The status code is => ${response.statusCode}');
       print(response.data);
-emit(BoardSettingsSuccessState());
+      if (response.statusCode == 200){
+        groupIds.add(response.data['data']['id']);
+        String groupIdsJson = jsonEncode(groupIds);
+
+        await CashNetwork.insertToCash(key: 'groups_id', value: groupIdsJson);
+
+        emit(BoardSettingsSuccessState());
+
+      }
     } on DioException catch (e) {
       Navigator.pop(context);
       errorHandler(e: e, context: context);
@@ -207,56 +218,45 @@ emit(BoardSettingsSuccessState());
   }
   Future<void> updateBoard({
     required BuildContext context,
+    required String title,
+    required String description,
+    required String color,
+    required String lang,
   }) async {
     try {
       emit(BoardSettingsLoadingState());
-      String? token = CashNetwork.getCashData(key: 'token');
-      String fileName1 = currentBoard.imageFile == null
-          ? ''
-          : currentBoard.imageFile!.path.split('/').last;
-      print('the icon is => ${currentBoard.icon}');
-      print('the description is => ${currentBoard.description}');
-      print(
-          'the color is => ${colorToHex(allColors[currentBoard.getApplicationSelectedColor()]['real']!)}');
-      print('the title is => ${currentBoard.title}');
 
-      FormData formData = FormData.fromMap({
-        'icon': currentBoard.icon,
-        'language_id': currentBoard.language.id,
-        'description': currentBoard.description,
-        'color': colorToHex(
-            allColors[currentBoard.getApplicationSelectedColor()]['real']!),
-        'visibility': currentBoard.visibility,
-        'has_image': currentBoard.hasImage ? 1 : 0,
-        'title': currentBoard.title,
-        "image": currentBoard.imageFile == null
-            ? null
-            : MultipartFile.fromFileSync(
-                currentBoard.imageFile!.path,
-                filename: fileName1,
-              ),
-      });
+      String? token = CashNetwork.getCashData(key: 'token');
+
       final response = await dio().post(
-        'boards/update-board/${currentBoard.uuid}',
-        data: formData,
+        'group/create',
+        data: {
+          'name': title,
+
+          'description': description,
+          'color': color,
+          'lang': lang,
+        },
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
       print('The status code is => ${response.statusCode}');
       print(response.data);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200){
+        // groupIds.add(response.data['data']['id']);
+        // String groupIdsJson = jsonEncode(groupIds);
+        //
+        // await CashNetwork.insertToCash(key: 'groups_id', value: groupIdsJson);
+        print("group has been updated");
         emit(BoardSettingsSuccessState());
+
       }
     } on DioException catch (e) {
       Navigator.pop(context);
       errorHandler(e: e, context: context);
-      if (e.response!.statusCode == 401) {
-        emit(BoardSettingsExpiredState());
-        return;
-      }
+
       print('The response is => ${e.response!.data}');
-      print('The failed status code is ${e.response!.statusCode}');
       emit(BoardSettingsFailedState(errorMessage: e.response!.data['message']));
     } catch (e) {
       Navigator.pop(context);
