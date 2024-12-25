@@ -47,7 +47,7 @@ class CustomFormTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(nameLabel!, style: const TextStyle(color: Colors.white)),
+        Text(nameLabel!, style:  TextStyle(color: Theme.of(context).textTheme.bodySmall!.color,)),
         nameLabel == null || nameLabel!.isEmpty
             ? TextFormField(
                 enabled: enabled,
@@ -64,8 +64,8 @@ class CustomFormTextField extends StatelessWidget {
                 focusNode: focusNode,
                 decoration: InputDecoration(
                   hintText: hintText,
-                  hintStyle: const TextStyle(
-                      color: Colors.black12, fontWeight: FontWeight.bold),
+                  hintStyle:  TextStyle(
+                      color: Theme.of(context).textTheme.labelMedium!.color, fontWeight: FontWeight.bold),
                   // labelText: nameLabel,
                   labelStyle: styleInput ??
                       const TextStyle(
@@ -112,8 +112,8 @@ class CustomFormTextField extends StatelessWidget {
                 maxLines: maxLines,
                 decoration: InputDecoration(
                   hintText: hintText,
-                  hintStyle: const TextStyle(
-                      color: Colors.black12, fontWeight: FontWeight.bold),
+                  hintStyle:  TextStyle(
+                      color: Theme.of(context).textTheme.labelMedium!.color,fontWeight: FontWeight.bold),
                   labelText: nameLabel,
                   labelStyle: styleInput ??
                       const TextStyle(

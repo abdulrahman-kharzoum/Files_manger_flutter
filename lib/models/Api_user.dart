@@ -94,27 +94,59 @@ class Authority {
   }
 }
 
-class UserResponse {
+class UserResponseRegiester {
   final UserModel model;
   final String token;
   final String message;
 
-  UserResponse({required this.model, required this.token, required this.message});
+  UserResponseRegiester({required this.model, required this.token, required this.message});
 
   // From JSON
-  factory UserResponse.fromJson(Map<String, dynamic> json) {
-    return UserResponse(
+  factory UserResponseRegiester.fromJson(Map<String, dynamic> json) {
+    return UserResponseRegiester(
       model: UserModel.fromJson(json['data']['model']),
       token: json['data']['token'],
       message: json['message'],
     );
   }
 
+
+
   // To JSON
   Map<String, dynamic> toJson() {
     return {
       'data': {
         'model': model.toJson(),
+        'token': token,
+      },
+      'message': message,
+    };
+  }
+}
+
+class UserResponseLogin {
+  final UserModel model;
+  final String token;
+  final String message;
+
+  UserResponseLogin({required this.model, required this.token, required this.message});
+
+  // From JSON
+  factory UserResponseLogin.fromJson(Map<String, dynamic> json) {
+    return UserResponseLogin(
+      model: UserModel.fromJson(json['data']['user']),
+      token: json['data']['token'],
+      message: json['message'],
+    );
+  }
+
+
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'data': {
+        'user': model.toJson(),
         'token': token,
       },
       'message': message,

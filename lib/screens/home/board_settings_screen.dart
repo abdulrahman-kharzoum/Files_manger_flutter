@@ -1,4 +1,5 @@
 import 'package:files_manager/core/functions/statics.dart';
+import 'package:files_manager/cubits/add_board_cubit/add_board_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -19,15 +20,28 @@ import 'package:files_manager/widgets/custom_text_fields/custom_text_fields.dart
 
 import '../../cubits/theme_cubit/app_theme_cubit.dart';
 
-class BoardSettingsScreen extends StatelessWidget {
+class BoardSettingsScreen extends StatefulWidget {
   const BoardSettingsScreen({super.key, required this.allBoardCubit});
+
   final AllBoardsCubit allBoardCubit;
+
+  @override
+  State<BoardSettingsScreen> createState() => _BoardSettingsScreenState();
+}
+
+class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<BoardSettingsCubit>().initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     final boardSettingsCubit = context.read<BoardSettingsCubit>();
-    final localeCubit = context.read<LocaleCubit>();
+  final localeCubit = context.read<LocaleCubit>();
 
     return BlocConsumer<BoardSettingsCubit, BoardSettingsState>(
       listener: (context, state) {
@@ -59,136 +73,166 @@ class BoardSettingsScreen extends StatelessWidget {
           context: context,
           child: WillPopScope(
             onWillPop: () async {
-              await allBoardCubit.refresh();
+              await widget.allBoardCubit.refresh();
               return true;
             },
             child: DefaultTabController(
               length: boardSettingsCubit.currentBoard.parentId != null ? 1 : 3,
               child: BlocBuilder<AppThemeCubit, AppThemeState>(
-  builder: (context, state) {
-    final isDarkTheme = state is AppThemeDark;
-    return Scaffold(
-                appBar: AppBar(
-                  backgroundColor: isDarkTheme ? AppColors.darkGray:Colors.grey,
-                  flexibleSpace: SizedBox(
-                    height: mediaQuery.height / 3,
-                  ),
-                  toolbarHeight: Statics.isPlatformDesktop
-                      ? mediaQuery.height / 8
-                      : mediaQuery.height / 12,
-                  title: SizedBox(
-                    child: CustomTextFields(
-                      textAlign: TextAlign.end,
-                      styleInput: TextStyle(
-                          color:  Theme.of(context).textTheme.bodySmall!.color!,
-                          fontWeight: FontWeight.bold,
-                          fontSize: Statics.isPlatformDesktop
-                              ? mediaQuery.width / 60
-                              : mediaQuery.width / 15),
-                      controller: boardSettingsCubit.boardTitleController,
-                      onChanged: (p0) async {
-                        await boardSettingsCubit.changeTitle();
-                      },
-                    ),
-                  ),
-                  centerTitle: true,
-                  leading: IconButton(
-                      onPressed: () async {
-                        Navigator.pop(context);
-                        allBoardCubit.refresh();
-                        FocusScope.of(context).unfocus();
-                      },
-                      icon:  Icon(
-                        Icons.cancel_outlined,
-                        color: Theme.of(context).textTheme.bodySmall!.color,
-                      )),
-                  bottom: TabBar(
-                    labelColor:isDarkTheme?Colors.white:Colors.black,
-                    unselectedLabelColor: Theme.of(context).textTheme.bodySmall!.color,
-                    indicator: BoxDecoration(
-                      color: isDarkTheme?AppColors.dark:AppColors.gray,
-                    ),
-                    labelStyle: TextStyle(
-                        fontSize: Statics.isPlatformDesktop
-                            ? mediaQuery.width / 90
-                            : mediaQuery.width / 30),
-                    unselectedLabelStyle: TextStyle(
-                        fontSize: Statics.isPlatformDesktop
-                            ? mediaQuery.width / 90
-                            : mediaQuery.width / 30),
-                    tabs: boardSettingsCubit.currentBoard.parentId != null
-                        ? [
-                      Tab(
-                        text: S.of(context).settings,
-                        icon: const Icon(
-                          Icons.settings,
-                          // color: Colors.white,
+                builder: (context, state) {
+                  final isDarkTheme = state is AppThemeDark;
+                  return Scaffold(
+                    appBar: AppBar(
+                      backgroundColor:
+                          isDarkTheme ? AppColors.darkGray : Colors.grey,
+                      flexibleSpace: SizedBox(
+                        height: mediaQuery.height / 3,
+                      ),
+                      toolbarHeight: Statics.isPlatformDesktop
+                          ? mediaQuery.height / 8
+                          : mediaQuery.height / 12,
+                      title: SizedBox(
+                        child: CustomTextFields(
+                          textAlign: TextAlign.end,
+                          styleInput: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodySmall!.color!,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Statics.isPlatformDesktop
+                                  ? mediaQuery.width / 60
+                                  : mediaQuery.width / 15),
+                          controller: boardSettingsCubit.boardTitleController,
+                          onChanged: (p0) async {
+                            await boardSettingsCubit.changeTitle();
+                          },
                         ),
                       ),
-                    ]
-                        : [
-                      Tab(
-                        text: S.of(context).settings,
+                      centerTitle: true,
+                      leading: IconButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+
+                          boardSettingsCubit.saveBoard();
+
+                          final newBoard = boardSettingsCubit.currentBoard;
+
+                          final exists = widget.allBoardCubit.allBoards
+                              .any((board) => board.id == newBoard.id);
+
+                          if (exists) {
+                            boardSettingsCubit.saveBoard();
+                          } else {
+                            widget.allBoardCubit
+                                .addNewBoard(newBoard: newBoard);
+                            print("langauge code : "+ newBoard.language.code);
+                            boardSettingsCubit.addBoard(
+                                context: context,
+                                title: newBoard.title,
+                                description: newBoard.description,
+                                color: newBoard.color,
+                                lang: newBoard.language.code);
+                          }
+
+                          widget.allBoardCubit.refresh();
+
+                          FocusScope.of(context).unfocus();
+                        },
                         icon: Icon(
-                          Icons.settings,
+                          Icons.cancel_outlined,
                           color: Theme.of(context).textTheme.bodySmall!.color,
-                          size: Statics.isPlatformDesktop
-                              ? mediaQuery.width / 50
-                              : mediaQuery.width / 30,
                         ),
                       ),
-                      Tab(
-                        text: S.of(context).users,
-                        icon: Icon(
-                          Icons.person,
-                          // color: Colors.white,
-                          size: Statics.isPlatformDesktop
-                              ? mediaQuery.width / 50
-                              : mediaQuery.width / 30,
+                      bottom: TabBar(
+                        labelColor: isDarkTheme ? Colors.white : Colors.black,
+                        unselectedLabelColor:
+                            Theme.of(context).textTheme.bodySmall!.color,
+                        indicator: BoxDecoration(
+                          color: isDarkTheme ? AppColors.dark : AppColors.gray,
                         ),
+                        labelStyle: TextStyle(
+                            fontSize: Statics.isPlatformDesktop
+                                ? mediaQuery.width / 90
+                                : mediaQuery.width / 30),
+                        unselectedLabelStyle: TextStyle(
+                            fontSize: Statics.isPlatformDesktop
+                                ? mediaQuery.width / 90
+                                : mediaQuery.width / 30),
+                        tabs: boardSettingsCubit.currentBoard.parentId != null
+                            ? [
+                                Tab(
+                                  text: S.of(context).settings,
+                                  icon: const Icon(
+                                    Icons.settings,
+                                    // color: Colors.white,
+                                  ),
+                                ),
+                              ]
+                            : [
+                                Tab(
+                                  text: S.of(context).settings,
+                                  icon: Icon(
+                                    Icons.settings,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .color,
+                                    size: Statics.isPlatformDesktop
+                                        ? mediaQuery.width / 50
+                                        : mediaQuery.width / 30,
+                                  ),
+                                ),
+                                Tab(
+                                  text: S.of(context).users,
+                                  icon: Icon(
+                                    Icons.person,
+                                    // color: Colors.white,
+                                    size: Statics.isPlatformDesktop
+                                        ? mediaQuery.width / 50
+                                        : mediaQuery.width / 30,
+                                  ),
+                                ),
+                                Tab(
+                                  text: S.of(context).privacy,
+                                  icon: Icon(
+                                    Icons.visibility,
+                                    // color: Colors.white,
+                                    size: Statics.isPlatformDesktop
+                                        ? mediaQuery.width / 50
+                                        : mediaQuery.width / 30,
+                                  ),
+                                ),
+                              ],
                       ),
-                      Tab(
-                        text: S.of(context).privacy,
-                        icon: Icon(
-                          Icons.visibility,
-                          // color: Colors.white,
-                          size: Statics.isPlatformDesktop
-                              ? mediaQuery.width / 50
-                              : mediaQuery.width / 30,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                body: SizedBox(
-                  child: boardSettingsCubit.currentBoard.parentId != null
-                      ? TabBarView(
-                    children: [
-                      BoardSettingsSection(
-                        boardSettingsCubit: boardSettingsCubit,
-                        mediaQuery: mediaQuery,
-                      ),
-                    ],
-                  )
-                      : TabBarView(
-                    children: [
-                      BoardSettingsSection(
-                        boardSettingsCubit: boardSettingsCubit,
-                        mediaQuery: mediaQuery,
-                      ),
-                      BoardUsersSection(
-                          mediaQuery: mediaQuery,
-                          boardSettingsCubit: boardSettingsCubit),
-                      BoardPrivacySection(
-                        boardSettingsCubit: boardSettingsCubit,
-                        mediaQuery: mediaQuery,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-  },
-),
+                    ),
+                    body: SizedBox(
+                      child: boardSettingsCubit.currentBoard.parentId != null
+                          ? TabBarView(
+                              children: [
+                                BoardSettingsSection(
+                                  boardSettingsCubit: boardSettingsCubit,
+                                  mediaQuery: mediaQuery,
+                                ),
+                              ],
+                            )
+                          : TabBarView(
+                              children: [
+                                BoardSettingsSection(
+                                  boardSettingsCubit: boardSettingsCubit,
+                                  mediaQuery: mediaQuery,
+                                ),
+                                BoardUsersSection(
+                                    mediaQuery: mediaQuery,
+                                    boardSettingsCubit: boardSettingsCubit),
+                                BoardPrivacySection(
+                                  boardSettingsCubit: boardSettingsCubit,
+                                  mediaQuery: mediaQuery,
+                                ),
+                              ],
+                            ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         );

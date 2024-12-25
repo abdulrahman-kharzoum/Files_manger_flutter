@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as Dio;
@@ -6,6 +8,7 @@ import 'package:files_manager/core/functions/apis_error_handler.dart';
 import 'package:files_manager/core/server/dio_settings.dart';
 import 'package:files_manager/core/shared/local_network.dart';
 import 'package:files_manager/models/board_model.dart';
+import '../../models/Api_user.dart';
 
 part 'add_board_state.dart';
 
@@ -24,11 +27,16 @@ class AddBoardCubit extends Cubit<AddBoardState> {
     try {
       emit(AddBoardLoadingState());
       String? token = CashNetwork.getCashData(key: 'token');
+      String? creator_id = CashNetwork.getCashData(key: 'userId');
 
+      // var result = await CashNetwork.getCashData(key: 'user_model');
+      // final userModel = UserModel.fromJson(jsonDecode(result));
+      //
       final response = await dio().post(
         'boards/create-new-board',
         data: {
           'name': title,
+          "creator_id": creator_id,
           'description': description,
           'color': color,
           'lang': lang,
@@ -39,10 +47,11 @@ class AddBoardCubit extends Cubit<AddBoardState> {
       );
       print('The status code is => ${response.statusCode}');
       print(response.data);
-      if (response.statusCode == 201) {
-        createdBoard = Board.fromJson(response.data['board']);
-        emit(AddBoardSuccessState(
-            isSubBoard: false, createdBoard: createdBoard));
+      if (response.statusCode == 200) {
+
+        // createdBoard = Board.fromJson(response.data['board']);
+        // emit(AddBoardSuccessState(
+        //     isSubBoard: false, createdBoard: createdBoard));
       }
     } on DioException catch (e) {
       Navigator.pop(context);

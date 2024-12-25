@@ -14,6 +14,7 @@ import 'package:files_manager/cubits/locale_cubit/locale_cubit.dart';
 import 'package:files_manager/models/board_model.dart';
 
 import '../../core/shared/local_network.dart';
+import '../../models/user_model.dart';
 
 part 'board_settings_state.dart';
 
@@ -24,6 +25,7 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
   TextEditingController boardTitleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController searchController = TextEditingController();
+  late String selectedColor;
   bool emojiKeyboard = false;
 
   List<dynamic> searchMembers = [];
@@ -33,6 +35,15 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     descriptionController =
         TextEditingController(text: currentBoard.description);
     await resetSearch();
+    if (currentBoard != null) {
+      // If currentBoard is provided, use its values to pre-populate the settings
+      boardTitleController = TextEditingController(text: currentBoard!.title);
+      selectedColor = currentBoard!.color;
+    } else {
+      // If no board is provided, set default values for a new board
+      boardTitleController = TextEditingController();
+      selectedColor = '#FFFFFF'; // Default color for new boards
+    }
     emit(BoardSettingsInitial());
   }
 
@@ -99,6 +110,48 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     emit(BoardSettingsInitial());
   }
 
+
+  Future<void> addBoard({
+    required BuildContext context,
+    required String title,
+    required String description,
+    required String color,
+    required String lang,
+  }) async {
+    try {
+      emit(BoardSettingsLoadingState());
+      String? token = CashNetwork.getCashData(key: 'token');
+      String? creator_id = CashNetwork.getCashData(key: 'userId');
+
+      final response = await dio().post(
+        'group/create',
+        data: {
+          'name': title,
+          "creator_id": creator_id,
+          'description': description,
+          'color': color,
+          'lang': lang,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      print('The status code is => ${response.statusCode}');
+      print(response.data);
+emit(BoardSettingsSuccessState());
+    } on DioException catch (e) {
+      Navigator.pop(context);
+      errorHandler(e: e, context: context);
+
+      print('The response is => ${e.response!.data}');
+      emit(BoardSettingsFailedState(errorMessage: e.response!.data['message']));
+    } catch (e) {
+      Navigator.pop(context);
+      print('================ catch exception =================');
+      print(e);
+      emit(BoardSettingsFailedState(errorMessage: 'Catch exception'));
+    }
+  }
   Future<void> changeTitle() async {
     currentBoard.title = boardTitleController.text;
     emit(BoardSettingsInitial());
@@ -120,7 +173,38 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     currentBoard.hasImage = false;
     emit(BoardSettingsInitial());
   }
+  void saveBoard() {
+   if (boardTitleController.text.isNotEmpty) {
 
+      final newBoard = Board(
+        language: Language(id: 1, name: 'english', code: 'en', direction: 'lr'),
+        id: 0, // Will be assigned by backend after creation
+        uuid: currentBoard?.uuid ?? 'new-board-uuid', // UUID for new or existing board
+        parentId: currentBoard?.parentId ?? null,
+        userId: 1, // Example user ID, this should be dynamically set
+       roleInBoard: currentBoard?.roleInBoard ?? 'Member', // Default role
+        color: selectedColor,
+        allFiles: [],
+        tasksCommentsCount: 0,
+        shareLink: '',
+        title: boardTitleController.text,
+        description: '',
+        icon: '',
+        hasImage: false,
+        isFavorite: false,
+        image: '',
+        visibility: 'Public',
+        createdAt: DateTime.now(),
+        children: [],
+        members: [],
+        invitedUsers: [],
+      );
+
+      emit(BoardSettingsSaved(newBoard: newBoard));
+    } else {
+      emit(BoardSettingsFailedState(errorMessage: 'Board title is required!'));
+    }
+  }
   Future<void> updateBoard({
     required BuildContext context,
   }) async {

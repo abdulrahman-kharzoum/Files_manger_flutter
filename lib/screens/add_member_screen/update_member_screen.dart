@@ -100,8 +100,8 @@ class UpdateMemberScreen extends StatelessWidget {
                     ),
                     Text(
                       S.of(context).name,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style:  TextStyle(
+                        color: Theme.of(context).textTheme.bodySmall!.color,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -111,16 +111,16 @@ class UpdateMemberScreen extends StatelessWidget {
                       hintText:
                           '${currentMember.firstName} ${currentMember.lastName}',
                       borderRadius: 5,
-                      styleInput: const TextStyle(color: Colors.white),
+                      styleInput:  TextStyle(color:Theme.of(context).textTheme.bodySmall!.color,),
                       controller: addMemberCubit.memberEmailController,
-                      borderColor: Colors.white54,
-                      fillColor: Colors.white10,
+                      borderColor: Theme.of(context).textTheme.labelMedium!.color!,
+                      fillColor: Theme.of(context).textTheme.labelSmall!.color!,
                       validator: validator.validateEmail,
                     ),
                     Text(
                       S.of(context).email,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style:  TextStyle(
+                        color:Theme.of(context).textTheme.bodySmall!.color,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -129,10 +129,10 @@ class UpdateMemberScreen extends StatelessWidget {
                       enabled: false,
                       hintText: currentMember.email,
                       borderRadius: 5,
-                      styleInput: const TextStyle(color: Colors.white),
+                      styleInput:  TextStyle(color: Theme.of(context).textTheme.labelMedium!.color,),
                       controller: addMemberCubit.memberEmailController,
-                      borderColor: Colors.white54,
-                      fillColor: Colors.white10,
+                      borderColor:Theme.of(context).textTheme.labelMedium!.color!,
+                      fillColor: Theme.of(context).textTheme.labelSmall!.color!,
                       validator: validator.validateEmail,
                     ),
                     SizedBox(
@@ -144,19 +144,19 @@ class UpdateMemberScreen extends StatelessWidget {
                         await addMemberCubit.changePermission('admin');
                       },
                       leading: Radio(
-                          activeColor: Colors.white,
+                          activeColor: Theme.of(context).textTheme.bodySmall!.color,
                           value: 'admin',
                           groupValue: addMemberCubit.currentRole,
                           onChanged: (value) async {
                             await addMemberCubit.changePermission(value!);
                           }),
                       title: Text(S.of(context).admin,
-                          style: const TextStyle(
-                              color: Colors.white,
+                          style:  TextStyle(
+                              color: Theme.of(context).textTheme.bodySmall!.color,
                               fontWeight: FontWeight.bold)),
                       subtitle: Text(
                         S.of(context).admin_desc,
-                        style: const TextStyle(color: Colors.white54),
+                        style:  TextStyle(color: Theme.of(context).textTheme.labelMedium!.color!,),
                       ),
                     ),
                     ListTile(
@@ -165,19 +165,19 @@ class UpdateMemberScreen extends StatelessWidget {
                         await addMemberCubit.changePermission('user');
                       },
                       leading: Radio(
-                          activeColor: Colors.white,
+                          activeColor: Theme.of(context).textTheme.bodySmall!.color,
                           value: 'user',
                           groupValue: addMemberCubit.currentRole,
                           onChanged: (value) async {
                             await addMemberCubit.changePermission(value!);
                           }),
                       title: Text(S.of(context).user,
-                          style: const TextStyle(
-                              color: Colors.white,
+                          style:  TextStyle(
+                              color: Theme.of(context).textTheme.bodySmall!.color,
                               fontWeight: FontWeight.bold)),
                       subtitle: Text(
                         S.of(context).user_desc,
-                        style: const TextStyle(color: Colors.white54),
+                        style:  TextStyle(color: Theme.of(context).textTheme.labelMedium!.color!),
                       ),
                     ),
                     ListTile(
@@ -186,19 +186,19 @@ class UpdateMemberScreen extends StatelessWidget {
                         await addMemberCubit.changePermission('guest');
                       },
                       leading: Radio(
-                          activeColor: Colors.white,
+                          activeColor: Theme.of(context).textTheme.bodySmall!.color,
                           value: 'guest',
                           groupValue: addMemberCubit.currentRole,
                           onChanged: (value) async {
                             await addMemberCubit.changePermission(value!);
                           }),
                       title: Text(S.of(context).guest,
-                          style: const TextStyle(
-                              color: Colors.white,
+                          style:  TextStyle(
+                              color: Theme.of(context).textTheme.bodySmall!.color,
                               fontWeight: FontWeight.bold)),
                       subtitle: Text(
                         S.of(context).guest_desc,
-                        style: const TextStyle(color: Colors.white54),
+                        style:  TextStyle(color:Theme.of(context).textTheme.labelMedium!.color!,),
                       ),
                     ),
                     SizedBox(
@@ -218,8 +218,8 @@ class UpdateMemberScreen extends StatelessWidget {
                         ),
                         child: Text(
                           S.of(context).edit_user,
-                          style: const TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style:  TextStyle(
+                              color: Theme.of(context).textTheme.bodySmall!.color, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),

@@ -103,7 +103,56 @@ class BoardScreen extends StatelessWidget {
               onPressed: () async {
                 // final boardCubit = context.read<BoardCubit>();
 
-                await allBoardsCubit.addBoard();
+                final newBoard = Board(
+                  id: 0,
+                  // This will be assigned later after creation
+                  uuid: 'new-board-uuid',
+                  // Generate a unique UUID or let the backend handle it
+                  parentId: null,
+                  // Default to null for a new board
+                  userId: 1,
+                  // Example user ID, replace with actual user ID
+                  language: Language(
+                      id: 1, name: 'english', code: 'en', direction: 'lr'),
+                  roleInBoard: 'Member',
+                  // Default role, adjust as needed
+                  color: '#FFFFFF',
+                  // Default color
+                  allFiles: [],
+                  tasksCommentsCount: 0,
+                  shareLink: '',
+                  title: '',
+                  description: '',
+                  icon: '',
+                  hasImage: false,
+                  isFavorite: false,
+                  image: '',
+                  visibility: 'Public',
+                  createdAt: DateTime.now(),
+                  children: [],
+                  members: [],
+                  invitedUsers: [],
+                );
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) =>
+                              BoardSettingsCubit(currentBoard: newBoard),
+                        ),
+                        BlocProvider(
+                          create: (context) => AddBoardCubit(),
+                        ),
+                      ],
+                      child: BoardSettingsScreen(
+                        allBoardCubit: allBoardsCubit,
+                      ),
+                    ),
+                  ),
+                );
+                // await allBoardsCubit.addBoard();
                 // var board = Board(
                 //     id:1,
                 //     uuid: '2',
@@ -166,7 +215,6 @@ class BoardScreen extends StatelessWidget {
                 //   },
                 // );
 
-
                 // final addBoardCubit = context.read<AddBoardCubit>();
                 // addBoardCubit
                 //     .addBoard(
@@ -218,7 +266,6 @@ class BoardScreen extends StatelessWidget {
                 //     );
                 //   }
                 // });
-
               },
               icon: const Icon(Icons.add),
             );
@@ -233,7 +280,6 @@ class BoardScreen extends StatelessWidget {
             },
             icon: Icon(
               Icons.edit_document,
-
               size: Statics.isPlatformDesktop
                   ? mediaQuery.width / 50
                   : mediaQuery.width / 15,
@@ -255,13 +301,11 @@ class BoardScreen extends StatelessWidget {
                       onPressed: () {
                         // Navigator.of(context).pushNamed('/report_screen');
                       },
-                      icon: Icon(Icons.logout,
-                          size: mediaQuery.width / 50),
+                      icon: Icon(Icons.logout, size: mediaQuery.width / 50),
                     ),
                   ],
                 )
               : PopupMenuButton<String>(
-
                   onSelected: (value) async {},
                   itemBuilder: (BuildContext context) {
                     return [
@@ -272,16 +316,13 @@ class BoardScreen extends StatelessWidget {
                           children: [
                             const Icon(
                               Icons.notifications,
-
                             ),
                             SizedBox(
                               width: mediaQuery.width / 90,
                             ),
                             Text(
                               S.of(context).notifications,
-                              style: const TextStyle(
-
-                              ),
+                              style: const TextStyle(),
                             ),
                           ],
                         ),
@@ -293,16 +334,13 @@ class BoardScreen extends StatelessWidget {
                           children: [
                             const Icon(
                               Icons.logout,
-
                             ),
                             SizedBox(
                               width: mediaQuery.width / 90,
                             ),
                             Text(
                               S.of(context).logout,
-                              style: const TextStyle(
-
-                              ),
+                              style: const TextStyle(),
                             ),
                           ],
                         ),

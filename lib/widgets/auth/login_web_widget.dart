@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../core/animation/dialogs/dialogs.dart';
 import '../../core/functions/validate_input.dart';
 import '../../cubits/add_board_cubit/add_board_cubit.dart';
 import '../../cubits/all_boards_cubit/all_boards_cubit.dart';
@@ -20,10 +21,12 @@ class LoginWebWidget extends StatelessWidget {
       required this.loginCubit,
       required this.validator,
       required this.showPassword});
+
   final LoginCubit loginCubit;
   final Validate validator;
   final bool showPassword;
   final LocaleCubit localeCubit;
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
@@ -117,31 +120,38 @@ class LoginWebWidget extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           if (loginCubit.formKey.currentState!.validate()) {
-                            // BlocProvider.of<LoginCubit>(context).login(
-                            //   context: context,
-                            //   email: emailController.text.toString(),
-                            //   password: passwordController.text.toString(),
-                            // );
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider(
-                                        create: (context) => AllBoardsCubit()
-                                          ..initState(context: context),
-                                      ),
-                                      BlocProvider(
-                                        create: (context) =>
-                                            LeaveFromBoardCubit(),
-                                      ),
-                                      BlocProvider(
-                                        create: (context) => AddBoardCubit(),
-                                      ),
-                                    ],
-                                    child: const BoardScreen(),
-                                  ),
-                                ));
+                            BlocProvider.of<LoginCubit>(context).login(
+                              context: context,
+                              email: loginCubit.emailController.text.toString(),
+                              password:
+                                  loginCubit.passwordController.text.toString(),
+                            );
+                            if (loginCubit.state is LoginSuccess) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MultiBlocProvider(
+                                      providers: [
+                                        BlocProvider(
+                                          create: (context) => AllBoardsCubit()
+                                            ..initState(context: context),
+                                        ),
+                                        BlocProvider(
+                                          create: (context) =>
+                                              LeaveFromBoardCubit(),
+                                        ),
+                                        BlocProvider(
+                                          create: (context) => AddBoardCubit(),
+                                        ),
+                                      ],
+                                      child: const BoardScreen(),
+                                    ),
+                                  ));
+                            } else {
+                              errorDialog(
+                                  text: "Wrong email or password",
+                                  context: context);
+                            }
 
                             print(loginCubit.emailController.text.toString());
                             print(

@@ -79,7 +79,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       print(response.data['message']);
 
       final responseData = response.data['data'];
-      UserResponse userResponse = UserResponse.fromJson(response.data);
+      UserResponseRegiester userResponse = UserResponseRegiester.fromJson(response.data);
 
 
       final userModel = responseData['model'];

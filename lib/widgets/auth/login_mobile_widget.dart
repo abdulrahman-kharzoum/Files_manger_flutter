@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../core/animation/dialogs/dialogs.dart';
 import '../../generated/l10n.dart';
 import '../custom_text_fields/custom_text_field.dart';
 
@@ -88,7 +89,20 @@ class LoginMobileWidget extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     if (loginCubit.formKey.currentState!.validate()) {
-                      Navigator.pushNamed(context, '/navigation_screen');
+
+                      BlocProvider.of<LoginCubit>(context).login(
+                        context: context,
+                        email: loginCubit.emailController.text.toString(),
+                        password:
+                        loginCubit.passwordController.text.toString(),
+                      );
+                      if (loginCubit.state is LoginSuccess) {
+                        Navigator.pushNamed(context, '/navigation_screen');
+                      } else if (loginCubit.state is LoginFailure){
+                        errorDialog(
+                            text: "Wrong email or password",
+                            context: context);
+                      }
                       print(loginCubit.emailController.text.toString());
                       print(loginCubit.passwordController.text.toString());
                     }

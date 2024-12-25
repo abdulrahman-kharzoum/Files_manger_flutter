@@ -195,10 +195,17 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
   }
 
   Future<void> addNewBoard({required Board newBoard}) async {
+    if (pagingController.itemList == null) {
+    pagingController.itemList = [];
+    }
+
     pagingController.itemList!.add(newBoard);
     allBoards.add(newBoard);
+
     emit(AllBoardsInitial());
   }
+
+
 
   Future<void> removeBoard({required int index, required int id}) async {
     if (pagingController.itemList != null) {
