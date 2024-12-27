@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:files_manager/core/functions/color_to_hex.dart';
+import 'package:files_manager/models/group.dart';
 import 'package:files_manager/models/invited_user_model.dart';
 import 'package:files_manager/models/member_model.dart';
 import 'package:files_manager/models/user_model.dart';
@@ -99,6 +100,32 @@ class Board {
           List<Member>.from(json['members'].map((x) => Member.fromJson(x))),
       invitedUsers: List<InvitedUser>.from(
           json['invitations'].map((x) => InvitedUser.fromJson(x))),
+    );
+  }
+  /// Factory constructor to convert `Group` to `Board`
+  factory Board.fromGroup(Group group) {
+    return Board(
+      id: group.id,
+      uuid: '', // UUID is not available in Group; leave empty or generate one.
+      parentId: null, // Parent ID is not available; leave as null.
+      userId: group.creator.id, // Use the creator's ID as userId.
+      language: Language(id: 1, name: 'english', code: group.lang, direction: 'lr'), // Map `lang` to `Language`.
+      roleInBoard: null, // Role in board is not available; leave as null.
+      color: group.color, // Map directly from Group's color.
+      allFiles: [], // Files not available in Group; leave as empty.
+      tasksCommentsCount: 0, // Not available in Group; default to 0.
+      shareLink: '', // Not available in Group; leave empty.
+      title: group.name, // Use Group's name as the title.
+      description: group.description, // Map directly from Group.
+      icon: '', // Icon not available; leave empty.
+      hasImage: false, // Not available; default to false.
+      isFavorite: false, // Not available; default to false.
+      image: '', // Image not available; leave empty.
+      visibility: 'public', // Not available; default to 'public'.
+      createdAt: DateTime.now(), // Not available; use current time.
+      children: [], // Children are not available; leave as empty.
+      members: [], // Members need mapping if available in Group.
+      invitedUsers: [], // Invited users need mapping if available in Group.
     );
   }
 }

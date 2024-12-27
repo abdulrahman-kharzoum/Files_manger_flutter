@@ -15,7 +15,7 @@ import 'package:files_manager/cubits/locale_cubit/locale_cubit.dart';
 import 'package:files_manager/models/board_model.dart';
 
 import '../../core/shared/local_network.dart';
-import '../../models/group.dart';
+
 import '../../models/user_model.dart';
 
 part 'board_settings_state.dart';
@@ -23,7 +23,7 @@ part 'board_settings_state.dart';
 class BoardSettingsCubit extends Cubit<BoardSettingsState> {
   BoardSettingsCubit({required this.currentBoard})
       : super(BoardSettingsInitial());
-  final Board currentBoard;
+    final Board currentBoard;
   TextEditingController boardTitleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController searchController = TextEditingController();
@@ -119,7 +119,7 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     required String description,
     required String color,
     required String lang,
-    required    List<int> groupIds,
+    required List<int> groupIds,
   }) async {
     try {
       emit(BoardSettingsLoadingState());
@@ -142,10 +142,14 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       print('The status code is => ${response.statusCode}');
       print(response.data);
       if (response.statusCode == 200){
-        groupIds.add(response.data['data']['id']);
-        String groupIdsJson = jsonEncode(groupIds);
+        if(currentBoard!= null){
+          currentBoard.id = response.data['data']['id'];
+          currentBoard.userId = response.data['data']['creator']['id'];
 
-        await CashNetwork.insertToCash(key: 'groups_id', value: groupIdsJson);
+        }
+        // groupIds.add(response.data['data']['id']);
+        // String groupIdsJson = jsonEncode(groupIds);
+        // await CashNetwork.insertToCash(key: 'groups_id', value: groupIdsJson);
 
         emit(BoardSettingsSuccessState());
 
@@ -218,6 +222,7 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
   }
   Future<void> updateBoard({
     required BuildContext context,
+    required int groupId,
     required String title,
     required String description,
     required String color,
@@ -228,8 +233,8 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
 
       String? token = CashNetwork.getCashData(key: 'token');
 
-      final response = await dio().post(
-        'group/create',
+      final response = await dio().put(
+        'group/$groupId',
         data: {
           'name': title,
 
@@ -266,4 +271,5 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       print(e);
     }
   }
+
 }

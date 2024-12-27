@@ -36,23 +36,26 @@ class UserModel {
   // From JSON
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
-      name: json['name'],
-      username: json['username'],
-      email: json['email'],
-      admin: json['admin'],
-      ownedGroups: List<dynamic>.from(json['ownedGroups']),
-      joinedGroups: List<dynamic>.from(json['joinedGroups']),
-      files: List<dynamic>.from(json['files']),
-      requests: List<dynamic>.from(json['requests']),
-      checkIns: List<dynamic>.from(json['checkIns']),
-      enabled: json['enabled'],
-      authorities: List<Authority>.from(json['authorities'].map((x) => Authority.fromJson(x))),
-      accountNonExpired: json['accountNonExpired'],
-      credentialsNonExpired: json['credentialsNonExpired'],
-      accountNonLocked: json['accountNonLocked'],
+      id: json['id'] ?? 0, // Default to 0 if null
+      name: json['name'] ?? 'Unknown', // Default to 'Unknown' if null
+      username: json['username'] ?? '',
+      email: json['email'] ?? '',
+      admin: json['admin'], // Allow null
+      ownedGroups: json['ownedGroups'] != null ? List<dynamic>.from(json['ownedGroups']) : [],
+      joinedGroups: json['joinedGroups'] != null ? List<dynamic>.from(json['joinedGroups']) : [],
+      files: json['files'] != null ? List<dynamic>.from(json['files']) : [],
+      requests: json['requests'] != null ? List<dynamic>.from(json['requests']) : [],
+      checkIns: json['checkIns'] != null ? List<dynamic>.from(json['checkIns']) : [],
+      enabled: json['enabled'] ?? false,
+      authorities: json['authorities'] != null
+          ? List<Authority>.from(json['authorities'].map((x) => Authority.fromJson(x)))
+          : [],
+      accountNonExpired: json['accountNonExpired'] ?? false,
+      credentialsNonExpired: json['credentialsNonExpired'] ?? false,
+      accountNonLocked: json['accountNonLocked'] ?? false,
     );
   }
+
 
   // To JSON
   Map<String, dynamic> toJson() {

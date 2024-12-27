@@ -111,7 +111,7 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                       leading: IconButton(
                         onPressed: () async {
                           Navigator.pop(context);
-
+                          //
                           boardSettingsCubit.saveBoard();
 
                           final newBoard = boardSettingsCubit.currentBoard;
@@ -120,14 +120,20 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                               .any((board) => board.id == newBoard.id);
 
                           if (exists) {
-                            boardSettingsCubit.saveBoard();
+                            // if (boardSettingsCubit.currentBoard?.id != null) {
+                              print("Group title: ${boardSettingsCubit.currentBoard!.title}");
+                              print("Group ID: ${boardSettingsCubit.currentBoard!.id}");
+                              print("New Group ID: ${newBoard.id}");
+
                             boardSettingsCubit.updateBoard(
+                                groupId: newBoard.id,
                                 context: context,
                                 title: newBoard.title,
                                 description: newBoard.description,
                                 color: newBoard.color,
                                 lang: newBoard.language.code,
                             );
+                          // }
                           } else {
                             widget.allBoardCubit
                                 .addNewBoard(newBoard: newBoard);
