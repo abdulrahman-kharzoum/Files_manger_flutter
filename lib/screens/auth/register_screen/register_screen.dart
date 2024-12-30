@@ -103,15 +103,7 @@ class RegisterScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: mediaQuery.height / 50),
-                        CustomFormTextField(
-                          keyboardType: TextInputType.text,
-                          controller: cubit.nameController,
-                          colorIcon: Colors.grey,
-                          hintText: '',
-                          nameLabel: S.of(context).first_name,
-                          validator: validator.validateName,
-                        ),
+
                         SizedBox(height: mediaQuery.height / 50),
                         CustomFormTextField(
                           keyboardType: TextInputType.text,

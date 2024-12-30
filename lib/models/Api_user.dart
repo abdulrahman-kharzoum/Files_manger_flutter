@@ -1,36 +1,12 @@
 class UserModel {
   final int id;
   final String name;
-  final String username;
   final String email;
-  final bool? admin;
-  final List<dynamic> ownedGroups;
-  final List<dynamic> joinedGroups;
-  final List<dynamic> files;
-  final List<dynamic> requests;
-  final List<dynamic> checkIns;
-  final bool enabled;
-  final List<Authority> authorities;
-  final bool accountNonExpired;
-  final bool credentialsNonExpired;
-  final bool accountNonLocked;
 
   UserModel({
     required this.id,
     required this.name,
-    required this.username,
     required this.email,
-    this.admin,
-    required this.ownedGroups,
-    required this.joinedGroups,
-    required this.files,
-    required this.requests,
-    required this.checkIns,
-    required this.enabled,
-    required this.authorities,
-    required this.accountNonExpired,
-    required this.credentialsNonExpired,
-    required this.accountNonLocked,
   });
 
   // From JSON
@@ -38,121 +14,83 @@ class UserModel {
     return UserModel(
       id: json['id'] ?? 0, // Default to 0 if null
       name: json['name'] ?? 'Unknown', // Default to 'Unknown' if null
-      username: json['username'] ?? '',
-      email: json['email'] ?? '',
-      admin: json['admin'], // Allow null
-      ownedGroups: json['ownedGroups'] != null ? List<dynamic>.from(json['ownedGroups']) : [],
-      joinedGroups: json['joinedGroups'] != null ? List<dynamic>.from(json['joinedGroups']) : [],
-      files: json['files'] != null ? List<dynamic>.from(json['files']) : [],
-      requests: json['requests'] != null ? List<dynamic>.from(json['requests']) : [],
-      checkIns: json['checkIns'] != null ? List<dynamic>.from(json['checkIns']) : [],
-      enabled: json['enabled'] ?? false,
-      authorities: json['authorities'] != null
-          ? List<Authority>.from(json['authorities'].map((x) => Authority.fromJson(x)))
-          : [],
-      accountNonExpired: json['accountNonExpired'] ?? false,
-      credentialsNonExpired: json['credentialsNonExpired'] ?? false,
-      accountNonLocked: json['accountNonLocked'] ?? false,
+      email: json['email'] ?? '', // Default to empty if null
     );
   }
-
 
   // To JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
-      'username': username,
       'email': email,
-      'admin': admin,
-      'ownedGroups': ownedGroups,
-      'joinedGroups': joinedGroups,
-      'files': files,
-      'requests': requests,
-      'checkIns': checkIns,
-      'enabled': enabled,
-      'authorities': authorities.map((x) => x.toJson()).toList(),
-      'accountNonExpired': accountNonExpired,
-      'credentialsNonExpired': credentialsNonExpired,
-      'accountNonLocked': accountNonLocked,
     };
   }
 }
-
-class Authority {
-  final String authority;
-
-  Authority({required this.authority});
-
-  factory Authority.fromJson(Map<String, dynamic> json) {
-    return Authority(
-      authority: json['authority'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'authority': authority,
-    };
-  }
-}
-
-class UserResponseRegiester {
-  final UserModel model;
+class TokenModel {
   final String token;
-  final String message;
+  final String type;
 
-  UserResponseRegiester({required this.model, required this.token, required this.message});
+  TokenModel({
+    required this.token,
+    this.type = '', // Default empty if type is unavailable
+  });
 
   // From JSON
-  factory UserResponseRegiester.fromJson(Map<String, dynamic> json) {
-    return UserResponseRegiester(
-      model: UserModel.fromJson(json['data']['model']),
-      token: json['data']['token'],
-      message: json['message'],
-    );
+  factory TokenModel.fromJson(dynamic json) {
+    if (json is String) {
+      // Token is returned as a string
+      return TokenModel(token: json);
+    } else if (json is Map<String, dynamic>) {
+      // Token is returned as a map
+      return TokenModel(
+        token: json['token'] ?? '',
+        type: json['type'] ?? '',
+      );
+    }
+    // Fallback for unexpected cases
+    return TokenModel(token: '');
   }
 
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'token': token,
+      if (type.isNotEmpty) 'type': type, // Include type only if it's not empty
+    };
+  }
+}
 
+class UserResponse {
+  final UserModel user;
+  final TokenModel token;
+  final String message;
+
+  UserResponse({
+    required this.user,
+    required this.token,
+    required this.message,
+  });
+
+  // From JSON
+  factory UserResponse.fromJson(Map<String, dynamic> json) {
+    return UserResponse(
+      user: UserModel.fromJson(json['data']['user']),
+      token: TokenModel.fromJson(json['data']['token']),
+      message: json['message'] ?? 'Success',
+    );
+  }
 
   // To JSON
   Map<String, dynamic> toJson() {
     return {
       'data': {
-        'model': model.toJson(),
-        'token': token,
+        'user': user.toJson(),
+        'token': token.toJson(),
       },
       'message': message,
     };
   }
 }
 
-class UserResponseLogin {
-  final UserModel model;
-  final String token;
-  final String message;
 
-  UserResponseLogin({required this.model, required this.token, required this.message});
-
-  // From JSON
-  factory UserResponseLogin.fromJson(Map<String, dynamic> json) {
-    return UserResponseLogin(
-      model: UserModel.fromJson(json['data']['user']),
-      token: json['data']['token'],
-      message: json['message'],
-    );
-  }
-
-
-
-  // To JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'data': {
-        'user': model.toJson(),
-        'token': token,
-      },
-      'message': message,
-    };
-  }
-}

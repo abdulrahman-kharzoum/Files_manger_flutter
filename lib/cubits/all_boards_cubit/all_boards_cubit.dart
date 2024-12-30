@@ -2,9 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 
 import 'package:dio/dio.dart' as Dio;
-import 'package:files_manager/models/folder_model.dart';
-import 'package:files_manager/models/file_model.dart';
 import 'package:files_manager/models/group.dart';
+
 import 'package:flutter/material.dart';
 import 'package:files_manager/core/functions/apis_error_handler.dart';
 import 'package:files_manager/core/server/dio_settings.dart';
@@ -218,70 +217,52 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
   }
   Future<void> getAllBoards({
     required BuildContext context,
-    bool goodResponse = true,
-    int groupId = 1,
   }) async {
     try {
       print("=============get Boards====================");
       emit(AllBoardsLoadingState());
       String? token = CashNetwork.getCashData(key: 'token');
 
-      List<Group> allGroups = [];
+      print("token get boards: $token");
+      final response = await dio().get(
+        'groups/all',
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
 
-      // Loop to fetch all groups
-      while (goodResponse) {
-        final response = await dio().get(
-          'group/$groupId',
-          options: Dio.Options(
-            headers: {'Authorization': 'Bearer $token'},
-          ),
-        );
+      print('The status code is => ${response.statusCode}');
+      print(response.data);
 
-        print('The status code is => ${response.statusCode}');
-        print(response.data);
+      if (response.statusCode == 200) {
+        final groupData = response.data['data'];
 
-        if (response.statusCode == 200) {
-          final groupData = response.data['data']; // The group data in the response
-          final Group newGroup = Group.fromJson(groupData);
-          allGroups.add(newGroup); // Add the group to the list
-
-          // Check if we have reached the last page
-          if (response.data['message'] != 'Success' || response.data['data'] == null) {
-            goodResponse = false; // Stop the loop if there's no data
-          }
-
-          print('New group fetched: ${newGroup.name}');
-          groupId++; // Move to the next group ID
-        } else if (response.statusCode == 404) {
-          goodResponse = false;
-          // Handle the 404 error gracefully: skip this group and continue with the next one
-          print('Error: Group not found for group ID $groupId. Skipping to next group.');
-        } else {
-          // If the response status is not 200 or 404, stop the loop
-          goodResponse = false;
-          print('Error: Non-200 response, stopping pagination');
+        if (groupData == null || groupData is! List) {
+          print("Unexpected 'data' format");
+          emit(AllBoardsFailedState(errorMessage: "Unexpected data format"));
+          return;
         }
 
-        // Optional: Small delay between requests to avoid rate limiting
-        await Future.delayed(const Duration(milliseconds: 200));
+        // Map the list of groups into `GroupModel`
+        List<GroupModel> allGroups = groupData
+            .map<GroupModel>((item) => GroupModel.fromJson(item))
+            .toList();
+
+        print('Total groups fetched: ${allGroups.length}');
+
+        // Convert GroupModel objects to Board objects
+        List<Board> allBoards = allGroups.map((group) {
+          final Board newBoard = Board.fromGroup(group);
+          print('Fetched board for group ${group.name}');
+          return newBoard;
+        }).toList();
+
+        emit(AllBoardsSuccessState(newBoards: allBoards, isReachMax: true));
+      } else {
+        print('Failed to fetch boards: ${response.statusCode}');
+        emit(AllBoardsFailedState(errorMessage: response.data['message']));
       }
-
-      // Now all groups are fetched, you can work with the list `allGroups`
-      print('Total groups fetched: ${allGroups.length}');
-
-      // After fetching groups, you can proceed to fetch the boards
-      List<Board> allBoards = [];
-      for (Group group in allGroups) {
-        final Board newBoard = Board.fromGroup(group);
-        allBoards.add(newBoard);
-        print('Fetched board for group ${group.name}');
-      }
-
-      // Emit success with the boards
-      emit(AllBoardsSuccessState(newBoards: allBoards, isReachMax: true));
-
     } on DioException catch (e) {
-      goodResponse = false;
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
           e.type == DioExceptionType.connectionError) {
@@ -297,12 +278,13 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
       print('The failed status code is ${e.response!.statusCode}');
       emit(AllBoardsFailedState(errorMessage: e.response!.data['message']));
     } catch (e) {
-      goodResponse = false;
       print('================ catch exception =================');
       print(e);
       emit(AllBoardsFailedState(errorMessage: 'Catch exception'));
     }
   }
+
+
 
 
 }

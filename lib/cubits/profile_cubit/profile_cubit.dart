@@ -56,7 +56,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     print("=================");
     print("Name From Profile ${userModel.name}");
     nameController = TextEditingController(text: userModel.name);
-    userNameController = TextEditingController(text: userModel.username);
+    userNameController = TextEditingController(text: userModel.name);
     emailController = TextEditingController(text: userModel.email);
     emit(SetProfileDetailsLoading());
     emit(SetProfileDetailsSuccess());
@@ -225,7 +225,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         userModel = UserModel.fromJson(jsonDecode(result));
 
         nameController.text = userModel.name;
-        userNameController.text = userModel.username;
+        userNameController.text = userModel.name;
         emailController.text = userModel.email;
 
         emit(SetProfileDetailsSuccess());

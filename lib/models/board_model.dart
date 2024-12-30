@@ -103,12 +103,12 @@ class Board {
     );
   }
   /// Factory constructor to convert `Group` to `Board`
-  factory Board.fromGroup(Group group) {
+  factory Board.fromGroup(GroupModel group) {
     return Board(
       id: group.id,
       uuid: '', // UUID is not available in Group; leave empty or generate one.
       parentId: null, // Parent ID is not available; leave as null.
-      userId: group.creator.id, // Use the creator's ID as userId.
+      userId: group.creatorId, // Use the creator's ID as userId.
       language: Language(id: 1, name: 'english', code: group.lang, direction: 'lr'), // Map `lang` to `Language`.
       roleInBoard: null, // Role in board is not available; leave as null.
       color: group.color, // Map directly from Group's color.

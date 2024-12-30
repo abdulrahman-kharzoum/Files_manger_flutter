@@ -19,6 +19,7 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
 
   bool showPassword = false;
+
   // final firebaseMessaging = FirebaseMessaging.instance;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -30,7 +31,8 @@ class LoginCubit extends Cubit<LoginState> {
     required BuildContext context,
   }) async {
     try {
-      String? fcmToken;
+      String? fcmToken =
+          "jsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdfffffffffffffffffffffffffffffffffffffffffffdsfffffffff";
       if (!await checkInternet()) {
         internetToast(context: context);
         Navigator.of(context);
@@ -46,82 +48,29 @@ class LoginCubit extends Cubit<LoginState> {
       //         key: 'fcm_token', value: fcmToken.toString());
       //   },
       // );
-      // print('The fcm token is => $fcmToken');
-      final response = await dio().post('login', data: {
+      print('The fcm token is => $fcmToken');
+      final response = await dio().post('/auth/login', data: {
         'email': email,
         'password': password,
-        // 'fcm_token': fcmToken,
+        'fcm_token': fcmToken,
       });
       if (response.statusCode == 200) {
         print('success');
         final responseData = response.data['data'];
-        String token = responseData['token'];
+        String token = responseData['token']['token'];
         await CashNetwork.insertToCash(key: 'token', value: token);
         final userModel = responseData['user'];
-        await CashNetwork.insertToCash(key: 'userId', value: userModel['id'].toString());
-        UserResponseLogin userResponse = UserResponseLogin.fromJson(response.data);
+        await CashNetwork.insertToCash(
+            key: 'userId', value: userModel['id'].toString());
+        UserResponse userResponse = UserResponse.fromJson(response.data);
 
 
-        await CashNetwork.insertToCash(key: 'user_model', value:jsonEncode(userResponse.model));
+        await CashNetwork.insertToCash(
+            key: 'user_model', value: jsonEncode(userResponse.user));
         var user_model = await CashNetwork.getCashData(key: 'user_model');
-        var uu=  UserModel.fromJson(jsonDecode(user_model));
+        var uu = UserModel.fromJson(jsonDecode(user_model));
         print("email :${uu.email}");
-        print("username  :${uu.username}");
-
-
-        // // await CashNetwork.insertToCash(key: 'fcm_token', value: fcmToken!);
-        // await CashNetwork.insertToCash(
-        //     key: 'id', value: response.data['user']['id'].toString());
-        // await CashNetwork.insertToCash(
-        //     key: 'email', value: response.data['user']['email'].toString());
-        // await CashNetwork.insertToCash(
-        //     key: 'first_name',
-        //     value: response.data['user']['first_name'].toString());
-        // await CashNetwork.insertToCash(
-        //     key: 'last_name',
-        //     value: response.data['user']['last_name'].toString());
-        // await CashNetwork.insertToCash(
-        //     key: 'role', value: response.data['user']['role']);
-        // if (response.data['user']['role'] == null ||
-        //     response.data['user']['role'].isEmpty) {
-        //   print('the role is empty no subscribe');
-        // } else if (response.data['user']['role'] == 'admin') {
-        //   // firebaseMessaging.subscribeToTopic('mosh_admins_topic');
-        //   // firebaseMessaging.unsubscribeFromTopic('mosh_users_topic');
-        //   print('admin subscribe');
-        // } else if (response.data['user']['role'] == 'user') {
-        //   // firebaseMessaging.subscribeToTopic('mosh_users_topic');
-        //   // firebaseMessaging.unsubscribeFromTopic('mosh_admins_topic');
-        //   print('user subscribe');
-        // }
-        // await CashNetwork.insertToCash(
-        //     key: 'country', value: response.data['user']['country']['name']);
-        // await CashNetwork.insertToCash(
-        //     key: 'country_id',
-        //     value: response.data['user']['country']['id'].toString());
-        // await CashNetwork.insertToCash(
-        //     key: 'gender', value: response.data['user']['gender']['type']);
-        // await CashNetwork.insertToCash(
-        //     key: 'gender_id',
-        //     value: response.data['user']['gender']['id'].toString());
-        // await CashNetwork.insertToCash(
-        //     key: 'image', value: response.data['user']['image']);
-        // await CashNetwork.insertToCash(
-        //     key: 'date_of_birth',
-        //     value: response.data['user']['date_of_birth']);
-        // await CashNetwork.insertToCash(
-        //     key: 'phone', value: response.data['user']['phone']);
-        // await CashNetwork.insertToCash(
-        //     key: 'country_code', value: response.data['user']['country_code']);
-        // await CashNetwork.insertToCash(
-        //     key: 'language_code',
-        //     value: response.data['user']['language']['code']);
-        // await CashNetwork.insertToCash(
-        //     key: 'language_id',
-        //     value: response.data['user']['language']['id'].toString());
-        // await CashNetwork.insertToCash(
-        //     key: 'language_name',
-        //     value: response.data['user']['language']['name']);
+        print("username  :${uu.name}");
 
         print('------login response');
         print(response.data);
