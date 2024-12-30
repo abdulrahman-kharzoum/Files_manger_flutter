@@ -21,7 +21,7 @@ final ThemeData DarkThemeData = ThemeData(
     displaySmall: GoogleFonts.cairo(color: Colors.white),
     headlineLarge: GoogleFonts.cairo(color: Colors.white),
     headlineMedium: GoogleFonts.cairo(color: Colors.white),
-    headlineSmall: GoogleFonts.cairo(color: Colors.white),
+    headlineSmall: GoogleFonts.cairo(color: AppColors.dark),
     labelLarge: GoogleFonts.cairo(color: Colors.white),
     labelMedium: GoogleFonts.cairo(color: Colors.white54),
     labelSmall: GoogleFonts.cairo(color: Colors.white10),
@@ -128,6 +128,15 @@ final ThemeData DarkThemeData = ThemeData(
       borderRadius: BorderRadius.circular(8.0),
     ),
   ),
+
+  dropdownMenuTheme: DropdownMenuThemeData(
+
+    menuStyle:MenuStyle(
+      backgroundColor: MaterialStatePropertyAll<Color>(AppColors.dark),
+    ),
+
+    textStyle:GoogleFonts.cairo(color: Colors.white),
+  ),
 );
 
 
@@ -151,7 +160,7 @@ final ThemeData LightThemeData = ThemeData(
     displaySmall: GoogleFonts.cairo(color: Colors.black),
     headlineLarge: GoogleFonts.cairo(color: Colors.black),
     headlineMedium: GoogleFonts.cairo(color: Colors.black),
-    headlineSmall: GoogleFonts.cairo(color: Colors.black),
+    headlineSmall: GoogleFonts.cairo(color: Colors.white),
     labelLarge: GoogleFonts.cairo(color: Colors.black),
     labelMedium: GoogleFonts.cairo(color: Colors.black54),
     labelSmall: GoogleFonts.cairo(color: Colors.black54),

@@ -13,6 +13,7 @@ import 'package:files_manager/widgets/custom_text_fields/custom_text_field.dart'
 class BoardSettingsSection extends StatelessWidget {
   const BoardSettingsSection(
       {super.key, required this.mediaQuery, required this.boardSettingsCubit});
+
   final Size mediaQuery;
   final BoardSettingsCubit boardSettingsCubit;
 
@@ -79,7 +80,7 @@ class BoardSettingsSection extends StatelessWidget {
             ),
             Text(
               S.of(context).select_language,
-              style:  TextStyle(
+              style: TextStyle(
                 color: Theme.of(context).textTheme.bodySmall!.color,
                 fontWeight: FontWeight.bold,
               ),
@@ -103,9 +104,9 @@ class BoardSettingsSection extends StatelessWidget {
                     ),
                   ),
                   child: DropdownButton<String>(
+                    dropdownColor: Theme.of(context).textTheme.headlineSmall!.color!,
                     isExpanded: true,
                     value: boardSettingsCubit.currentBoard.language.code,
-
                     underline: const SizedBox(),
                     items: [
                       DropdownMenuItem(
@@ -119,11 +120,9 @@ class BoardSettingsSection extends StatelessWidget {
                             S.of(context).arabic,
                           )),
                       DropdownMenuItem(
-
                         value: 'en',
                         child: Text(
                           S.of(context).english,
-
                         ),
                       ),
                     ],
@@ -142,8 +141,8 @@ class BoardSettingsSection extends StatelessWidget {
             ),
             Text(
               S.of(context).description,
-              style:  TextStyle(
-                color:  Theme.of(context).textTheme.bodySmall!.color,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodySmall!.color,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -156,7 +155,8 @@ class BoardSettingsSection extends StatelessWidget {
               hintText: '',
               fillColor: Colors.transparent,
               borderColor: Theme.of(context).textTheme.labelSmall!.color!,
-              styleInput:  TextStyle(color:Theme.of(context).textTheme.bodySmall!.color),
+              styleInput: TextStyle(
+                  color: Theme.of(context).textTheme.bodySmall!.color),
               maxLines: 5,
               borderRadius: 0.0,
               onChanged: (p0) async {
@@ -171,7 +171,7 @@ class BoardSettingsSection extends StatelessWidget {
             ),
             Text(
               S.of(context).color,
-              style:  TextStyle(
+              style: TextStyle(
                 color: Theme.of(context).textTheme.bodySmall!.color,
                 fontWeight: FontWeight.bold,
               ),
@@ -211,7 +211,12 @@ class BoardSettingsSection extends StatelessWidget {
                                           0, 1), // changes position of shadow
                                     ),
                                   ],
-                            border: Border.all(color: Theme.of(context).textTheme.bodySmall!.color!, width: 2),
+                            border: Border.all(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .color!,
+                                width: 2),
                             color: allColors[index]['show'],
                           ),
                         ),
@@ -236,10 +241,12 @@ class BoardSettingsSection extends StatelessWidget {
                     },
                     child: SizedBox(
                       width: mediaQuery.width / 3,
-                      child:  Text(
+                      child: Text(
                         'Color picker',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Theme.of(context).textTheme.bodySmall!.color),
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.bodySmall!.color),
                       ),
                     )),
                 GestureDetector(
@@ -256,7 +263,9 @@ class BoardSettingsSection extends StatelessWidget {
                         EdgeInsets.symmetric(horizontal: mediaQuery.width / 70),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Theme.of(context).textTheme.bodySmall!.color!, width: 2),
+                      border: Border.all(
+                          color: Theme.of(context).textTheme.bodySmall!.color!,
+                          width: 2),
                       color: allColors.last['show'],
                     ),
                   ),
