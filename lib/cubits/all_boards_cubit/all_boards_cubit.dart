@@ -124,7 +124,7 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
     //     ],
     //     invitedUsers: []),
   ];
-  List<int> groupsId=[];
+
   Future<void> addBoard() async {
     allBoards.add(
         Board(
@@ -250,14 +250,15 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
 
         print('Total groups fetched: ${allGroups.length}');
 
-        // Convert GroupModel objects to Board objects
-        List<Board> allBoards = allGroups.map((group) {
+
+        List<Board> newBoards = allGroups.map((group) {
           final Board newBoard = Board.fromGroup(group);
+          allBoards.add(newBoard);
           print('Fetched board for group ${group.name}');
           return newBoard;
         }).toList();
 
-        emit(AllBoardsSuccessState(newBoards: allBoards, isReachMax: true));
+        emit(AllBoardsSuccessState(newBoards: newBoards, isReachMax: true));
       } else {
         print('Failed to fetch boards: ${response.statusCode}');
         emit(AllBoardsFailedState(errorMessage: response.data['message']));

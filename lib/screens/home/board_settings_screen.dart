@@ -41,7 +41,7 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     final boardSettingsCubit = context.read<BoardSettingsCubit>();
-  final localeCubit = context.read<LocaleCubit>();
+    final localeCubit = context.read<LocaleCubit>();
 
     return BlocConsumer<BoardSettingsCubit, BoardSettingsState>(
       listener: (context, state) {
@@ -111,7 +111,7 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                       leading: IconButton(
                         onPressed: () async {
                           Navigator.pop(context);
-                          //
+
                           boardSettingsCubit.saveBoard();
 
                           final newBoard = boardSettingsCubit.currentBoard;
@@ -121,31 +121,32 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
 
                           if (exists) {
                             // if (boardSettingsCubit.currentBoard?.id != null) {
-                              print("Group title: ${boardSettingsCubit.currentBoard!.title}");
-                              print("Group ID: ${boardSettingsCubit.currentBoard!.id}");
-                              print("New Group ID: ${newBoard.id}");
+                            print(
+                                "Group title: ${boardSettingsCubit.currentBoard!.title}");
+                            print(
+                                "Group ID: ${boardSettingsCubit.currentBoard!.id}");
+                            print("New Group ID: ${newBoard.id}");
 
                             boardSettingsCubit.updateBoard(
-                                groupId: newBoard.id,
-                                context: context,
-                                title: newBoard.title,
-                                description: newBoard.description,
-                                color: newBoard.color,
-                                lang: newBoard.language.code,
+                              groupId: newBoard.id,
+                              context: context,
+                              title: newBoard.title,
+                              description: newBoard.description,
+                              color: newBoard.color,
+                              lang: newBoard.language.code,
                             );
-                          // }
+                            // }
                           } else {
                             widget.allBoardCubit
                                 .addNewBoard(newBoard: newBoard);
 
-                            boardSettingsCubit.addBoard(
-                                context: context,
-                                title: newBoard.title,
-                                description: newBoard.description,
-                                color: newBoard.color,
-                                lang: newBoard.language.code,
-                              groupIds: widget.allBoardCubit.groupsId
 
+                            context.read<AddBoardCubit>().addBoard(
+                              context: context,
+                              title: newBoard.title,
+                              description: newBoard.description,
+                              color: newBoard.color,
+                              lang: newBoard.language.code,
                             );
                           }
 

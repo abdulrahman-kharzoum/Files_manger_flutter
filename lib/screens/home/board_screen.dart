@@ -152,120 +152,6 @@ class BoardScreen extends StatelessWidget {
                     ),
                   ),
                 );
-                // await allBoardsCubit.addBoard();
-                // var board = Board(
-                //     id:1,
-                //     uuid: '2',
-                //     parentId: null,
-                //     userId: 1,
-                //     allFiles: [],
-                //     language: Language(id: 1, name: 'english', code: 'en', direction: 'lr'),
-                //     roleInBoard: 'admin',
-                //     color: colorToHex(const Color.fromARGB(255, 27, 27, 27)),
-                //     tasksCommentsCount: 0,
-                //     shareLink: '',
-                //     title: 'New Group',
-                //     description: '',
-                //     icon: '\u{263A}',
-                //     hasImage: false,
-                //     isFavorite: false,
-                //     image: '',
-                //     visibility: '',
-                //     createdAt: DateTime.now(),
-                //     children: [],
-                //     members: [
-                //       Member(
-                //           id: 1,
-                //           country:
-                //           Country(id: 1, name: 'damascus', iso3: '+963', code: '123'),
-                //           language:
-                //           Language(id: 1, name: 'english', code: 'en', direction: 'lr'),
-                //           gender: Gender(id: 1, type: 'male'),
-                //           firstName: 'Alaa',
-                //           lastName: 'Shibany',
-                //           mainRole: 'admin',
-                //           role: 'admin',
-                //           dateOfBirth: '2002-11-28',
-                //           countryCode: '+963',
-                //           phone: '981233473',
-                //           email: 'alaashibany@gmail.com',
-                //           image: '')
-                //     ],
-                //     invitedUsers: []);
-                // Navigator.of(context)
-                //     .push(
-                //   MaterialPageRoute(
-                //     builder: (context) => MultiBlocProvider(
-                //       providers: [
-                //         BlocProvider(
-                //           create: (context) =>
-                //           BoardSettingsCubit(currentBoard: board)
-                //             ..initState(),
-                //         ),
-                //       ],
-                //       child: BoardSettingsScreen(
-                //         allBoardCubit: allBoardsCubit,
-                //       ),
-                //     ),
-                //   ),
-                // )
-                //     .then(
-                //       (d) async {
-                //     boardCubit.refresh();
-                //   },
-                // );
-
-                // final addBoardCubit = context.read<AddBoardCubit>();
-                // addBoardCubit
-                //     .addBoard(
-                //   context: context,
-                //   title: 'New Board Title',
-                //   description: 'Board Description',
-                //   color: '#00FF00',
-                //   lang: 'AR',
-                // )
-                //     .then((_) {
-                //   final state = addBoardCubit.state;
-                //   if (state is AddBoardSuccessState) {
-                //     // Add the newly created board to AllBoardsCubit
-                //     allBoardsCubit.addNewBoard(newBoard: state.createdBoard);
-                //
-                //     // Navigate to the new board's screen
-                //     Navigator.of(context).push(
-                //       MaterialPageRoute(
-                //         builder: (context) => MultiBlocProvider(
-                //           providers: [
-                //             BlocProvider(
-                //               create: (context) => BoardCubit(
-                //                 currentBoard: state.createdBoard,
-                //               )..initState(
-                //                 context: context,
-                //                 uuid: state.createdBoard.uuid,
-                //               ),
-                //             ),
-                //             BlocProvider(
-                //               create: (context) => ApplicationCubit()
-                //                 ..initState(
-                //                   context: context,
-                //                   uuid: state.createdBoard.uuid,
-                //                 ),
-                //             ),
-                //             BlocProvider(
-                //               create: (context) => LeaveFromBoardCubit(),
-                //             ),
-                //             BlocProvider(
-                //               create: (context) => AddBoardCubit(),
-                //             ),
-                //           ],
-                //           child: AddBoardScreen(
-                //             uuid: state.createdBoard.uuid,
-                //             allBoardsCubit: allBoardsCubit,
-                //           ),
-                //         ),
-                //       ),
-                //     );
-                //   }
-                // });
               },
               icon: const Icon(Icons.add),
             );
@@ -379,6 +265,10 @@ class BoardScreen extends StatelessWidget {
         builder: (context, state) {
           return BlocConsumer<AllBoardsCubit, AllBoardsState>(
             listener: (context, state) {
+              if (state is AllBoardsLoadingState &&
+                  allBoardsCubit.allBoards.isEmpty) {
+                loadingDialog(context: context, mediaQuery: mediaQuery);
+              }
               if (state is AllBoardsFailedState) {
                 errorDialog(context: context, text: state.errorMessage);
               } else if (state is AllBoardsExpiredState) {
@@ -393,6 +283,7 @@ class BoardScreen extends StatelessWidget {
               } else if (state is AllBoardsNoInternetState) {
                 internetDialog(context: context, mediaQuery: mediaQuery);
               } else if (state is AllBoardsSuccessState) {
+
                 final isLastPage = state.isReachMax;
                 print('Is the last page => $isLastPage');
                 if (isLastPage) {
@@ -409,9 +300,10 @@ class BoardScreen extends StatelessWidget {
               }
             },
             builder: (context, state) {
+
               return RefreshIndicator(
                 onRefresh: () async {
-                  await allBoardsCubit.refreshData();
+                  // await allBoardsCubit.refreshData();
                 },
                 child: Statics.isPlatformDesktop
                     ? Wrap(
@@ -422,7 +314,7 @@ class BoardScreen extends StatelessWidget {
                             addBoardCubit: addBoardCubit,
                             favoriteCubit: favoriteCubit,
                             currentBoard: allBoardsCubit.allBoards[index],
-                            currentIndex: 0,
+                            currentIndex: index,
                           ).animate().fade(
                                 duration: const Duration(milliseconds: 500),
                               ),
@@ -436,7 +328,7 @@ class BoardScreen extends StatelessWidget {
                             addBoardCubit: addBoardCubit,
                             favoriteCubit: favoriteCubit,
                             currentBoard: allBoardsCubit.allBoards[index],
-                            currentIndex: 0,
+                            currentIndex: index,
                           ).animate().fade(
                                 duration: const Duration(milliseconds: 500),
                               ),

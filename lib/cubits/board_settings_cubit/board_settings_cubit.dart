@@ -23,7 +23,7 @@ part 'board_settings_state.dart';
 class BoardSettingsCubit extends Cubit<BoardSettingsState> {
   BoardSettingsCubit({required this.currentBoard})
       : super(BoardSettingsInitial());
-    final Board currentBoard;
+  final Board currentBoard;
   TextEditingController boardTitleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController searchController = TextEditingController();
@@ -112,61 +112,57 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     emit(BoardSettingsInitial());
   }
 
+  //
+  // Future<void> addBoard({
+  //   required BuildContext context,
+  //   required String title,
+  //   required String description,
+  //   required String color,
+  //   required String lang,
+  // }) async {
+  //   try {
+  //     emit(BoardSettingsLoadingState());
+  //     String? token = CashNetwork.getCashData(key: 'token');
+  //
+  //     final response = await dio().post(
+  //       'groups/create',
+  //       data: {
+  //         'name': title,
+  //         'description': description,
+  //         'color': color,
+  //         'lang': lang,
+  //       },
+  //       options: Dio.Options(
+  //         headers: {'Authorization': 'Bearer $token'},
+  //       ),
+  //     );
+  //     print('The status code is => ${response.statusCode}');
+  //     print(response.data);
+  //     if (response.statusCode == 200){
+  //       if(currentBoard!= null){
+  //         currentBoard.id = response.data['data']['id'];
+  //         currentBoard.userId = response.data['data']['creator']['id'];
+  //
+  //       }
+  //
+  //       emit(BoardSettingsSuccessState());
+  //
+  //     }
+  //   } on DioException catch (e) {
+  //     Navigator.pop(context);
+  //     errorHandler(e: e, context: context);
+  //
+  //     print('The response is => ${e.response!.data}');
+  //     emit(BoardSettingsFailedState(errorMessage: e.response!.data['message']));
+  //   } catch (e) {
+  //     Navigator.pop(context);
+  //     print('================ catch exception =================');
+  //     print(e);
+  //     emit(BoardSettingsFailedState(errorMessage: 'Catch exception'));
+  //   }
+  // }
+  //
 
-  Future<void> addBoard({
-    required BuildContext context,
-    required String title,
-    required String description,
-    required String color,
-    required String lang,
-    required List<int> groupIds,
-  }) async {
-    try {
-      emit(BoardSettingsLoadingState());
-      String? token = CashNetwork.getCashData(key: 'token');
-      String? creator_id = CashNetwork.getCashData(key: 'userId');
-
-      final response = await dio().post(
-        'group/create',
-        data: {
-          'name': title,
-          "creator_id": creator_id,
-          'description': description,
-          'color': color,
-          'lang': lang,
-        },
-        options: Dio.Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-      );
-      print('The status code is => ${response.statusCode}');
-      print(response.data);
-      if (response.statusCode == 200){
-        if(currentBoard!= null){
-          currentBoard.id = response.data['data']['id'];
-          currentBoard.userId = response.data['data']['creator']['id'];
-
-        }
-        // groupIds.add(response.data['data']['id']);
-        // String groupIdsJson = jsonEncode(groupIds);
-        // await CashNetwork.insertToCash(key: 'groups_id', value: groupIdsJson);
-
-        emit(BoardSettingsSuccessState());
-
-      }
-    } on DioException catch (e) {
-      Navigator.pop(context);
-      errorHandler(e: e, context: context);
-
-      print('The response is => ${e.response!.data}');
-      emit(BoardSettingsFailedState(errorMessage: e.response!.data['message']));
-    } catch (e) {
-      Navigator.pop(context);
-      print('================ catch exception =================');
-      print(e);
-      emit(BoardSettingsFailedState(errorMessage: 'Catch exception'));
-    }
-  }
   Future<void> changeTitle() async {
     currentBoard.title = boardTitleController.text;
     emit(BoardSettingsInitial());
@@ -188,16 +184,20 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     currentBoard.hasImage = false;
     emit(BoardSettingsInitial());
   }
-  void saveBoard() {
-   if (boardTitleController.text.isNotEmpty) {
 
+  void saveBoard() {
+    if (boardTitleController.text.isNotEmpty) {
       final newBoard = Board(
         language: Language(id: 1, name: 'english', code: 'en', direction: 'lr'),
-        id: 0, // Will be assigned by backend after creation
-        uuid: currentBoard?.uuid ?? 'new-board-uuid', // UUID for new or existing board
+        id: 0,
+        // Will be assigned by backend after creation
+        uuid: currentBoard?.uuid ?? 'new-board-uuid',
+        // UUID for new or existing board
         parentId: currentBoard?.parentId ?? null,
-        userId: 1, // Example user ID, this should be dynamically set
-       roleInBoard: currentBoard?.roleInBoard ?? 'Member', // Default role
+        userId: 1,
+        // Example user ID, this should be dynamically set
+        roleInBoard: currentBoard?.roleInBoard ?? 'Member',
+        // Default role
         color: selectedColor,
         allFiles: [],
         tasksCommentsCount: 0,
@@ -220,6 +220,7 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       emit(BoardSettingsFailedState(errorMessage: 'Board title is required!'));
     }
   }
+
   Future<void> updateBoard({
     required BuildContext context,
     required int groupId,
@@ -232,30 +233,43 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       emit(BoardSettingsLoadingState());
 
       String? token = CashNetwork.getCashData(key: 'token');
-
-      final response = await dio().put(
-        'group/$groupId',
-        data: {
-          'name': title,
-
-          'description': description,
-          'color': color,
-          'lang': lang,
-        },
-        options: Dio.Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-      );
-      print('The status code is => ${response.statusCode}');
-      print(response.data);
-      if (response.statusCode == 200){
-        // groupIds.add(response.data['data']['id']);
-        // String groupIdsJson = jsonEncode(groupIds);
-        //
-        // await CashNetwork.insertToCash(key: 'groups_id', value: groupIdsJson);
-        print("group has been updated");
-        emit(BoardSettingsSuccessState());
-
+      if (currentBoard!.title! == title) {
+        final response = await dio().put(
+          'groups/update/$groupId',
+          data: {
+            'description': description,
+            'color': color,
+            'lang': lang,
+          },
+          options: Dio.Options(
+            headers: {'Authorization': 'Bearer $token'},
+          ),
+        );
+        print('The status code is => ${response.statusCode}');
+        print(response.data);
+        if (response.statusCode == 200) {
+          print("group has been updated");
+          emit(BoardSettingsSuccessState());
+        }
+      } else {
+        final response = await dio().put(
+          'groups/update/$groupId',
+          data: {
+            'name': title,
+            'description': description,
+            'color': color,
+            'lang': lang,
+          },
+          options: Dio.Options(
+            headers: {'Authorization': 'Bearer $token'},
+          ),
+        );
+        print('The status code is => ${response.statusCode}');
+        print(response.data);
+        if (response.statusCode == 200) {
+          print("group has been updated");
+          emit(BoardSettingsSuccessState());
+        }
       }
     } on DioException catch (e) {
       Navigator.pop(context);
@@ -271,5 +285,4 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       print(e);
     }
   }
-
 }
