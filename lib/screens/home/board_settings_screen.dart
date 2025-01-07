@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:files_manager/core/functions/statics.dart';
 import 'package:files_manager/cubits/add_board_cubit/add_board_cubit.dart';
+import 'package:files_manager/models/group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -44,17 +47,17 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
     final localeCubit = context.read<LocaleCubit>();
 
     return BlocConsumer<BoardSettingsCubit, BoardSettingsState>(
-      listener: (context, state) {
-        if (state is BoardSettingsLoadingState) {
+      listener: (context, boardState) {
+        if (boardState is BoardSettingsLoadingState) {
           loadingDialog(
               context: context,
               mediaQuery: mediaQuery,
               title: S.of(context).saving);
-        } else if (state is BoardSettingsSuccessState) {
+        } else if (boardState is BoardSettingsSuccessState) {
           Navigator.pop(context);
-        } else if (state is BoardSettingsFailedState) {
-          errorDialog(context: context, text: state.errorMessage);
-        } else if (state is BoardSettingsExpiredState) {
+        } else if (boardState is BoardSettingsFailedState) {
+          errorDialog(context: context, text: boardState.errorMessage);
+        } else if (boardState is BoardSettingsExpiredState) {
           showExpiredDialog(
             context: context,
             onConfirmBtnTap: () async {
@@ -65,16 +68,15 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
           );
         }
       },
-      builder: (context, state) {
+      builder: (context, boardState) {
         return Localizations.override(
           locale: boardSettingsCubit.currentBoard.language.code == 'default'
               ? localeCubit.locale
               : Locale(boardSettingsCubit.currentBoard.language.code),
           context: context,
-          child: WillPopScope(
-            onWillPop: () async {
+          child: PopScope(
+            onPopInvokedWithResult: (vale, val) async {
               await widget.allBoardCubit.refresh();
-              return true;
             },
             child: DefaultTabController(
               length: boardSettingsCubit.currentBoard.parentId != null ? 1 : 3,
@@ -110,9 +112,7 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                       centerTitle: true,
                       leading: IconButton(
                         onPressed: () async {
-                          Navigator.pop(context);
-
-                          boardSettingsCubit.saveBoard();
+                          // boardSettingsCubit.saveBoard();
 
                           final newBoard = boardSettingsCubit.currentBoard;
 
@@ -128,30 +128,41 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                             print("New Group ID: ${newBoard.id}");
 
                             boardSettingsCubit.updateBoard(
-                              groupId: newBoard.id,
+                              groupId: boardSettingsCubit.currentBoard.id,
+                              context: context,
+                              title:
+                                  boardSettingsCubit.boardTitleController.text,
+                              description: newBoard.description,
+                              color: newBoard.color,
+                              lang: newBoard.language.code,
+                            );
+                          } else {
+                            final addBoardCubit = context.read<AddBoardCubit>();
+
+                            int id = await addBoardCubit.addBoard(
                               context: context,
                               title: newBoard.title,
                               description: newBoard.description,
                               color: newBoard.color,
                               lang: newBoard.language.code,
                             );
-                            // }
-                          } else {
+
+                            // print("api id " + id.toString(
+                            newBoard.id = id;
+
                             widget.allBoardCubit
                                 .addNewBoard(newBoard: newBoard);
-
-
-                            context.read<AddBoardCubit>().addBoard(
-                              context: context,
-                              title: newBoard.title,
-                              description: newBoard.description,
-                              color: newBoard.color,
-                              lang: newBoard.language.code,
-                            );
                           }
 
                           widget.allBoardCubit.refresh();
-
+                          {
+                            if (boardState is BoardSettingsInitial ||
+                                boardState is BoardSettingsSuccessState) {
+                              print("==============fdsjlgjdsklgj===========");
+                              print(boardState);
+                              Navigator.of(context).pop();
+                            }
+                          }
                           FocusScope.of(context).unfocus();
                         },
                         icon: Icon(

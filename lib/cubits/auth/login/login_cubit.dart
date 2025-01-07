@@ -1,15 +1,17 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:files_manager/core/functions/statics.dart';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:files_manager/core/functions/apis_error_handler.dart';
 import 'package:files_manager/core/server/dio_settings.dart';
 import 'package:files_manager/core/shared/local_network.dart';
-import 'package:files_manager/models/user_model.dart';
+
 import '../../../core/animation/dialogs/dialogs.dart';
 import '../../../core/shared/connect.dart';
+
 import '../../../generated/l10n.dart';
 import '../../../models/Api_user.dart';
 
@@ -33,11 +35,20 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       String? fcmToken =
           "jsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdfffffffffffffffffffffffffffffffffffffffffffdsfffffffff";
-      if (!await checkInternet()) {
-        internetToast(context: context);
-        Navigator.of(context);
-        return;
+      if (!Statics.isPlatformDesktop) {
+        if (!await checkInternet()) {
+          internetToast(context: context);
+          Navigator.of(context);
+          return;
+        }
+      } else {
+        // if (!await checkInternetForWeb()!) {
+        //   internetToast(context: context);
+        //   Navigator.of(context);
+        //   return;
+        // }
       }
+
       emit(LoginLoading());
       // print('The fcm token we will send to back => ${fcmToken.toString()}');
       // await FirebaseMessaging.instance.deleteToken().then(
@@ -63,7 +74,6 @@ class LoginCubit extends Cubit<LoginState> {
         await CashNetwork.insertToCash(
             key: 'userId', value: userModel['id'].toString());
         UserResponse userResponse = UserResponse.fromJson(response.data);
-
 
         await CashNetwork.insertToCash(
             key: 'user_model', value: jsonEncode(userResponse.user));

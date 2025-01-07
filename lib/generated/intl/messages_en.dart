@@ -940,6 +940,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Write your message"),
         "write_your_report":
             MessageLookupByLibrary.simpleMessage("Write your report"),
+        "wrongEmailOrPass":
+            MessageLookupByLibrary.simpleMessage("Wrong Email or Password"),
         "year": MessageLookupByLibrary.simpleMessage("Year"),
         "years": MessageLookupByLibrary.simpleMessage("Years"),
         "yes": MessageLookupByLibrary.simpleMessage("Yes"),

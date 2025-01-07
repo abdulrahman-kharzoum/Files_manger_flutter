@@ -903,6 +903,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("اكتب رسالتك"),
         "write_your_report":
             MessageLookupByLibrary.simpleMessage("اكتب تقريرك"),
+        "wrongEmailOrPass": MessageLookupByLibrary.simpleMessage(
+            "بريد إلكتروني أو كلمة مرور خاطئة"),
         "year": MessageLookupByLibrary.simpleMessage("سنة"),
         "years": MessageLookupByLibrary.simpleMessage("سنوات"),
         "yes": MessageLookupByLibrary.simpleMessage("نعم"),

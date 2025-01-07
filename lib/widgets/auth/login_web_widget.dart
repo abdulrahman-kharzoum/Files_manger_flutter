@@ -147,9 +147,9 @@ class LoginWebWidget extends StatelessWidget {
                                       child: const BoardScreen(),
                                     ),
                                   ));
-                            } else {
+                            } else if (loginCubit.state is LoginFailure){
                               errorDialog(
-                                  text: "Wrong email or password",
+                                  text:  S.of(context).wrongEmailOrPass,
                                   context: context);
                             }
 

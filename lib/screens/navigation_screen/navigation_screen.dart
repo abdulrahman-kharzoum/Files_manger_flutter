@@ -4,6 +4,8 @@ import 'package:files_manager/cubits/navigation_cubit/navigation_cubit.dart';
 import 'package:files_manager/generated/l10n.dart';
 import 'package:files_manager/theme/color.dart';
 
+import '../../core/functions/statics.dart';
+
 class NavigationScreen extends StatelessWidget {
   const NavigationScreen({super.key});
 
@@ -58,15 +60,16 @@ class NavigationScreen extends StatelessWidget {
                         icon: Icon(
                           Icons.home_rounded,
                           color: Theme.of(context).iconTheme.color,
-                          size: mediaQuery.width / 15,
+                          size: Statics.isPlatformDesktop?mediaQuery.width / 55: mediaQuery.width / 15,
                         ),
                         label: S.of(context).home,
+
                       ),
                       NavigationDestination(
                         icon: Icon(
                           Icons.notifications,
                           color: Theme.of(context).iconTheme.color,
-                          size: mediaQuery.width / 15,
+                          size: Statics.isPlatformDesktop?mediaQuery.width / 55: mediaQuery.width / 15,
                         ),
                         label: S.of(context).notifications,
                       ),
@@ -82,7 +85,7 @@ class NavigationScreen extends StatelessWidget {
                         icon: Icon(
                           Icons.settings,
                           color: Theme.of(context).iconTheme.color,
-                          size: mediaQuery.width / 15,
+                          size: Statics.isPlatformDesktop?mediaQuery.width / 55: mediaQuery.width / 15,
                         ),
                         label: S.of(context).settings,
                       ),

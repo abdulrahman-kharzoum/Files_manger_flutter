@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 
@@ -126,8 +128,7 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
   ];
 
   Future<void> addBoard() async {
-    allBoards.add(
-        Board(
+    allBoards.add(Board(
         id: allBoards.last.id + 1,
         uuid: '2',
         parentId: null,
@@ -197,7 +198,7 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
 
   Future<void> addNewBoard({required Board newBoard}) async {
     if (pagingController.itemList == null) {
-    pagingController.itemList = [];
+      pagingController.itemList = [];
     }
 
     pagingController.itemList!.add(newBoard);
@@ -206,8 +207,6 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
     emit(AllBoardsInitial());
   }
 
-
-
   Future<void> removeBoard({required int index, required int id}) async {
     if (pagingController.itemList != null) {
       pagingController.itemList!.removeAt(index);
@@ -215,6 +214,7 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
     allBoards.removeWhere((e) => e.id == id);
     refresh();
   }
+
   Future<void> getAllBoards({
     required BuildContext context,
   }) async {
@@ -243,13 +243,21 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
           return;
         }
 
-        // Map the list of groups into `GroupModel`
+
+
         List<GroupModel> allGroups = groupData
             .map<GroupModel>((item) => GroupModel.fromJson(item))
             .toList();
 
-        print('Total groups fetched: ${allGroups.length}');
+        String allGroupsJson = jsonEncode(allGroups.map((group) => group.toJson()).toList());
 
+// Save the JSON string to cache
+        await CashNetwork.insertToCash(
+          key: 'my_groups',
+          value: allGroupsJson,
+        );
+
+        print('Total groups fetched: ${allGroups.length}');
 
         List<Board> newBoards = allGroups.map((group) {
           final Board newBoard = Board.fromGroup(group);
@@ -284,8 +292,4 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
       emit(AllBoardsFailedState(errorMessage: 'Catch exception'));
     }
   }
-
-
-
-
 }

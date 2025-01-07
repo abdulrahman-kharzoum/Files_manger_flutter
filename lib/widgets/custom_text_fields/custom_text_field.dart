@@ -65,14 +65,16 @@ class CustomFormTextField extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: hintText,
                   hintStyle:  TextStyle(
-                      color: Theme.of(context).textTheme.labelMedium!.color, fontWeight: FontWeight.bold),
+
+                      color: Theme.of(context).textTheme.labelMedium!.color,
+                    fontWeight: FontWeight.bold),
                   // labelText: nameLabel,
                   labelStyle: styleInput ??
                       const TextStyle(
                           color: Colors.grey, fontWeight: FontWeight.bold),
                   filled: true,
                   fillColor: fillColor,
-                  hoverColor: const Color.fromARGB(255, 231, 231, 231),
+                  hoverColor:  Theme.of(context).textTheme.headlineLarge!.color!,
                   suffixIcon: icon != null
                       ? IconButton(
                           icon: Icon(icon, color: colorIcon),
@@ -141,7 +143,7 @@ class CustomFormTextField extends StatelessWidget {
                     borderRadius: BorderRadius.circular(borderRadius),
                     borderSide: BorderSide(color: borderColor),
                   ),
-                  hoverColor: const Color.fromARGB(255, 231, 231, 231),
+                  hoverColor:  Theme.of(context).textTheme.headlineLarge!.color!,
                 ),
                 validator: validator,
                 onChanged: onChanged,

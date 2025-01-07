@@ -112,57 +112,6 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     emit(BoardSettingsInitial());
   }
 
-  //
-  // Future<void> addBoard({
-  //   required BuildContext context,
-  //   required String title,
-  //   required String description,
-  //   required String color,
-  //   required String lang,
-  // }) async {
-  //   try {
-  //     emit(BoardSettingsLoadingState());
-  //     String? token = CashNetwork.getCashData(key: 'token');
-  //
-  //     final response = await dio().post(
-  //       'groups/create',
-  //       data: {
-  //         'name': title,
-  //         'description': description,
-  //         'color': color,
-  //         'lang': lang,
-  //       },
-  //       options: Dio.Options(
-  //         headers: {'Authorization': 'Bearer $token'},
-  //       ),
-  //     );
-  //     print('The status code is => ${response.statusCode}');
-  //     print(response.data);
-  //     if (response.statusCode == 200){
-  //       if(currentBoard!= null){
-  //         currentBoard.id = response.data['data']['id'];
-  //         currentBoard.userId = response.data['data']['creator']['id'];
-  //
-  //       }
-  //
-  //       emit(BoardSettingsSuccessState());
-  //
-  //     }
-  //   } on DioException catch (e) {
-  //     Navigator.pop(context);
-  //     errorHandler(e: e, context: context);
-  //
-  //     print('The response is => ${e.response!.data}');
-  //     emit(BoardSettingsFailedState(errorMessage: e.response!.data['message']));
-  //   } catch (e) {
-  //     Navigator.pop(context);
-  //     print('================ catch exception =================');
-  //     print(e);
-  //     emit(BoardSettingsFailedState(errorMessage: 'Catch exception'));
-  //   }
-  // }
-  //
-
   Future<void> changeTitle() async {
     currentBoard.title = boardTitleController.text;
     emit(BoardSettingsInitial());
@@ -233,55 +182,46 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       emit(BoardSettingsLoadingState());
 
       String? token = CashNetwork.getCashData(key: 'token');
-      if (currentBoard!.title! == title) {
-        final response = await dio().put(
-          'groups/update/$groupId',
-          data: {
-            'description': description,
-            'color': color,
-            'lang': lang,
-          },
-          options: Dio.Options(
-            headers: {'Authorization': 'Bearer $token'},
-          ),
-        );
-        print('The status code is => ${response.statusCode}');
-        print(response.data);
-        if (response.statusCode == 200) {
-          print("group has been updated");
-          emit(BoardSettingsSuccessState());
-        }
-      } else {
-        final response = await dio().put(
-          'groups/update/$groupId',
-          data: {
-            'name': title,
-            'description': description,
-            'color': color,
-            'lang': lang,
-          },
-          options: Dio.Options(
-            headers: {'Authorization': 'Bearer $token'},
-          ),
-        );
-        print('The status code is => ${response.statusCode}');
-        print(response.data);
-        if (response.statusCode == 200) {
-          print("group has been updated");
-          emit(BoardSettingsSuccessState());
-        }
+
+      final response = await dio().put(
+        'groups/update/$groupId',
+        data: {
+          // 'name',
+          'description': description,
+          'color': color,
+          'lang': lang,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print("group has been updated");
+
+        emit(BoardSettingsSuccessState());
+        print("after BoardSettingsSuccessState ");
+
       }
     } on DioException catch (e) {
-      Navigator.pop(context);
       errorHandler(e: e, context: context);
 
       print('The response is => ${e.response!.data}');
       emit(BoardSettingsFailedState(errorMessage: e.response!.data['message']));
+      print("after BoardSettingsFailedState dioEx");
+
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
     } catch (e) {
-      Navigator.pop(context);
       print('================ catch exception =================');
       print(e);
       emit(BoardSettingsFailedState(errorMessage: 'Catch exception'));
+      print("after BoardSettingsFailedState ");
+
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
       print(e);
     }
   }
