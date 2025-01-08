@@ -43,10 +43,10 @@ class RegisterCubit extends Cubit<RegisterState> {
     print('step1');
     try {
       String? fcmToken = "jsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdfffffffffffffffffffffffffffffffffffffffffffdsfffffffff";
-      if (!await checkInternet()) {
-        internetToast(context: context);
-        return;
-      }
+      // if (!await checkInternet()) {
+      //   internetToast(context: context);
+      //   return;
+      // }
       emit(RegisterLoadingState());
       print('step2');
       // await FirebaseMessaging.instance.deleteToken().then(

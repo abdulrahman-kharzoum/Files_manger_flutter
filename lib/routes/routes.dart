@@ -27,6 +27,7 @@ import 'package:files_manager/screens/start/splash_screen.dart';
 
 import '../cubits/file_report_cubit/file_report_cubit.dart';
 import '../cubits/user_report_cubit/user_report_cubit.dart';
+import '../screens/auth/register_screen/register_screen1.dart';
 
 final Map<String, WidgetBuilder> routes = {
   // ======splash Screen=====//
@@ -57,7 +58,7 @@ final Map<String, WidgetBuilder> routes = {
         // ..fetchCountry(context)
         // ..fetchGenderFunction(context)
 
-        child: const RegisterScreen(),
+        child: RegisterScreen1(),
       ),
   // ======Forget Password Screen=====//
   '/forget_password': (context) => BlocProvider(
@@ -86,12 +87,14 @@ final Map<String, WidgetBuilder> routes = {
       ),
   // ======Report Screen=====//
   '/report_screen': (context) => MultiBlocProvider(
-  providers: [
-    BlocProvider(create: (context) => FileReportCubit()..loadFileReportData()),
-    BlocProvider(create: (context) => UserReportCubit()..loadUserReportData()),
-  ],
-  child: AdminReportScreen(),
-),
+        providers: [
+          BlocProvider(
+              create: (context) => FileReportCubit()..loadFileReportData()),
+          BlocProvider(
+              create: (context) => UserReportCubit()..loadUserReportData()),
+        ],
+        child: AdminReportScreen(),
+      ),
   //===== privacy and policy Screen =====//
   '/privacy_and_policy': (context) => BlocProvider(
         create: (context) => PolicyCubit(),

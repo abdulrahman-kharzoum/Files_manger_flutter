@@ -95,8 +95,10 @@ class CustomFormTextField extends StatelessWidget {
                     borderRadius: BorderRadius.circular(borderRadius),
                     borderSide: BorderSide(color: borderColor),
                   ),
+                  errorMaxLines: 3,
                 ),
                 validator: validator,
+
                 onChanged: onChanged,
                 onFieldSubmitted: onFieldSubmitted,
               )
@@ -144,6 +146,7 @@ class CustomFormTextField extends StatelessWidget {
                     borderSide: BorderSide(color: borderColor),
                   ),
                   hoverColor:  Theme.of(context).textTheme.headlineLarge!.color!,
+                  errorMaxLines: 3,
                 ),
                 validator: validator,
                 onChanged: onChanged,

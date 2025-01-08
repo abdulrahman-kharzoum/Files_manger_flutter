@@ -502,7 +502,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "overview": MessageLookupByLibrary.simpleMessage("Overview"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "password_length": MessageLookupByLibrary.simpleMessage(
-            "Password must be at least 8 characters long and include at least one letter, one number, and one special character"),
+            "Password must be at least 8 characters long \nand include at least one letter, one number, \nand one special character"),
         "password_message_success": MessageLookupByLibrary.simpleMessage(
             "You have successfully reset your password. Please use your new password when logging in."),
         "password_must_match":

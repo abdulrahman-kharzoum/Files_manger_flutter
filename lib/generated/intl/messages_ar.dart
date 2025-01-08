@@ -486,7 +486,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "overview": MessageLookupByLibrary.simpleMessage("نظرة عامة"),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
         "password_length": MessageLookupByLibrary.simpleMessage(
-            "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل وتتضمن حرفًا واحدًا على الأقل ورقمًا واحدًا وحرفًا خاصًا واحدًا"),
+            "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل \nوتتضمن حرفًا واحدًا على الأقل\n ورقمًا واحدًا وحرفًا خاصًا واحدًا"),
         "password_message_success": MessageLookupByLibrary.simpleMessage(
             "لقد قمت بإعادة تعيين كلمة المرور الخاصة بك بنجاح. الرجاء استخدام كلمة المرور الجديدة عند تسجيل الدخول."),
         "password_must_match":

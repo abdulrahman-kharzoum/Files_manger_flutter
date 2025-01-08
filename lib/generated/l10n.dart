@@ -1090,10 +1090,10 @@ class S {
     );
   }
 
-  /// `Password must be at least 8 characters long and include at least one letter, one number, and one special character`
+  /// `Password must be at least 8 characters long \nand include at least one letter, one number, \nand one special character`
   String get password_length {
     return Intl.message(
-      'Password must be at least 8 characters long and include at least one letter, one number, and one special character',
+      'Password must be at least 8 characters long \nand include at least one letter, one number, \nand one special character',
       name: 'password_length',
       desc: '',
       args: [],

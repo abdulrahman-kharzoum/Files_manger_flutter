@@ -103,7 +103,7 @@
   "enter_email_plz": "Please enter an email address",
   "invalid_email_address": "Invalid email address",
   "please_enter_password": "Please Enter Your password",
-  "password_length": "Password must be at least 8 characters long and include at least one letter, one number, and one special character",
+  "password_length": "Password must be at least 8 characters long \nand include at least one letter, one number, \nand one special character",
   "reset_password": "Reset Password",
   "newpassword": "New password",
   "reenter_password": "Re-enter password",
