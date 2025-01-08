@@ -102,7 +102,7 @@ void errorDialog({
     builder: (context) => AlertDialog(
       backgroundColor: AppColors.dark,
       title: Text(S.of(context).error),
-      content: Text(text),
+      content: Text(text,style: TextStyle(color: AppColors.white),),
       actions: [
         TextButton(
           style: ButtonStyle(

@@ -62,7 +62,7 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
 
       final formData = FormData.fromMap(data);
 
-      // Make the API call
+      print("file name $fileName");
       final response = await dio().post(
         'files/create',
         data: formData,

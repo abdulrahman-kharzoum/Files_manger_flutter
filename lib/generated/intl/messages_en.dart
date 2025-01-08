@@ -45,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_your_boards_to_favorites_to_see_them_here":
             MessageLookupByLibrary.simpleMessage(
                 "Add your boards to favorites to see them here."),
+        "added": MessageLookupByLibrary.simpleMessage("Added Successfully"),
         "adding": MessageLookupByLibrary.simpleMessage("Adding"),
         "adding_board": MessageLookupByLibrary.simpleMessage("Adding board"),
         "additional_info":
@@ -172,11 +173,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "country": MessageLookupByLibrary.simpleMessage("Country"),
         "country_code": MessageLookupByLibrary.simpleMessage("Country code"),
         "coupon": MessageLookupByLibrary.simpleMessage("Coupon"),
+        "create": MessageLookupByLibrary.simpleMessage("Create"),
         "create_a_subboard":
             MessageLookupByLibrary.simpleMessage("Create a subboard"),
         "create_account": MessageLookupByLibrary.simpleMessage("Register Now"),
         "create_address":
             MessageLookupByLibrary.simpleMessage("Create address"),
+        "create_folder":
+            MessageLookupByLibrary.simpleMessage("Create New Folder"),
         "created_at": MessageLookupByLibrary.simpleMessage("Created at"),
         "credit_debit": MessageLookupByLibrary.simpleMessage("Credit/Debit"),
         "crop_image": MessageLookupByLibrary.simpleMessage("Crop Image"),
@@ -257,6 +261,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please Enter Your Email"),
         "enter_email_plz": MessageLookupByLibrary.simpleMessage(
             "Please enter an email address"),
+        "enter_folder_name": MessageLookupByLibrary.simpleMessage(
+            "Enter the name of your new folder"),
         "enter_password":
             MessageLookupByLibrary.simpleMessage("Enter password"),
         "enter_report_here":
@@ -315,6 +321,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "flat": MessageLookupByLibrary.simpleMessage("Flat"),
         "flat_number": MessageLookupByLibrary.simpleMessage("Flat Number"),
         "flights": MessageLookupByLibrary.simpleMessage("Flights"),
+        "folder_name": MessageLookupByLibrary.simpleMessage("Folder Name"),
+        "folder_name_not_empty": MessageLookupByLibrary.simpleMessage(
+            "Folder name cannot be empty."),
         "foloosi_method_is_not_available": MessageLookupByLibrary.simpleMessage(
             "Foloosi method is not available"),
         "forget_password":

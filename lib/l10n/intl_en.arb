@@ -646,5 +646,11 @@
   "userName_length": "UserName must be at least 5 characters long",
   "enterBoardTitle": "Enter Group Name",
   "enterBoardDes": "Enter Group Description",
+  "added": "Added Successfully",
+  "folder_name":"Folder Name",
+  "create_folder":"Create New Folder",
+  "folder_name_not_empty": "Folder name cannot be empty.",
+  "create": "Create",
+  "enter_folder_name": "Enter the name of your new folder",
   "wrongEmailOrPass": "Wrong Email or Password"
 }

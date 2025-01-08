@@ -1,5 +1,8 @@
+import 'package:files_manager/core/functions/snackbar_function.dart';
 import 'package:files_manager/models/file_model.dart';
 import 'package:files_manager/models/folder_model.dart';
+import 'package:files_manager/widgets/custom_text_fields/custom_text_field.dart';
+import 'package:files_manager/widgets/custom_text_fields/custom_text_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:files_manager/core/animation/dialogs/dialogs.dart';
@@ -12,6 +15,93 @@ import 'package:files_manager/theme/color.dart';
 import 'package:files_manager/widgets/all_applications_screen/application_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../core/functions/statics.dart';
+
+Future<void> showFolderNameDialog({
+  required BuildContext context,
+  required Function(String folderName) onConfirm,
+}) async {
+  final TextEditingController folderNameController = TextEditingController();
+
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Theme.of(context).textTheme.headlineSmall!.color!,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text(
+        S.of(context).create_folder,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+             S.of(context).enter_folder_name,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodySmall!.color,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            CustomFormTextField(
+              controller: folderNameController,
+              nameLabel: '',
+              hintText:S.of(context).folder_name,
+              fillColor: Colors.transparent,
+              borderColor: Theme.of(context).textTheme.labelSmall!.color!,
+              styleInput: TextStyle(
+                  color: Theme.of(context).textTheme.bodySmall!.color),
+              maxLines: 5,
+              borderRadius: 25.0,
+              onChanged: (p0) async {
+                // await boardSettingsCubit.changeDescription();
+              },
+              validator: (p0) {
+                return null;
+              },
+            ),
+
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: Text(
+            S.of(context).cancel,
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final folderName = folderNameController.text.trim();
+              if (folderName.isNotEmpty) {
+                await onConfirm(folderName);
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(S.of(context).folder_name_not_empty),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: Text( S.of(context).create),
+          ),
+        ],
+      );
+    },
+  );
+}
 
 class AllApplicationsScreen extends StatelessWidget {
   const AllApplicationsScreen({
@@ -81,8 +171,10 @@ class AllApplicationsScreen extends StatelessWidget {
               if (state is BoardAddApplicationLoading) {
                 loadingDialog(context: context, mediaQuery: mediaQuery);
               } else if (state is BoardAddApplicationSuccess) {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+                showLightSnackBar(context, S.of(context).added);
                 boardCubit.currentBoard.allFiles.add(state.addedApplication);
+
                 applicationCubit.pagingController
                     .appendLastPage([state.addedApplication]);
                 Navigator.of(context).pop();
@@ -104,12 +196,10 @@ class AllApplicationsScreen extends StatelessWidget {
 
                       if (result != null) {
                         final selectedFile = result.files.first;
-                        print(selectedFile.name);
-                        print(selectedFile.size);
-                        print(selectedFile.extension);
+
                         await boardAddApplicationCubit.addApplicationFunction(
                             context: context,
-                            fileName: 'new text',
+                            fileName: selectedFile.name,
                             file: selectedFile,
                             parent_id: 0,
                             is_folder: false,
@@ -151,12 +241,24 @@ class AllApplicationsScreen extends StatelessWidget {
                         //     mode: 'free',
                         //     createdAt: DateTime.now(),
                         //     updatedAt: DateTime.now()));
-                        await boardAddApplicationCubit.addApplicationFunction(
-                            context: context,
-                            fileName: 'new Folder',
-                            parent_id: 0,
-                            is_folder: true,
-                            group_id: boardCubit.currentBoard.id);
+                        // await boardAddApplicationCubit.addApplicationFunction(
+                        //     context: context,
+                        //     fileName: 'new Folder',
+                        //     parent_id: 0,
+                        //     is_folder: true,
+                        //     group_id: boardCubit.currentBoard.id);
+                        await showFolderNameDialog(
+                          context: context,
+                          onConfirm: (folderName) async {
+                            await boardAddApplicationCubit
+                                .addApplicationFunction(
+                                    context: context,
+                                    fileName: folderName,
+                                    parent_id: 0,
+                                    is_folder: true,
+                                    group_id: boardCubit.currentBoard.id);
+                          },
+                        );
 
                         await boardCubit.refresh();
                         await allBoardsCubit.refresh();

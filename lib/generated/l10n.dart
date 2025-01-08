@@ -6522,6 +6522,66 @@ class S {
     );
   }
 
+  /// `Added Successfully`
+  String get added {
+    return Intl.message(
+      'Added Successfully',
+      name: 'added',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Folder Name`
+  String get folder_name {
+    return Intl.message(
+      'Folder Name',
+      name: 'folder_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create New Folder`
+  String get create_folder {
+    return Intl.message(
+      'Create New Folder',
+      name: 'create_folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Folder name cannot be empty.`
+  String get folder_name_not_empty {
+    return Intl.message(
+      'Folder name cannot be empty.',
+      name: 'folder_name_not_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create`
+  String get create {
+    return Intl.message(
+      'Create',
+      name: 'create',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter the name of your new folder`
+  String get enter_folder_name {
+    return Intl.message(
+      'Enter the name of your new folder',
+      name: 'enter_folder_name',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Wrong Email or Password`
   String get wrongEmailOrPass {
     return Intl.message(

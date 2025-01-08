@@ -652,5 +652,11 @@
   "userName_length": "يجب أن يكون اسم المستخدم مكونًا من 5 أحرف على الأقل",
   "enterBoardTitle": "ادخل اسم المجموعة",
   "enterBoardDes": "ادخل وصف المجموعة",
+  "added": "تمت الإضافة بنجاح",
+  "folder_name":"اسم الملف",
+  "create_folder":"إنشاء ملف جديد",
+  "folder_name_not_empty": "اسم الملف يجب أن لايكون فارغاً",
+  "create": "إنشاء",
+  "enter_folder_name": "أدخل اسم المجلد الجديد الخاص بك",
   "wrongEmailOrPass": "بريد إلكتروني أو كلمة مرور خاطئة"
 }

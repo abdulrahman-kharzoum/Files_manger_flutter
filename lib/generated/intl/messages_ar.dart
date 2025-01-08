@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_your_boards_to_favorites_to_see_them_here":
             MessageLookupByLibrary.simpleMessage(
                 "أضف اللوحات الخاصة بك إلى المفضلة لتراها هنا."),
+        "added": MessageLookupByLibrary.simpleMessage("تمت الإضافة بنجاح"),
         "adding": MessageLookupByLibrary.simpleMessage("جاري الإضافة"),
         "adding_board": MessageLookupByLibrary.simpleMessage("جاري إضافة لوحة"),
         "additional_info":
@@ -167,11 +168,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "country": MessageLookupByLibrary.simpleMessage("الدولة"),
         "country_code": MessageLookupByLibrary.simpleMessage("رمز البلد"),
         "coupon": MessageLookupByLibrary.simpleMessage("قسيمة"),
+        "create": MessageLookupByLibrary.simpleMessage("إنشاء"),
         "create_a_subboard":
             MessageLookupByLibrary.simpleMessage("إنشاء لوحة فرعية"),
         "create_account": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
         "create_address":
             MessageLookupByLibrary.simpleMessage("إنشاء عنوان جديد"),
+        "create_folder": MessageLookupByLibrary.simpleMessage("إنشاء ملف جديد"),
         "created_at": MessageLookupByLibrary.simpleMessage("تاريخ الإنشاء"),
         "credit_debit": MessageLookupByLibrary.simpleMessage("بطاقة الائتمان"),
         "crop_image": MessageLookupByLibrary.simpleMessage("قص الصورة"),
@@ -250,6 +253,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "الرجاء إدخال البريد الإلكتروني"),
         "enter_email_plz":
             MessageLookupByLibrary.simpleMessage("راجاء أدخل بريدك الإلكتروني"),
+        "enter_folder_name": MessageLookupByLibrary.simpleMessage(
+            "أدخل اسم المجلد الجديد الخاص بك"),
         "enter_password":
             MessageLookupByLibrary.simpleMessage("أدخل كلمة المرور"),
         "enter_report_here":
@@ -305,6 +310,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "flat": MessageLookupByLibrary.simpleMessage("شقة"),
         "flat_number": MessageLookupByLibrary.simpleMessage("رقم الشقة"),
         "flights": MessageLookupByLibrary.simpleMessage("الرحلات"),
+        "folder_name": MessageLookupByLibrary.simpleMessage("اسم الملف"),
+        "folder_name_not_empty": MessageLookupByLibrary.simpleMessage(
+            "اسم الملف يجب أن لايكون فارغاً"),
         "foloosi_method_is_not_available":
             MessageLookupByLibrary.simpleMessage("بوابة فلوسي غير متوفرة"),
         "forget_password":
