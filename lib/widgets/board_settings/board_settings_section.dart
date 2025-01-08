@@ -152,7 +152,7 @@ class BoardSettingsSection extends StatelessWidget {
             CustomFormTextField(
               controller: boardSettingsCubit.descriptionController,
               nameLabel: '',
-              hintText: '',
+              hintText:S.of(context).enterBoardDes,
               fillColor: Colors.transparent,
               borderColor: Theme.of(context).textTheme.labelSmall!.color!,
               styleInput: TextStyle(

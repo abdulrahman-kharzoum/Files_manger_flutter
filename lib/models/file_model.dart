@@ -1,4 +1,5 @@
-  import 'package:files_manager/models/member_model.dart';
+  import 'package:files_manager/models/group.dart';
+import 'package:files_manager/models/member_model.dart';
   import 'package:flutter/material.dart';
   import 'package:files_manager/cubits/all_boards_cubit/all_boards_cubit.dart';
   import 'package:files_manager/cubits/application_cubit/application_cubit.dart';
@@ -46,6 +47,19 @@
         mode: json['mode'],
         createdAt: DateTime.parse(json['created_at']),
         updatedAt: DateTime.parse(json['updated_at']),
+      );
+    }
+
+
+    // Add fromFileApi method
+    factory FileModel.fromFileApi(FileApiModel fileApi) {
+      return FileModel(
+        id: fileApi.id,
+        boardId: 0,  // You can assign boardId based on your logic
+        title: fileApi.name,
+        mode: fileApi.extension ?? 'unknown',
+        createdAt: DateTime.now(),  // Assign based on the API response or current time
+        updatedAt: DateTime.now(),  // Assign based on the API response or current time
       );
     }
 

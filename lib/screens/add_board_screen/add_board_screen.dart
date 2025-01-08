@@ -106,7 +106,7 @@ class AddBoardScreen extends StatelessWidget {
                       locale: Locale(boardCubit.currentBoard.language.code),
                       context: context,
                       child: DefaultTabController(
-                        length: 2,
+                        length: 1,
                         child: Scaffold(
                           backgroundColor:
                               hexToColor(boardCubit.currentBoard.color),
@@ -159,6 +159,8 @@ class AddBoardScreen extends StatelessWidget {
                                                         boardCubit.currentBoard)
                                                   ..initState(),
                                           ),
+                                          BlocProvider(
+                                              create: (context) => AddBoardCubit()),
                                         ],
                                         child: BoardSettingsScreen(
                                           allBoardCubit: allBoardsCubit,

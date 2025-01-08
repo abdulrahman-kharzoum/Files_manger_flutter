@@ -243,19 +243,57 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
           return;
         }
 
-
-
         List<GroupModel> allGroups = groupData
             .map<GroupModel>((item) => GroupModel.fromJson(item))
             .toList();
 
-        String allGroupsJson = jsonEncode(allGroups.map((group) => group.toJson()).toList());
+            // Convert the list of GroupModel to a JSON string
+        String allGroupsJsonString = jsonEncode(
+          allGroups.map((group) => group.toJson()).toList(),
+        );
 
-// Save the JSON string to cache
+            // Save to cache
         await CashNetwork.insertToCash(
           key: 'my_groups',
-          value: allGroupsJson,
+          value: allGroupsJsonString,
         );
+
+
+        // Retrieve the JSON string from cache
+        final cachedData = await CashNetwork.getCashData(key: 'my_groups');
+
+        if (cachedData != null && cachedData is String) {
+          // Decode the JSON string
+          List<dynamic> groupJsonList = jsonDecode(cachedData);
+
+          // Convert to a list of GroupModel
+          List<GroupModel> allGroups = groupJsonList
+              .map<GroupModel>((json) => GroupModel.fromJson(json))
+              .toList();
+
+          // Example: Retrieve a specific group by ID
+          int groupIdToFind = 15; // Replace with the desired group ID
+          GroupModel? specificGroup = allGroups.firstWhere(
+                (group) => group.id == groupIdToFind,
+            orElse: () => GroupModel(
+              id: 0, // Default ID
+              name: '', // Default name
+              description: '', // Default description
+              color: '', // Default color
+              lang: '', // Default language
+              creatorId: 0, // Default creator ID
+              files: [], // Empty list for files
+            ),
+          );
+
+
+          if (specificGroup != null) {
+            print('Group ID: ${specificGroup.id}');
+            print('Files: ${specificGroup.files}');
+          } else {
+            print('Group not found');
+          }
+        }
 
         print('Total groups fetched: ${allGroups.length}');
 

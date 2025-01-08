@@ -6482,10 +6482,10 @@ class S {
     );
   }
 
-  /// `please enter username`
+  /// `Please Enter Username`
   String get please_enter_username {
     return Intl.message(
-      'please enter username',
+      'Please Enter Username',
       name: 'please_enter_username',
       desc: '',
       args: [],
@@ -6507,6 +6507,16 @@ class S {
     return Intl.message(
       'Enter Group Name',
       name: 'enterBoardTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter Group Description`
+  String get enterBoardDes {
+    return Intl.message(
+      'Enter Group Description',
+      name: 'enterBoardDes',
       desc: '',
       args: [],
     );

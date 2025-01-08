@@ -133,7 +133,6 @@ class RegisterWebWidget extends StatelessWidget {
                           validator: validator.validateRePassword,
                         ),
                         SizedBox(height: mediaQuery.height / 50),
-                        // /Register Btn ///
                         SizedBox(
                           width: mediaQuery.width / 3,
                           height: mediaQuery.height / 15,
@@ -166,6 +165,7 @@ class RegisterWebWidget extends StatelessWidget {
                             ),
                           ),
                         ),
+
 
                         SizedBox(
                           height: mediaQuery.height / 20,

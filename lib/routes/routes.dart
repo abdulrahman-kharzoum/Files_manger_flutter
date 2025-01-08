@@ -27,7 +27,7 @@ import 'package:files_manager/screens/start/splash_screen.dart';
 
 import '../cubits/file_report_cubit/file_report_cubit.dart';
 import '../cubits/user_report_cubit/user_report_cubit.dart';
-import '../screens/auth/register_screen/register_screen1.dart';
+import '../screens/auth/register_screen/register_screen.dart';
 
 final Map<String, WidgetBuilder> routes = {
   // ======splash Screen=====//
@@ -58,7 +58,7 @@ final Map<String, WidgetBuilder> routes = {
         // ..fetchCountry(context)
         // ..fetchGenderFunction(context)
 
-        child: RegisterScreen1(),
+        child: RegisterScreen(),
       ),
   // ======Forget Password Screen=====//
   '/forget_password': (context) => BlocProvider(

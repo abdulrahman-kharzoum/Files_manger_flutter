@@ -242,6 +242,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "end_time": MessageLookupByLibrary.simpleMessage("End time"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
+        "enterBoardDes":
+            MessageLookupByLibrary.simpleMessage("Enter Group Description"),
         "enterBoardTitle":
             MessageLookupByLibrary.simpleMessage("Enter Group Name"),
         "enter_a_message":
@@ -556,7 +558,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "please_enter_user_name":
             MessageLookupByLibrary.simpleMessage("Please enter your name"),
         "please_enter_username":
-            MessageLookupByLibrary.simpleMessage("please enter username"),
+            MessageLookupByLibrary.simpleMessage("Please Enter Username"),
         "please_enter_your_email_so_you_can_continue_resetting_your_password":
             MessageLookupByLibrary.simpleMessage(
                 "Please enter your email so you can continue resetting your password"),

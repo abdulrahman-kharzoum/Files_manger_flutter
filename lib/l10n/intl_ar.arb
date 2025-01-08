@@ -651,5 +651,6 @@
   "please_enter_username": "الرجاء إدخال اسم المستخدم",
   "userName_length": "يجب أن يكون اسم المستخدم مكونًا من 5 أحرف على الأقل",
   "enterBoardTitle": "ادخل اسم المجموعة",
+  "enterBoardDes": "ادخل وصف المجموعة",
   "wrongEmailOrPass": "بريد إلكتروني أو كلمة مرور خاطئة"
 }

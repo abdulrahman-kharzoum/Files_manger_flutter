@@ -642,8 +642,9 @@
   "settings_board": "Settings board",
   "please_enter_name": "please enter name",
   "name_length": "Name must be at least 3 characters long",
-  "please_enter_username": "please enter username",
+  "please_enter_username": "Please Enter Username",
   "userName_length": "UserName must be at least 5 characters long",
   "enterBoardTitle": "Enter Group Name",
+  "enterBoardDes": "Enter Group Description",
   "wrongEmailOrPass": "Wrong Email or Password"
 }

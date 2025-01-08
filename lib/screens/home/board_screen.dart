@@ -143,8 +143,7 @@ class BoardScreen extends StatelessWidget {
                               BoardSettingsCubit(currentBoard: newBoard),
                         ),
                         BlocProvider(
-                          create: (context) => AddBoardCubit(),
-                        ),
+                            create: (context) => AddBoardCubit()),
                       ],
                       child: BoardSettingsScreen(
                         allBoardCubit: allBoardsCubit,

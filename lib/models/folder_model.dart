@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:files_manager/models/group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:files_manager/cubits/application_cubit/application_cubit.dart';
@@ -40,6 +41,18 @@ class FolderModel extends Application {
       mode: json['mode'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
+    );
+  }
+  // Add fromFileApi method for FolderModel
+  factory FolderModel.fromFileApi(FileApiModel fileApi) {
+    return FolderModel(
+      id: fileApi.id,
+      boardId: 0,  // You can assign boardId based on your logic
+      title: fileApi.name,
+      mode: fileApi.extension ?? 'unknown',
+      allFiles: [],  // If you have files in the folder, initialize them here
+      createdAt: DateTime.now(),  // Assign based on the API response or current time
+      updatedAt: DateTime.now(),  // Assign based on the API response or current time
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:files_manager/cubits/add_board_cubit/add_board_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:files_manager/cubits/all_boards_cubit/all_boards_cubit.dart';
@@ -73,6 +74,8 @@ class SubBoardScreen extends StatelessWidget {
                               BoardSettingsCubit(currentBoard: board)
                                 ..initState(),
                         ),
+                        BlocProvider(
+                            create: (context) => AddBoardCubit()),
                       ],
                       child: BoardSettingsScreen(
                         allBoardCubit: allBoardsCubit,

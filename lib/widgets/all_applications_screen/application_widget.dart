@@ -17,7 +17,7 @@ class ApplicationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+        onTap: onTap,
       child: Container(
         width: Statics.isPlatformDesktop
             ? mediaQuery.width / 5

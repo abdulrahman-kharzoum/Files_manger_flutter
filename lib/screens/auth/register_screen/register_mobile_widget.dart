@@ -112,22 +112,37 @@ class RegisterMobileWidget extends StatelessWidget {
                 validator: validator.validateRePassword,
               ),
               SizedBox(height: mediaQuery.height / 50),
-              CustomButtonWidget(
-                mediaQuery: mediaQuery,
-                title: S.of(context).sign_up,
-                onPressed: () {
-                  // print('Language ${cubit.selectedLanguage}');
-                  if (registerCubit.formKey.currentState!
-                      .validate()) {
-                    if (registerCubit
-                        .reEnterPasswordController.text !=
-                        registerCubit.passwordController.text) {
-                      return showLightSnackBar(
-                          context, S.of(context).password_must_match);
+              SizedBox(
+                width: mediaQuery.width / 3,
+                height: mediaQuery.height / 15,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (registerCubit.formKey.currentState!
+                        .validate()) {
+                      if (registerCubit
+                          .reEnterPasswordController.text !=
+                          registerCubit.passwordController.text) {
+                        return showLightSnackBar(
+                            context, S.of(context).password_must_match);
+                      }
+                      registerCubit.register(context: context);
                     }
-                    registerCubit.register(context: context);
-                  }
-                },
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey.shade500,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: Text(
+                    S.of(context).sign_up,
+                    style: GoogleFonts.tajawal(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: mediaQuery.width / 80,
+                    ),
+                  ),
+                ),
               ),
               SizedBox(
                 height: mediaQuery.height / 20,

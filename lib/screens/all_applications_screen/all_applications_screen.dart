@@ -21,14 +21,16 @@ class AllApplicationsScreen extends StatelessWidget {
     required this.allBoardsCubit,
     required this.applicationCubit,
   });
+
   final BoardCubit boardCubit;
   final String uuid;
   final AllBoardsCubit allBoardsCubit;
   final ApplicationCubit applicationCubit;
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
-    // final boardAddApplicationCubit = context.read<BoardAddApplicationCubit>();
+    final boardAddApplicationCubit = context.read<BoardAddApplicationCubit>();
     return Scaffold(
       backgroundColor: AppColors.dark,
       extendBodyBehindAppBar: true,
@@ -80,7 +82,7 @@ class AllApplicationsScreen extends StatelessWidget {
                 loadingDialog(context: context, mediaQuery: mediaQuery);
               } else if (state is BoardAddApplicationSuccess) {
                 Navigator.of(context).pop();
-
+                boardCubit.currentBoard.allFiles.add(state.addedApplication);
                 applicationCubit.pagingController
                     .appendLastPage([state.addedApplication]);
                 Navigator.of(context).pop();
@@ -101,17 +103,28 @@ class AllApplicationsScreen extends StatelessWidget {
                           await FilePicker.platform.pickFiles();
 
                       if (result != null) {
-                        boardCubit.currentBoard.allFiles.add(FileModel(
-                            id: boardCubit.currentBoard.allFiles.isEmpty
-                                ? 1
-                                : boardCubit.currentBoard.allFiles.last
-                                        .getApplicationId() +
-                                    1,
-                            boardId: boardCubit.currentBoard.id,
-                            title: 'New file',
-                            mode: 'free',
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now()));
+                        final selectedFile = result.files.first;
+                        print(selectedFile.name);
+                        print(selectedFile.size);
+                        print(selectedFile.extension);
+                        await boardAddApplicationCubit.addApplicationFunction(
+                            context: context,
+                            fileName: 'new text',
+                            file: selectedFile,
+                            parent_id: 0,
+                            is_folder: false,
+                            group_id: boardCubit.currentBoard.id);
+                        // boardCubit.currentBoard.allFiles.add(FileModel(
+                        //     id: boardCubit.currentBoard.allFiles.isEmpty
+                        //         ? 1
+                        //         : boardCubit.currentBoard.allFiles.last
+                        //                 .getApplicationId() +
+                        //             1,
+                        //     boardId: boardCubit.currentBoard.id,
+                        //     title: 'New file',
+                        //     mode: 'free',
+                        //     createdAt: DateTime.now(),
+                        //     updatedAt: DateTime.now()));
                         await boardCubit.refresh();
                         await allBoardsCubit.refresh();
                         Navigator.pop(context);
@@ -126,18 +139,25 @@ class AllApplicationsScreen extends StatelessWidget {
                       context: context,
                       asset: 'assets/images/chat-hover.jpg',
                       onTap: () async {
-                        boardCubit.currentBoard.allFiles.add(FolderModel(
-                            id: boardCubit.currentBoard.allFiles.isEmpty
-                                ? 1
-                                : boardCubit.currentBoard.allFiles.last
-                                        .getApplicationId() +
-                                    1,
-                            boardId: boardCubit.currentBoard.id,
-                            allFiles: [],
-                            title: 'New folder',
-                            mode: 'free',
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now()));
+                        // boardCubit.currentBoard.allFiles.add(FolderModel(
+                        //     id: boardCubit.currentBoard.allFiles.isEmpty
+                        //         ? 1
+                        //         : boardCubit.currentBoard.allFiles.last
+                        //         .getApplicationId() +
+                        //         1,
+                        //     boardId: boardCubit.currentBoard.id,
+                        //     allFiles: [],
+                        //     title: 'New folder',
+                        //     mode: 'free',
+                        //     createdAt: DateTime.now(),
+                        //     updatedAt: DateTime.now()));
+                        await boardAddApplicationCubit.addApplicationFunction(
+                            context: context,
+                            fileName: 'new Folder',
+                            parent_id: 0,
+                            is_folder: true,
+                            group_id: boardCubit.currentBoard.id);
+
                         await boardCubit.refresh();
                         await allBoardsCubit.refresh();
                         Navigator.pop(context);

@@ -43,7 +43,7 @@ class CustomTextFields extends StatelessWidget {
         style: styleInput ?? const TextStyle(color: Colors.black),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: const TextStyle(color: Colors.transparent),
+          hintStyle:  TextStyle(color: Colors.grey),
           labelText: nameLabel,
           labelStyle: styleInput ?? const TextStyle(color: Colors.transparent),
           filled: true,

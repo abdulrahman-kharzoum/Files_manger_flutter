@@ -229,6 +229,8 @@ class BoardWidget extends StatelessWidget {
                                             currentBoard: currentBoard!)
                                           ..initState(),
                                       ),
+                                      BlocProvider(
+                                          create: (context) => AddBoardCubit()),
                                     ],
                                     child: BoardSettingsScreen(
                                       allBoardCubit: allBoardsCubit,
@@ -330,7 +332,8 @@ class BoardWidget extends StatelessWidget {
                   ),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                   fit: BoxFit.cover,
-                  width: mediaQuery.width / 8, // Adjust the size as needed
+                  width: mediaQuery.width / 8,
+                  // Adjust the size as needed
                   height: mediaQuery.width / 8, // Adjust the size as needed
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -36,6 +37,7 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     boardTitleController = TextEditingController(text: currentBoard.title);
     descriptionController =
         TextEditingController(text: currentBoard.description);
+
     await resetSearch();
     if (currentBoard != null) {
       // If currentBoard is provided, use its values to pre-populate the settings
@@ -46,6 +48,7 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       boardTitleController = TextEditingController();
       selectedColor = '#FFFFFF'; // Default color for new boards
     }
+
     emit(BoardSettingsInitial());
   }
 
@@ -182,47 +185,55 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       emit(BoardSettingsLoadingState());
 
       String? token = CashNetwork.getCashData(key: 'token');
-
-      final response = await dio().put(
-        'groups/update/$groupId',
-        data: {
-          // 'name',
+      var requestData;
+      if (title != currentBoard.title){
+         requestData = {
+          'name': currentBoard.title,
           'description': description,
           'color': color,
           'lang': lang,
-        },
+        };
+      }
+      else{
+         requestData = {
+          'description': description,
+          'color': color,
+          'lang': lang,
+        };
+      }
+
+
+      final response = await dio().put(
+        'groups/update/$groupId',
+        data: requestData,
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
 
       if (response.statusCode == 200) {
-        print("group has been updated");
+        print("Group has been updated");
 
-        emit(BoardSettingsSuccessState());
-        print("after BoardSettingsSuccessState ");
-
+        if (!isClosed) emit(BoardSettingsSuccessState());
+        print("After BoardSettingsSuccessState");
       }
     } on DioException catch (e) {
-      errorHandler(e: e, context: context);
-
-      print('The response is => ${e.response!.data}');
-      emit(BoardSettingsFailedState(errorMessage: e.response!.data['message']));
-      print("after BoardSettingsFailedState dioEx");
-
-      if (context.mounted) {
-        Navigator.pop(context);
+      print('Dio Exception => ${e.response!.data}');
+      if (!isClosed) {
+        emit(BoardSettingsFailedState(
+            errorMessage: e.response!.data['message']));
+        print("After BoardSettingsFailedState (DioException)");
       }
+
+      if (context.mounted) Navigator.pop(context);
     } catch (e) {
-      print('================ catch exception =================');
-      print(e);
-      emit(BoardSettingsFailedState(errorMessage: 'Catch exception'));
-      print("after BoardSettingsFailedState ");
-
-      if (context.mounted) {
-        Navigator.pop(context);
+      print('Catch Exception => $e');
+      if (!isClosed) {
+        emit(BoardSettingsFailedState(errorMessage: 'Catch exception'));
+        print("After BoardSettingsFailedState");
       }
-      print(e);
+
+      if (context.mounted) Navigator.pop(context);
     }
   }
 }
