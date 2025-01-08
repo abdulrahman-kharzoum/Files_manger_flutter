@@ -76,7 +76,7 @@ class AddBoardScreen extends StatelessWidget {
                     BlocProvider(
                       create: (context) => ApplicationCubit()
                         ..initState(
-                            context: context, uuid: state.createdBoard.uuid),
+                            context: context, groupId: state.createdBoard.id),
                     ),
                   ],
                   child: AddBoardScreen(

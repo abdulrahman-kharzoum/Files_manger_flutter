@@ -71,7 +71,7 @@ class BoardWidget extends StatelessWidget {
                   create: (context) => ApplicationCubit()
                     ..initState(
                       context: context,
-                      uuid: currentBoard!.uuid,
+                      groupId: currentBoard!.id,
                     ),
                 ),
               ],
@@ -105,12 +105,12 @@ class BoardWidget extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           SizedBox(
-                            // height: Statics.isPlatformDesktop
-                            //     ? mediaQuery.height / 40
-                            //     : mediaQuery.height / 20,
-                            // width: Statics.isPlatformDesktop
-                            //     ? mediaQuery.width / 30
-                            //     : mediaQuery.width / 10,
+                            height: Statics.isPlatformDesktop
+                                ? mediaQuery.height / 40
+                                : mediaQuery.height / 20,
+                            width: Statics.isPlatformDesktop
+                                ? mediaQuery.width / 30
+                                : mediaQuery.width / 10,
                             child: currentBoard!.hasImage
                                 ? currentBoard!.image.isEmpty
                                     ? ClipRRect(

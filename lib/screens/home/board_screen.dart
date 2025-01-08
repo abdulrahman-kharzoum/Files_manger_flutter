@@ -73,7 +73,7 @@ class BoardScreen extends StatelessWidget {
                         create: (context) => ApplicationCubit()
                           ..initState(
                             context: context,
-                            uuid: state.createdBoard.uuid,
+                            groupId: state.createdBoard.id,
                           ),
                       ),
                       BlocProvider(

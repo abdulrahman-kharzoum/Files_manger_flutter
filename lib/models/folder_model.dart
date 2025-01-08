@@ -44,10 +44,10 @@ class FolderModel extends Application {
     );
   }
   // Add fromFileApi method for FolderModel
-  factory FolderModel.fromFileApi(FileApiModel fileApi) {
+  factory FolderModel.fromFileApi(FileApiModel fileApi,int group_id) {
     return FolderModel(
       id: fileApi.id,
-      boardId: 0,  // You can assign boardId based on your logic
+      boardId: group_id,
       title: fileApi.name,
       mode: fileApi.extension ?? 'unknown',
       allFiles: [],  // If you have files in the folder, initialize them here

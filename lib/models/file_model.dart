@@ -52,10 +52,10 @@ import 'package:files_manager/models/member_model.dart';
 
 
     // Add fromFileApi method
-    factory FileModel.fromFileApi(FileApiModel fileApi) {
+    factory FileModel.fromFileApi(FileApiModel fileApi,int group_id) {
       return FileModel(
         id: fileApi.id,
-        boardId: 0,  // You can assign boardId based on your logic
+        boardId: group_id,  // You can assign boardId based on your logic
         title: fileApi.name,
         mode: fileApi.extension ?? 'unknown',
         createdAt: DateTime.now(),  // Assign based on the API response or current time

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:files_manager/interfaces/applications_abstract.dart';
 import 'package:files_manager/models/file_model.dart';
 import 'package:files_manager/models/folder_model.dart';
 import 'package:flutter/material.dart';
@@ -49,29 +50,34 @@ class ShowApplicationsData extends StatelessWidget {
           } else if (state is GetAllApplicationsInBoardSuccess) {
             final isLastPage = state.isReachMax;
             print('Is the last page => $isLastPage');
-            // Use set to avoid duplicating items.
-            final existingItems =
-                applicationCubit.pagingController.itemList ?? [];
-            // Check for new items and ignore duplicates
-            final newItems = state.newBoardsApp
-                .where((app) => !existingItems.any((existingApp) =>
-                    existingApp.getApplicationId() == app.getApplicationId()))
-                .toList();
-            if (isLastPage) {
-              applicationCubit.pagingController.appendLastPage(newItems);
-            } else {
-              if (applicationCubit.pagingController.itemList == null) {
-                applicationCubit.pagingController.appendPage(newItems, 2);
-                return;
-              }
-              final nextPageKey =
-                  (applicationCubit.pagingController.itemList!.length ~/
-                          applicationCubit.pageSize) +
-                      1;
-              print('The next page is =>$nextPageKey');
-              applicationCubit.pagingController
-                  .appendPage(newItems, nextPageKey);
+            for(Application a in state.newBoardsApp){
+              boardCubit.currentBoard.allFiles.add(a);
+
             }
+
+            // // Use set to avoid duplicating items.
+            // final existingItems =
+            //     applicationCubit.pagingController.itemList ?? [];
+            // // Check for new items and ignore duplicates
+            // final newItems = state.newBoardsApp
+            //     .where((app) => !existingItems.any((existingApp) =>
+            //         existingApp.getApplicationId() == app.getApplicationId()))
+            //     .toList();
+            // if (isLastPage) {
+            //   applicationCubit.pagingController.appendLastPage(newItems);
+            // } else {
+            //   if (applicationCubit.pagingController.itemList == null) {
+            //     applicationCubit.pagingController.appendPage(newItems, 2);
+            //     return;
+            //   }
+            //   final nextPageKey =
+            //       (applicationCubit.pagingController.itemList!.length ~/
+            //               applicationCubit.pageSize) +
+            //           1;
+            //   print('The next page is =>$nextPageKey');
+            //   applicationCubit.pagingController
+            //       .appendPage(newItems, nextPageKey);
+            // }
           }
         },
         builder: (context, state) {

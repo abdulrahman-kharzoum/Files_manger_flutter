@@ -75,8 +75,8 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
         print("===========Folder And Files 200 ====================");
         final fileApi = FileApiModel.fromJson(response.data['data']);
         Application createdApplication = fileApi.extension == null
-            ? FolderModel.fromFileApi(fileApi)
-            : FileModel.fromFileApi(fileApi);
+            ? FolderModel.fromFileApi(fileApi,group_id)
+            : FileModel.fromFileApi(fileApi,group_id);
 
         emit(BoardAddApplicationSuccess(addedApplication: createdApplication));
       } else {
