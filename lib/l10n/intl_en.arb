@@ -652,5 +652,8 @@
   "folder_name_not_empty": "Folder name cannot be empty.",
   "create": "Create",
   "enter_folder_name": "Enter the name of your new folder",
-  "wrongEmailOrPass": "Wrong Email or Password"
+  "wrongEmailOrPass": "Wrong Email or Password",
+  "invite": "Invite",
+  "inviting": "inviting",
+  "user_invited": "User is Invited to the group"
 }

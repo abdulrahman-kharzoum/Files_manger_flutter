@@ -369,6 +369,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "اسم المستخدم يجب ان يكون 4 محارف على الأقل"),
         "invalid_username": MessageLookupByLibrary.simpleMessage(
             "يجب أن يكون اسم المستخدم 4 أحرف على الأقل"),
+        "invite": MessageLookupByLibrary.simpleMessage("دعوة"),
+        "inviting": MessageLookupByLibrary.simpleMessage("يتم الدعوة"),
         "items": MessageLookupByLibrary.simpleMessage("عدد العناصر"),
         "job_opportunity": MessageLookupByLibrary.simpleMessage("فرصة عمل"),
         "job_success": MessageLookupByLibrary.simpleMessage(
@@ -863,6 +865,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "يجب أن يكون اسم المستخدم مكونًا من 5 أحرف على الأقل"),
         "user_desc": MessageLookupByLibrary.simpleMessage(
             "يستطيع الإضافة و الحذف و التعديل داخل التطبيق, لكن لن يكون بإمكانه إضافة تطبيقات أو التحكم بالإعدادات"),
+        "user_invited":
+            MessageLookupByLibrary.simpleMessage("تم دعوة المستخدم للمجموعة"),
         "username": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
         "users": MessageLookupByLibrary.simpleMessage("المستخدمين"),
         "verification": MessageLookupByLibrary.simpleMessage("التحقق"),

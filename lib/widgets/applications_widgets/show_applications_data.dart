@@ -23,7 +23,9 @@ import '../../theme/color.dart';
 
 class ShowApplicationsData extends StatelessWidget {
   const ShowApplicationsData({super.key, required this.allBoardsCubit});
+
   final AllBoardsCubit allBoardsCubit;
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
@@ -34,6 +36,9 @@ class ShowApplicationsData extends StatelessWidget {
       context: context,
       child: BlocConsumer<ApplicationCubit, ApplicationState>(
         listener: (context, state) {
+          if (state is GetAllApplicationsInBoardLoading) {
+            loadingDialog(context: context, mediaQuery: mediaQuery);
+          }
           if (state is GetAllApplicationsInBoardFailure) {
             errorDialog(context: context, text: state.errorMessage);
           } else if (state is AllBoardsExpiredState) {
@@ -50,9 +55,10 @@ class ShowApplicationsData extends StatelessWidget {
           } else if (state is GetAllApplicationsInBoardSuccess) {
             final isLastPage = state.isReachMax;
             print('Is the last page => $isLastPage');
-            for(Application a in state.newBoardsApp){
-              boardCubit.currentBoard.allFiles.add(a);
-
+            if (boardCubit.currentBoard.allFiles.isEmpty) {
+              for (Application a in state.newBoardsApp) {
+                boardCubit.currentBoard.allFiles.add(a);
+              }
             }
 
             // // Use set to avoid duplicating items.
@@ -81,6 +87,7 @@ class ShowApplicationsData extends StatelessWidget {
           }
         },
         builder: (context, state) {
+
           return RefreshIndicator(
               onRefresh: () async {
                 applicationCubit.refreshData();
@@ -121,7 +128,6 @@ class ShowApplicationsData extends StatelessWidget {
                                 ],
                               ),
                               title: Row(
-                             
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Flexible(
@@ -130,7 +136,8 @@ class ShowApplicationsData extends StatelessWidget {
                                           ? mediaQuery.width / 2.5
                                           : mediaQuery.width / 1.5,
                                       child: Text(
-                                        boardCubit.currentBoard.allFiles[index].getApplicationName(),
+                                        boardCubit.currentBoard.allFiles[index]
+                                            .getApplicationName(),
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                       ),
@@ -138,18 +145,20 @@ class ShowApplicationsData extends StatelessWidget {
                                   ),
                                   Statics.isPlatformDesktop
                                       ? Flexible(
-                                    child: Text(
-                                      DateFormat('yyyy-MM-d HH:mm:ss').format(
-                                        boardCubit.currentBoard.allFiles[index]
-                                            .getApplicationCreateDate(),
-                                      ),
-                                      style: TextStyle(color: Colors.black38),
-                                    ),
-                                  )
+                                          child: Text(
+                                            DateFormat('yyyy-MM-d HH:mm:ss')
+                                                .format(
+                                              boardCubit
+                                                  .currentBoard.allFiles[index]
+                                                  .getApplicationCreateDate(),
+                                            ),
+                                            style: TextStyle(
+                                                color: Colors.black38),
+                                          ),
+                                        )
                                       : const SizedBox(),
                                 ],
                               ),
-
                               subtitle: Text(
                                 'Count of file ${boardCubit.currentBoard.allFiles[index].getApplicationFilesCount()}',
                                 style: TextStyle(color: Colors.black26),
@@ -249,7 +258,7 @@ class ShowApplicationsData extends StatelessWidget {
                                     child: SizedBox(
                                       width: Statics.isPlatformDesktop
                                           ? mediaQuery.width / 2.5
-                                          : mediaQuery.width / 1.5 ,
+                                          : mediaQuery.width / 1.5,
                                       child: Text(boardCubit
                                           .currentBoard.allFiles[index]
                                           .getApplicationName()),
@@ -321,7 +330,8 @@ class ShowApplicationsData extends StatelessWidget {
                   ),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                   fit: BoxFit.cover,
-                  width: mediaQuery.width / 8, // Adjust the size as needed
+                  width: mediaQuery.width / 8,
+                  // Adjust the size as needed
                   height: mediaQuery.width / 8, // Adjust the size as needed
                 ),
               ),

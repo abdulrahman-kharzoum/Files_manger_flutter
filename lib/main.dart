@@ -2,7 +2,6 @@ import 'package:files_manager/core/notification/notification_web.dart';
 import 'package:files_manager/core/shared/local_network.dart';
 import 'package:files_manager/core/functions/statics.dart';
 import 'package:files_manager/cubits/theme_cubit/app_theme_cubit.dart';
-import 'package:files_manager/models/themestate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +23,6 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CashNetwork.cashInitialization();
-
   await Hive.initFlutter();
   await Hive.openBox('main');
   final notificationService = NotificationService();

@@ -23,7 +23,7 @@ class NotificationScreen extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).notifications),
-      backgroundColor: AppColors.dark,
+      backgroundColor: Theme.of(context).textTheme.headlineSmall!.color,
       body: BlocConsumer<NotificationCubit, NotificationState>(
         listener: (context, state) async {
           if (state is NotificationSuccessState) {

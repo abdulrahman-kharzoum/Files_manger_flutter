@@ -1,15 +1,18 @@
-import 'dart:convert';
+import 'dart:async';
+
 import 'dart:io';
-import 'dart:math';
+
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as Dio;
+import 'package:files_manager/models/Api_user.dart';
+import 'package:files_manager/models/member_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:files_manager/core/functions/apis_error_handler.dart';
+
 import 'package:files_manager/core/functions/color_to_hex.dart';
 import 'package:files_manager/core/server/dio_settings.dart';
 import 'package:files_manager/cubits/locale_cubit/locale_cubit.dart';
@@ -17,7 +20,6 @@ import 'package:files_manager/models/board_model.dart';
 
 import '../../core/shared/local_network.dart';
 
-import '../../models/user_model.dart';
 
 part 'board_settings_state.dart';
 
@@ -30,7 +32,7 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
   TextEditingController searchController = TextEditingController();
   late String selectedColor;
   bool emojiKeyboard = false;
-
+  Timer? _debounceTimer;
   List<dynamic> searchMembers = [];
 
   Future<void> initState() async {
@@ -57,27 +59,131 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     print('all members in original list is => ${currentBoard.members}');
     searchMembers = [...currentBoard.members, ...currentBoard.invitedUsers];
     print('all members in search list is => $searchMembers');
-
+    searchController.clear();
     emit(BoardSettingsInitial());
   }
 
-  Future<void> search() async {
-    searchMembers.clear();
-    if (searchController.text.isEmpty) {
-      await resetSearch();
+  // Future<void> search() async {
+  //   searchMembers.clear();
+  //   if (searchController.text.isEmpty) {
+  //     await resetSearch();
+  //     return;
+  //   }
+  //   searchMembers = currentBoard.members
+  //       .where(
+  //         (element) => '${element.firstName} ${element.lastName}'
+  //             .toLowerCase()
+  //             .contains(searchController.text.toLowerCase()),
+  //       )
+  //       .toList();
+  //
+  //   // searchMembers.addAll(invitations);
+  //   emit(BoardSettingsInitial());
+  // }
+  Future<void> search({
+    required BuildContext context,
+    required String userName,
+  }) async {
+    // Cancel any existing debounce timer
+    _debounceTimer?.cancel();
+
+    if (userName.isEmpty) {
+
+      searchMembers = [];
+      emit(BoardSettingsNoDataState());
       return;
     }
-    searchMembers = currentBoard.members
-        .where(
-          (element) => '${element.firstName} ${element.lastName}'
-              .toLowerCase()
-              .contains(searchController.text.toLowerCase()),
-        )
-        .toList();
 
-    // searchMembers.addAll(invitations);
-    emit(BoardSettingsInitial());
+    // Start a new debounce timer for search
+    _debounceTimer = Timer(const Duration(milliseconds: 1000), () async {
+      try {
+        emit(BoardSettingsSearchLoadingState());
+
+        String? token = CashNetwork.getCashData(key: 'token');
+        final response = await dio().get(
+          'users/search?name=$userName',
+          options: Dio.Options(
+            headers: {'Authorization': 'Bearer $token'},
+          ),
+        );
+
+        if (response.statusCode == 200) {
+          List<UserModel> users = (response.data['data'] as List)
+              .map((userJson) => UserModel.fromJson(userJson))
+              .toList();
+
+          List<Member> members =
+          users.map((user) => Member.fromUserModel(user)).toList();
+
+          searchMembers = members;
+
+          emit(BoardSettingsSearchSuccessState());
+        }
+      } on DioException catch (e) {
+        print('Dio Exception => ${e.response?.data}');
+        if (!isClosed) {
+          emit(BoardSettingsFailedState(
+              errorMessage: e.response?.data['message'] ?? 'Unknown error'));
+        }
+      } catch (e) {
+        print('Catch Exception => $e');
+        if (!isClosed) {
+          emit(BoardSettingsFailedState(errorMessage: 'Unexpected error'));
+        }
+      }
+    });
   }
+  Future<void> inviteUser({
+    required BuildContext context,
+    required int userId,
+    required int groupId,
+  }) async {
+    try {
+      emit(BoardSettingsInviteLoadingState());
+
+      String? token = CashNetwork.getCashData(key: 'token');
+
+      final invitationExpiryDate =
+      DateTime.now().add(Duration(days: 2)).toString().split('.')[0];
+
+      var requestData = {
+        'group_id': groupId,
+        'user_id': userId,
+        'invitation_expires_at': invitationExpiryDate,
+      };
+
+      final response = await dio().post(
+        '/group-invitations/create',
+        data: requestData,
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print("Invite has been Sent");
+
+        // Send push notification to the user via Firebase
+        // await _sendNotificationToUser(userId, groupId, invitationExpiryDate);
+
+        emit(BoardSettingsInviteSuccessState());
+      }
+    } on DioException catch (e) {
+      print('Dio Exception => ${e.response?.data}');
+      if (!isClosed) {
+        emit(BoardSettingsFailedState(
+            errorMessage: e.response?.data['message'] ?? 'Unknown error'));
+      }
+    } catch (e) {
+      print('Catch Exception => $e');
+      if (!isClosed) {
+        emit(BoardSettingsFailedState(errorMessage: 'Unexpected error'));
+      }
+    }
+  }
+
+
+
 
   Future<void> selectLanguage(String newValue, LocaleCubit localCubit) async {
     if (newValue == 'default') {
@@ -137,41 +243,6 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     emit(BoardSettingsInitial());
   }
 
-  void saveBoard() {
-    if (boardTitleController.text.isNotEmpty) {
-      final newBoard = Board(
-        language: Language(id: 1, name: 'english', code: 'en', direction: 'lr'),
-        id: 0,
-        // Will be assigned by backend after creation
-        uuid: currentBoard?.uuid ?? 'new-board-uuid',
-        // UUID for new or existing board
-        parentId: currentBoard?.parentId ?? null,
-        userId: 1,
-        // Example user ID, this should be dynamically set
-        roleInBoard: currentBoard?.roleInBoard ?? 'Member',
-        // Default role
-        color: selectedColor,
-        allFiles: [],
-        tasksCommentsCount: 0,
-        shareLink: '',
-        title: boardTitleController.text,
-        description: '',
-        icon: '',
-        hasImage: false,
-        isFavorite: false,
-        image: '',
-        visibility: 'Public',
-        createdAt: DateTime.now(),
-        children: [],
-        members: [],
-        invitedUsers: [],
-      );
-
-      emit(BoardSettingsSaved(newBoard: newBoard));
-    } else {
-      emit(BoardSettingsFailedState(errorMessage: 'Board title is required!'));
-    }
-  }
 
   Future<void> updateBoard({
     required BuildContext context,
@@ -186,22 +257,20 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
 
       String? token = CashNetwork.getCashData(key: 'token');
       var requestData;
-      if (title != currentBoard.title){
-         requestData = {
+      if (title != currentBoard.title) {
+        requestData = {
           'name': currentBoard.title,
           'description': description,
           'color': color,
           'lang': lang,
         };
-      }
-      else{
-         requestData = {
+      } else {
+        requestData = {
           'description': description,
           'color': color,
           'lang': lang,
         };
       }
-
 
       final response = await dio().put(
         'groups/update/$groupId',

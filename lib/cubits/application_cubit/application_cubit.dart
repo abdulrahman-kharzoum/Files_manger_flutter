@@ -122,6 +122,7 @@ class ApplicationCubit extends Cubit<ApplicationState> {
   Future<void> getAllFilesBoard(
       {required BuildContext context, required int groupId}) async {
     try {
+
       print("===============Boards FILES====================");
       emit(GetAllApplicationsInBoardLoading());
       String? token = CashNetwork.getCashData(key: 'token');
@@ -151,6 +152,7 @@ class ApplicationCubit extends Cubit<ApplicationState> {
           }
         }
         print('we will emit success');
+
         emit(GetAllApplicationsInBoardSuccess(
             newBoardsApp: newBoardsApp, isReachMax: true));
       } else {

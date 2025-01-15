@@ -68,4 +68,5 @@ class DefaultFirebaseOptions {
     androidClientId: '222788676874-0goeqh9v3j8roc9l3j2dakcvuh6s3la5.apps.googleusercontent.com',
     iosBundleId: 'com.moshtask.app',
   );
+
 }

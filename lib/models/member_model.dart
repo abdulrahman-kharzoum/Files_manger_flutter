@@ -1,5 +1,7 @@
 import 'package:files_manager/models/user_model.dart';
 
+import 'Api_user.dart';
+
 class Member {
   int id;
   Country country;
@@ -52,4 +54,23 @@ class Member {
       image: json['image'],
     );
   }
+
+  factory Member.fromUserModel(UserModel user) {
+    return Member(
+      id: user.id,
+      country: Country(id: 1, name: 'Default Country', iso3: '+000', code: '000'),
+      language: Language(id: 1, name: 'English', code: 'en', direction: 'lr'),
+      gender: Gender(id: 1, type: 'male'),
+      firstName: user.name.split(' ').first,
+      lastName: user.name.split(' ').length > 1 ? user.name.split(' ').last : '',
+      mainRole: 'user',
+      role: 'user',
+      dateOfBirth: '2002-02-02',
+      countryCode: '+000',
+      phone: '0000000000',
+      email: user.email,
+      image:  '',
+    );
+  }
+
 }

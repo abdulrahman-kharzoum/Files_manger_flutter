@@ -1,3 +1,5 @@
+import 'package:files_manager/core/animation/dialogs/dialogs.dart';
+import 'package:files_manager/core/functions/snackbar_function.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:files_manager/cubits/add_member_cubit/add_member_cubit.dart';
@@ -14,180 +16,283 @@ import '../../core/functions/statics.dart';
 import '../../cubits/theme_cubit/app_theme_cubit.dart';
 
 class BoardUsersSection extends StatelessWidget {
-  const BoardUsersSection(
+  BoardUsersSection(
       {super.key, required this.mediaQuery, required this.boardSettingsCubit});
+
   final Size mediaQuery;
   final BoardSettingsCubit boardSettingsCubit;
+  final FocusNode _searchFocusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<BoardSettingsCubit, BoardSettingsState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is BoardSettingsSearchLoadingState) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            loadingDialog(
+              context: context,
+              mediaQuery: mediaQuery,
+            );
+            _searchFocusNode.unfocus();
+          });
+        }
+       else if (state is BoardSettingsInviteLoadingState) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            loadingDialog(
+              context: context,
+              mediaQuery: mediaQuery,
+              title: S.of(context).inviting
+            );
+
+          });
+        }else if (state is BoardSettingsInviteSuccessState){
+          if (context.mounted) Navigator.pop(context);
+          showLightSnackBar(context, S.of(context).user_invited);
+        }
+          else if (state is BoardSettingsNoDataState) {
+          NoData(iconData: Icons.search, text: S.of(context).no_data);
+        } else if (state is BoardSettingsSearchSuccessState) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) Navigator.pop(context);
+          });
+        } else if (state is BoardSettingsFailedState) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            errorDialog(context: context, text: state.errorMessage);
+          });
+        }
+      },
       builder: (context, state) {
         return BlocBuilder<AppThemeCubit, AppThemeState>(
-  builder: (context, state) {
-    final isDarkTheme = state is AppThemeDark;
-    return Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: mediaQuery.width / 30,
-            vertical: mediaQuery.height / 90,
-          ),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  SizedBox(
-                    width: mediaQuery.width / 1.3,
-                    child: CustomFormTextField(
-                      fillColor: Colors.transparent,
-                      controller: boardSettingsCubit.searchController,
-                      borderRadius: 15,
-                      borderColor: Theme.of(context).textTheme.labelSmall!.color!,
-                      hintText: S.of(context).search_about_user,
-                      nameLabel: '',
-                      onChanged: (p0) async {
-                        await boardSettingsCubit.search();
-                      },
-                      styleInput:  TextStyle(color: Theme.of(context).textTheme.bodySmall!.color!),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => MultiBlocProvider(
-                            providers: [
-                              BlocProvider(
-                                create: (context) => AddMemberCubit(),
-                              ),
-                            ],
-                            child: AddMemberScreen(
-                              boardSettingsCubit: boardSettingsCubit,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.add_circle,
-
-                    ),
-                  ),
-                ],
+          builder: (context, state) {
+            final isDarkTheme = state is AppThemeDark;
+            return Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: mediaQuery.width / 30,
+                vertical: mediaQuery.height / 90,
               ),
-              boardSettingsCubit.searchMembers.isEmpty
-                  ? NoData(iconData: Icons.search, text: S.of(context).no_data)
-                  : Expanded(
-                      child: ListView(
-                        // shrinkWrap: true,
-                        children: List.generate(
-                          boardSettingsCubit.searchMembers.length,
-                          (index) {
-                            return boardSettingsCubit.searchMembers[index]
-                                    is InvitedUser
-                                ? ListTile(
-                                    leading: memberWidget(
-                                        memberName: boardSettingsCubit
-                                            .searchMembers[index].invitedEmail,
-                                        role: null,
-                                        mediaQuery: mediaQuery,
-                                        userImage: boardSettingsCubit
-                                            .searchMembers[index].image),
-                                    title: Text(
-                                      '${boardSettingsCubit.searchMembers[index].invitedEmail}',
-                                      style:  TextStyle(
-                                          color: Theme.of(context).textTheme.bodySmall!.color,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: Text(
-                                      '${S.of(context).status}: ${boardSettingsCubit.searchMembers[index].status} ',
-                                      style:  TextStyle(
-                                          color:isDarkTheme? Colors.white54:Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )
-                                : ListTile(
-                                    leading: memberWidget(
-                                      memberName: boardSettingsCubit
-                                          .searchMembers[index].firstName,
-                                      role: boardSettingsCubit
-                                          .searchMembers[index].role,
-                                      mediaQuery: mediaQuery,
-                                      userImage: boardSettingsCubit
-                                          .searchMembers[index].image,
-                                    ),
-                                    title: Text(
-                                      '${boardSettingsCubit.searchMembers[index].firstName} ${boardSettingsCubit.searchMembers[index].lastName}',
-                                      style:  TextStyle(
-                                          color: Theme.of(context).textTheme.bodySmall!.color,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: Text(
-                                      '${boardSettingsCubit.searchMembers[index].role} ',
-                                      style:  TextStyle(
-                                          color:isDarkTheme? Colors.white54:Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    trailing: PopupMenuButton(
-                                      icon: const Icon(Icons.more_vert),
-                                      onSelected: (value) {
-                                        if (value == 'edit') {
-                                          print('Setting');
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MultiBlocProvider(
-                                                providers: [
-                                                  BlocProvider(
-                                                    create: (context) =>
-                                                        AddMemberCubit()
-                                                          ..initState(
-                                                              boardSettingsCubit
-                                                                  .searchMembers[
-                                                                      index]
-                                                                  .role),
-                                                  ),
-                                                ],
-                                                child: UpdateMemberScreen(
-                                                  currentMember:
-                                                      boardSettingsCubit
-                                                          .searchMembers[index],
-                                                  boardSettingsCubit:
-                                                      boardSettingsCubit,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        } else if (value == 'delete') {
-                                          print('delete');
-                                        }
-                                      },
-                                      itemBuilder: (context) => [
-                                        PopupMenuItem(
-                                          value: 'edit',
-                                          child: ListTile(
-                                            leading: const Icon(Icons.settings),
-                                            title: Text(S.of(context).edit),
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'delete',
-                                          child: ListTile(
-                                            leading: const Icon(Icons.delete),
-                                            title: Text(S.of(context).delete),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: mediaQuery.width / 1.3,
+                        child: CustomFormTextField(
+                          fillColor: Colors.transparent,
+                          controller: boardSettingsCubit.searchController,
+                          focusNode: _searchFocusNode,
+                          borderRadius: 15,
+                          borderColor:
+                              Theme.of(context).textTheme.labelSmall!.color!,
+                          hintText: S.of(context).search_about_user,
+                          nameLabel: '',
+                          onChanged: (p0) async {
+                            await boardSettingsCubit.search(
+                                context: context,
+                                userName:
+                                    boardSettingsCubit.searchController.text);
                           },
+                          styleInput: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .color!),
                         ),
                       ),
-                    )
-            ],
-          ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: IconButton(
+                          onPressed: () {
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(
+                            //     builder: (context) => MultiBlocProvider(
+                            //       providers: [
+                            //         BlocProvider(
+                            //           create: (context) => AddMemberCubit(),
+                            //         ),
+                            //       ],
+                            //       child: AddMemberScreen(
+                            //         boardSettingsCubit: boardSettingsCubit,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // );
+                          },
+                          icon: const Icon(
+                            Icons.add_circle,
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  boardSettingsCubit.searchMembers.isEmpty
+                      ? NoData(
+                          iconData: Icons.search, text: S.of(context).no_data)
+                      : Expanded(
+                          child: ListView(
+                            children: List.generate(
+                              boardSettingsCubit.searchMembers.length,
+                              (index) {
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                      child: boardSettingsCubit
+                                                  .searchMembers[index]
+                                              is InvitedUser
+                                          ? ListTile(
+                                              leading: memberWidget(
+                                                  memberName: boardSettingsCubit
+                                                      .searchMembers[index]
+                                                      .invitedEmail,
+                                                  role: null,
+                                                  mediaQuery: mediaQuery,
+                                                  userImage: boardSettingsCubit
+                                                      .searchMembers[index]
+                                                      .image),
+                                              title: Text(
+                                                '${boardSettingsCubit.searchMembers[index].invitedEmail}',
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .color,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              subtitle: Text(
+                                                '${S.of(context).status}: ${boardSettingsCubit.searchMembers[index].status}',
+                                                style: TextStyle(
+                                                    color: isDarkTheme
+                                                        ? Colors.white54
+                                                        : Colors.black54,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            )
+                                          : ListTile(
+                                              leading: memberWidget(
+                                                memberName: boardSettingsCubit
+                                                    .searchMembers[index]
+                                                    .firstName,
+                                                role: boardSettingsCubit
+                                                    .searchMembers[index].role,
+                                                mediaQuery: mediaQuery,
+                                                userImage: boardSettingsCubit
+                                                    .searchMembers[index].image,
+                                              ),
+                                              title: Text(
+                                                '${boardSettingsCubit.searchMembers[index].firstName} ${boardSettingsCubit.searchMembers[index].lastName}',
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .color,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              subtitle: Text(
+                                                '${boardSettingsCubit.searchMembers[index].role}',
+                                                style: TextStyle(
+                                                    color: isDarkTheme
+                                                        ? Colors.white54
+                                                        : Colors.black54,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              trailing: PopupMenuButton(
+                                                icon:
+                                                    const Icon(Icons.more_vert),
+                                                onSelected: (value) {
+                                                  if (value == 'edit') {
+                                                    Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            MultiBlocProvider(
+                                                          providers: [
+                                                            BlocProvider(
+                                                              create: (context) =>
+                                                                  AddMemberCubit()
+                                                                    ..initState(boardSettingsCubit
+                                                                        .searchMembers[
+                                                                            index]
+                                                                        .role),
+                                                            ),
+                                                          ],
+                                                          child:
+                                                              UpdateMemberScreen(
+                                                            currentMember:
+                                                                boardSettingsCubit
+                                                                        .searchMembers[
+                                                                    index],
+                                                            boardSettingsCubit:
+                                                                boardSettingsCubit,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  } else if (value ==
+                                                      'delete') {
+                                                    print('delete');
+                                                  }
+                                                },
+                                                itemBuilder: (context) => [
+                                                  PopupMenuItem(
+                                                    value: 'edit',
+                                                    child: ListTile(
+                                                      leading: const Icon(
+                                                          Icons.settings),
+                                                      title: Text(
+                                                          S.of(context).edit),
+                                                    ),
+                                                  ),
+                                                  PopupMenuItem(
+                                                    value: 'delete',
+                                                    child: ListTile(
+                                                      leading: const Icon(
+                                                          Icons.delete),
+                                                      title: Text(
+                                                          S.of(context).delete),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        boardSettingsCubit.inviteUser(
+                                            context: context,
+                                            userId: boardSettingsCubit
+                                                .searchMembers[index].id,
+                                            groupId: boardSettingsCubit
+                                                .currentBoard.id);
+                                        await boardSettingsCubit.resetSearch();
+                                        await boardSettingsCubit.refresh();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.blueAccent,
+                                      ),
+                                      child: Text(
+                                        S.of(context).invite,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall!
+                                                .color,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        )
+                ],
+              ),
+            );
+          },
         );
-  },
-);
       },
     );
   }

@@ -380,6 +380,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "User name must be 4 characters at least"),
         "invalid_username": MessageLookupByLibrary.simpleMessage(
             "The username must be at least 4 characters"),
+        "invite": MessageLookupByLibrary.simpleMessage("Invite"),
+        "inviting": MessageLookupByLibrary.simpleMessage("inviting"),
         "items": MessageLookupByLibrary.simpleMessage("Items"),
         "job_opportunity":
             MessageLookupByLibrary.simpleMessage("Job Opportunity"),
@@ -901,6 +903,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "UserName must be at least 5 characters long"),
         "user_desc": MessageLookupByLibrary.simpleMessage(
             "He can add, delete and edit within the app, but he will not be able to add apps or control settings."),
+        "user_invited": MessageLookupByLibrary.simpleMessage(
+            "User is Invited to the group"),
         "username": MessageLookupByLibrary.simpleMessage("Username"),
         "users": MessageLookupByLibrary.simpleMessage("Users"),
         "verification": MessageLookupByLibrary.simpleMessage("Verification"),

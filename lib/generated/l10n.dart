@@ -6591,6 +6591,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Invite`
+  String get invite {
+    return Intl.message(
+      'Invite',
+      name: 'invite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `inviting`
+  String get inviting {
+    return Intl.message(
+      'inviting',
+      name: 'inviting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User is Invited to the group`
+  String get user_invited {
+    return Intl.message(
+      'User is Invited to the group',
+      name: 'user_invited',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

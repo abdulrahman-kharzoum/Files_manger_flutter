@@ -658,5 +658,8 @@
   "folder_name_not_empty": "اسم الملف يجب أن لايكون فارغاً",
   "create": "إنشاء",
   "enter_folder_name": "أدخل اسم المجلد الجديد الخاص بك",
-  "wrongEmailOrPass": "بريد إلكتروني أو كلمة مرور خاطئة"
+  "wrongEmailOrPass": "بريد إلكتروني أو كلمة مرور خاطئة",
+  "invite": "دعوة",
+  "inviting": "يتم الدعوة",
+  "user_invited": "تم دعوة المستخدم للمجموعة"
 }
