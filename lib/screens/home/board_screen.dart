@@ -41,62 +41,7 @@ class BoardScreen extends StatelessWidget {
         title: S.of(context).my_boards,
         leading: BlocConsumer<AddBoardCubit, AddBoardState>(
           listener: (context, state) {
-            if (state is AddBoardFailedState) {
-              errorDialog(context: context, text: state.errorMessage);
-            } else if (state is AddBoardExpiredState) {
-              showExpiredDialog(
-                context: context,
-                onConfirmBtnTap: () async {
-                  await CashNetwork.clearCash();
-                  Phoenix.rebirth(context);
-                  await Hive.box('main').clear();
-                },
-              );
-            } else if (state is AddBoardSuccessState) {
-              Navigator.pop(context);
-              state.isSubBoard
-                  ? null
-                  : allBoardsCubit.addNewBoard(newBoard: state.createdBoard);
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            BoardCubit(currentBoard: state.createdBoard)
-                              ..initState(
-                                context: context,
-                                uuid: state.createdBoard.uuid,
-                              ),
-                      ),
-                      BlocProvider(
-                        create: (context) => ApplicationCubit()
-                          ..initState(
-                            context: context,
-                            groupId: state.createdBoard.id,
-                          ),
-                      ),
-                      BlocProvider(
-                        create: (context) => LeaveFromBoardCubit(),
-                      ),
-                      BlocProvider(
-                        create: (context) => AddBoardCubit(),
-                      ),
-                    ],
-                    child: AddBoardScreen(
-                      uuid: state.createdBoard.uuid,
-                      allBoardsCubit: allBoardsCubit,
-                    ),
-                  ),
-                ),
-              );
-            } else if (state is AddBoardLoadingState) {
-              loadingDialog(
-                  context: context,
-                  mediaQuery: mediaQuery,
-                  title: S.of(context).adding_board);
-            }
-          },
+                     },
           builder: (context, state) {
             return IconButton(
               tooltip: S.of(context).add_board,

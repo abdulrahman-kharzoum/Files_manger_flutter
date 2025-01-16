@@ -6,6 +6,9 @@ sealed class ApplicationState {}
 final class ApplicationInitial extends ApplicationState {}
 
 final class GetAllApplicationsInBoardLoading extends ApplicationState {}
+final class NavigationInProgress extends ApplicationState {}
+final class NavigationCompleted extends ApplicationState {}
+final class GetAllApplicationsInFolderLoading extends ApplicationState {}
 
 final class GetAllApplicationsInBoardSuccess extends ApplicationState {
   final List<Application> newBoardsApp;
@@ -14,6 +17,13 @@ final class GetAllApplicationsInBoardSuccess extends ApplicationState {
   GetAllApplicationsInBoardSuccess(
       {required this.newBoardsApp, required this.isReachMax});
 }
+
+final class GetAllApplicationsInFolderSuccess extends ApplicationState {
+  final List<Application> newBoardsApp;
+
+  GetAllApplicationsInFolderSuccess({required this.newBoardsApp});
+}
+
 
 final class GetAllApplicationsInBoardFailure extends ApplicationState {
   final String errorMessage;

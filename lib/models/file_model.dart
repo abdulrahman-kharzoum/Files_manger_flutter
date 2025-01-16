@@ -16,6 +16,7 @@ import 'package:files_manager/models/member_model.dart';
     IconData icon = Icons.file_copy;
     int? applicationColor;
     Member? member;
+    String? localPath;
     FileModel({
       required this.id,
       required this.boardId,
@@ -23,6 +24,7 @@ import 'package:files_manager/models/member_model.dart';
       required this.mode,
       required this.createdAt,
       required this.updatedAt,
+      this.localPath
       // required this.applicationName,
       // required this.boardCubit,
     });
@@ -47,6 +49,7 @@ import 'package:files_manager/models/member_model.dart';
         mode: json['mode'],
         createdAt: DateTime.parse(json['created_at']),
         updatedAt: DateTime.parse(json['updated_at']),
+        localPath: ''
       );
     }
 

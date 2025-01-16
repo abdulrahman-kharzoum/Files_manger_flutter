@@ -14,6 +14,7 @@ class FolderModel extends Application {
   BoardCubit? boardCubit;
   int? applicationColor;
   int id;
+  String? localPath;
   int boardId;
   String title;
   String mode;
@@ -29,6 +30,7 @@ class FolderModel extends Application {
     required this.allFiles,
     required this.createdAt,
     required this.updatedAt,
+    this.localPath,
     this.boardCubit,
   });
 
@@ -41,6 +43,7 @@ class FolderModel extends Application {
       mode: json['mode'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
+      localPath: ''
     );
   }
   // Add fromFileApi method for FolderModel

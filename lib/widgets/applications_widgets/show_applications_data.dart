@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:files_manager/interfaces/applications_abstract.dart';
 import 'package:files_manager/models/file_model.dart';
-import 'package:files_manager/models/folder_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,10 +35,14 @@ class ShowApplicationsData extends StatelessWidget {
     return Localizations.override(
       context: context,
       child: BlocConsumer<ApplicationCubit, ApplicationState>(
-        listener: (context, state) {
-          if (state is GetAllApplicationsInBoardLoading) {
-            loadingDialog(context: context, mediaQuery: mediaQuery);
+        listener: (context, state)
+          {
+          if (state is GetAllApplicationsInBoardLoading ||
+              state is GetAllApplicationsInFolderLoading
+            ) {
+            // loadingDialog(context: context, mediaQuery: mediaQuery);
           }
+
           if (state is GetAllApplicationsInBoardFailure) {
             errorDialog(context: context, text: state.errorMessage);
           } else if (state is AllBoardsExpiredState) {
@@ -53,13 +57,17 @@ class ShowApplicationsData extends StatelessWidget {
           } else if (state is AllBoardsNoInternetState) {
             internetDialog(context: context, mediaQuery: mediaQuery);
           } else if (state is GetAllApplicationsInBoardSuccess) {
+
             final isLastPage = state.isReachMax;
             print('Is the last page => $isLastPage');
-            if (boardCubit.currentBoard.allFiles.isEmpty) {
+            boardCubit.currentBoard.allFiles.clear();
+
               for (Application a in state.newBoardsApp) {
                 boardCubit.currentBoard.allFiles.add(a);
               }
-            }
+              // if(state is GetAllApplicationsInFolderLoading||state is GetAllApplicationsInBoardLoading){
+              //   Navigator.pop(context);
+              // }
 
             // // Use set to avoid duplicating items.
             // final existingItems =
@@ -84,205 +92,272 @@ class ShowApplicationsData extends StatelessWidget {
             //   applicationCubit.pagingController
             //       .appendPage(newItems, nextPageKey);
             // }
+          } else if (state is GetAllApplicationsInFolderSuccess) {
+            boardCubit.currentBoard.allFiles.clear();
+            print(boardCubit.currentBoard.allFiles.length);
+
+            boardCubit.currentBoard.allFiles.addAll(state.newBoardsApp);
+
+            print(boardCubit.currentBoard.allFiles.length);
+            // Navigator.pop(context);
+
           }
         },
         builder: (context, state) {
-
-          return RefreshIndicator(
-              onRefresh: () async {
-                applicationCubit.refreshData();
-              },
-              child: ListView(
-                children: List.generate(
-                  boardCubit.currentBoard.allFiles.length,
-                  (index) {
-                    return boardCubit.currentBoard.allFiles[index].isFolder()
-                        ? Card(
-                            color: Colors.white,
-                            child: ListTile(
-                              leading: Icon(Icons.folder),
-                              trailing: PopupMenuButton(
-                                icon: const Icon(Icons.more_vert),
-                                onSelected: (value) {
-                                  if (value == 'settings') {
-                                  } else if (value == 'share') {
-                                    print('Share');
-                                    // share();
-                                  }
-                                },
-                                itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                    value: 'share',
-                                    child: ListTile(
-                                      leading: const Icon(Icons.link),
-                                      title: Text('Share'),
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    if (applicationCubit.folderHistory.isNotEmpty)
+                      IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          applicationCubit.navigateBack(
+                              context: context,
+                              groupId: boardCubit.currentBoard.id);
+                        },
+                      ),
+                    Expanded(
+                      child: Text(
+                        applicationCubit.folderHistory.isNotEmpty
+                            ? applicationCubit.folderHistory.join(' / ')
+                            : 'Root',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .color,
+                            fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: RefreshIndicator(
+                    onRefresh: () async {
+                      applicationCubit.refreshData();
+                    },
+                    child: ListView(
+                      children: List.generate(
+                        boardCubit.currentBoard.allFiles.length,
+                        (index) {
+                          return boardCubit.currentBoard.allFiles[index]
+                                  .isFolder()
+                              ? Card(
+                                  color: Colors.white,
+                                  child: ListTile(
+                                    onTap: () {
+                                      applicationCubit.folderHistory.add(
+                                          boardCubit
+                                              .currentBoard.allFiles[index]
+                                              .getApplicationId());
+                                      applicationCubit.getAllFilesFolder(
+                                          context: context,
+                                          groupId: boardCubit.currentBoard.id,
+                                          folderId: boardCubit
+                                              .currentBoard.allFiles[index]
+                                              .getApplicationId());
+                                    },
+                                    leading: Icon(Icons.folder),
+                                    trailing: PopupMenuButton(
+                                      icon: const Icon(Icons.more_vert),
+                                      onSelected: (value) {
+                                        if (value == 'settings') {
+                                        } else if (value == 'share') {
+                                          print('Share');
+                                          // share();
+                                        }
+                                      },
+                                      itemBuilder: (context) => [
+                                        PopupMenuItem(
+                                          value: 'share',
+                                          child: ListTile(
+                                            leading: const Icon(Icons.link),
+                                            title: Text('Share'),
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 'copy',
+                                          child: ListTile(
+                                            leading: const Icon(Icons.copy),
+                                            title: Text('Copy'),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 'copy',
-                                    child: ListTile(
-                                      leading: const Icon(Icons.copy),
-                                      title: Text('Copy'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              title: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Flexible(
-                                    child: SizedBox(
-                                      width: Statics.isPlatformDesktop
-                                          ? mediaQuery.width / 2.5
-                                          : mediaQuery.width / 1.5,
-                                      child: Text(
-                                        boardCubit.currentBoard.allFiles[index]
-                                            .getApplicationName(),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  Statics.isPlatformDesktop
-                                      ? Flexible(
-                                          child: Text(
-                                            DateFormat('yyyy-MM-d HH:mm:ss')
-                                                .format(
+                                    title: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Flexible(
+                                          child: SizedBox(
+                                            width: Statics.isPlatformDesktop
+                                                ? mediaQuery.width / 2.5
+                                                : mediaQuery.width / 1.5,
+                                            child: Text(
                                               boardCubit
                                                   .currentBoard.allFiles[index]
-                                                  .getApplicationCreateDate(),
+                                                  .getApplicationName(),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
                                             ),
-                                            style: TextStyle(
-                                                color: Colors.black38),
                                           ),
-                                        )
-                                      : const SizedBox(),
-                                ],
-                              ),
-                              subtitle: Text(
-                                'Count of file ${boardCubit.currentBoard.allFiles[index].getApplicationFilesCount()}',
-                                style: TextStyle(color: Colors.black26),
-                              ),
-                            ),
-                          ).animate().fade(
-                              duration: const Duration(milliseconds: 500),
-                            )
-                        : Card(
-                            color: Colors.white,
-                            child: ListTile(
-                              leading: Icon(boardCubit
-                                  .currentBoard.allFiles[index]
-                                  .getIcon()),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  boardCubit.currentBoard.allFiles[index]
-                                              .getApplicationOwner() !=
-                                          null
-                                      ? Text('Booked by',
-                                          style: TextStyle(color: Colors.red))
-                                      : Text(
-                                          'Free for editing',
-                                          style: TextStyle(color: Colors.green),
                                         ),
-                                  boardCubit.currentBoard.allFiles[index]
-                                              .getApplicationOwner() !=
-                                          null
-                                      ? memberWidget(
-                                          member: boardCubit
-                                              .currentBoard.allFiles[index]
-                                              .getApplicationOwner()!,
-                                          mediaQuery: mediaQuery)
-                                      : const SizedBox()
-                                ],
-                              ),
-                              trailing: PopupMenuButton(
-                                icon: const Icon(Icons.more_vert),
-                                onSelected: (value) async {
-                                  if (value == 'checkout') {
-                                    await boardCubit.checkOut(
-                                        file: boardCubit.currentBoard
-                                            .allFiles[index] as FileModel);
-                                  } else if (value == 'checkIn') {
-                                    await boardCubit.checkIn(
-                                        file: boardCubit.currentBoard
-                                            .allFiles[index] as FileModel);
-                                  } else if (value == 'share') {
-                                    print('Share');
-                                    // share();
-                                  }
-                                },
-                                itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                    value: boardCubit
+                                        Statics.isPlatformDesktop
+                                            ? Flexible(
+                                                child: Text(
+                                                  DateFormat(
+                                                          'yyyy-MM-d HH:mm:ss')
+                                                      .format(
+                                                    boardCubit.currentBoard
+                                                        .allFiles[index]
+                                                        .getApplicationCreateDate(),
+                                                  ),
+                                                  style: TextStyle(
+                                                      color: Colors.black38),
+                                                ),
+                                              )
+                                            : const SizedBox(),
+                                      ],
+                                    ),
+                                    subtitle: Text(
+                                      'Count of file ${boardCubit.currentBoard.allFiles[index].getApplicationFilesCount()}',
+                                      style: TextStyle(color: Colors.black26),
+                                    ),
+                                  ),
+                                ).animate().fade(
+                                    duration: const Duration(milliseconds: 500),
+                                  )
+                              : Card(
+                                  color: Colors.white,
+                                  child: ListTile(
+                                    leading: Icon(boardCubit
+                                        .currentBoard.allFiles[index]
+                                        .getIcon()),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        boardCubit.currentBoard.allFiles[index]
+                                                    .getApplicationOwner() !=
+                                                null
+                                            ? Text('Booked by',
+                                                style: TextStyle(
+                                                    color: Colors.red))
+                                            : Text(
+                                                'Free for editing',
+                                                style: TextStyle(
+                                                    color: Colors.green),
+                                              ),
+                                        boardCubit.currentBoard.allFiles[index]
+                                                    .getApplicationOwner() !=
+                                                null
+                                            ? memberWidget(
+                                                member: boardCubit.currentBoard
+                                                    .allFiles[index]
+                                                    .getApplicationOwner()!,
+                                                mediaQuery: mediaQuery)
+                                            : const SizedBox()
+                                      ],
+                                    ),
+                                    trailing: PopupMenuButton(
+                                      icon: const Icon(Icons.more_vert),
+                                      onSelected: (value) async {
+                                        if (value == 'checkout') {
+                                          await boardCubit.checkOut(
+                                              file: boardCubit.currentBoard
+                                                      .allFiles[index]
+                                                  as FileModel);
+                                        } else if (value == 'checkIn') {
+                                          await boardCubit.checkIn(
+                                              file: boardCubit.currentBoard
+                                                      .allFiles[index]
+                                                  as FileModel);
+                                        } else if (value == 'share') {
+                                          print('Share');
+                                          // share();
+                                        }
+                                      },
+                                      itemBuilder: (context) => [
+                                        PopupMenuItem(
+                                          value: boardCubit.currentBoard
+                                                      .allFiles[index]
+                                                      .getApplicationOwner() !=
+                                                  null
+                                              ? 'checkout'
+                                              : 'checkIn',
+                                          child: ListTile(
+                                            leading: Icon(boardCubit
+                                                        .currentBoard
+                                                        .allFiles[index]
+                                                        .getApplicationOwner() !=
+                                                    null
+                                                ? Icons.done_all
+                                                : Icons.check_circle_rounded),
+                                            title: boardCubit.currentBoard
+                                                        .allFiles[index]
+                                                        .getApplicationOwner() !=
+                                                    null
+                                                ? Text('Check out')
+                                                : Text('Check in'),
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 'share',
+                                          child: ListTile(
+                                            leading: const Icon(Icons.link),
+                                            title: Text('Share'),
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 'copy',
+                                          child: ListTile(
+                                            leading: const Icon(Icons.copy),
+                                            title: Text('Copy'),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    title: Row(
+                                      children: [
+                                        Flexible(
+                                          child: SizedBox(
+                                            width: Statics.isPlatformDesktop
+                                                ? mediaQuery.width / 2.5
+                                                : mediaQuery.width / 1.5,
+                                            child: Text(boardCubit
                                                 .currentBoard.allFiles[index]
-                                                .getApplicationOwner() !=
-                                            null
-                                        ? 'checkout'
-                                        : 'checkIn',
-                                    child: ListTile(
-                                      leading: Icon(boardCubit
-                                                  .currentBoard.allFiles[index]
-                                                  .getApplicationOwner() !=
-                                              null
-                                          ? Icons.done_all
-                                          : Icons.check_circle_rounded),
-                                      title: boardCubit
-                                                  .currentBoard.allFiles[index]
-                                                  .getApplicationOwner() !=
-                                              null
-                                          ? Text('Check out')
-                                          : Text('Check in'),
+                                                .getApplicationName()),
+                                          ),
+                                        ),
+                                        Statics.isPlatformDesktop
+                                            ? Text(
+                                                DateFormat('yyyy-MM-d HH:mm:ss')
+                                                    .format(boardCubit
+                                                        .currentBoard
+                                                        .allFiles[index]
+                                                        .getApplicationCreateDate()),
+                                                style: TextStyle(
+                                                    color: Colors.black38),
+                                              )
+                                            : const SizedBox()
+                                      ],
                                     ),
                                   ),
-                                  PopupMenuItem(
-                                    value: 'share',
-                                    child: ListTile(
-                                      leading: const Icon(Icons.link),
-                                      title: Text('Share'),
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 'copy',
-                                    child: ListTile(
-                                      leading: const Icon(Icons.copy),
-                                      title: Text('Copy'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              title: Row(
-                                children: [
-                                  Flexible(
-                                    child: SizedBox(
-                                      width: Statics.isPlatformDesktop
-                                          ? mediaQuery.width / 2.5
-                                          : mediaQuery.width / 1.5,
-                                      child: Text(boardCubit
-                                          .currentBoard.allFiles[index]
-                                          .getApplicationName()),
-                                    ),
-                                  ),
-                                  Statics.isPlatformDesktop
-                                      ? Text(
-                                          DateFormat('yyyy-MM-d HH:mm:ss')
-                                              .format(boardCubit
-                                                  .currentBoard.allFiles[index]
-                                                  .getApplicationCreateDate()),
-                                          style:
-                                              TextStyle(color: Colors.black38),
-                                        )
-                                      : const SizedBox()
-                                ],
-                              ),
-                            ),
-                          ).animate().fade(
-                              duration: const Duration(milliseconds: 500),
-                            );
-                  },
-                ),
-              ));
+                                ).animate().fade(
+                                    duration: const Duration(milliseconds: 500),
+                                  );
+                        },
+                      ),
+                    )),
+              ),
+            ],
+          );
         },
       ),
     );

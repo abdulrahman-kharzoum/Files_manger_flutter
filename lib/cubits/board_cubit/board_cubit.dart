@@ -46,6 +46,7 @@ class BoardCubit extends Cubit<BoardState> {
     emit(BoardInitial());
   }
 
+
   Future<void> checkIn({required FileModel file}) async {
     file.member = Member(
         id: 1,

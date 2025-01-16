@@ -56,8 +56,8 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
         }
       }
 
-      if (parent_id != 0) {
-        data['parent_id'] = parent_id;
+      if (parent_id != 0|| parent_id != null) {
+        data['parent_id'] = parent_id.toInt();
       }
 
       final formData = FormData.fromMap(data);
@@ -94,7 +94,7 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
       }
     } catch (e) {
       emit(BoardAddApplicationFailure(
-          errorMessage: 'Unexpected error occurred'));
+          errorMessage: e.toString()));
     }
   }
 }

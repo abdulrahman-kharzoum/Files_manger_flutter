@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 
@@ -20,6 +18,8 @@ part 'application_state.dart';
 class ApplicationCubit extends Cubit<ApplicationState> {
   ApplicationCubit() : super(ApplicationInitial());
   final int pageSize = 10;
+  final List<int> folderHistory = [];
+
   PagingController<int, Application> pagingController =
       PagingController(firstPageKey: 1);
   final List<Application> newBoardsApp = [];
@@ -28,6 +28,7 @@ class ApplicationCubit extends Cubit<ApplicationState> {
     required BuildContext context,
     required int groupId,
   }) async {
+    newBoardsApp.clear();
     getAllFilesBoard(context: context, groupId: groupId);
     // pagingController.addPageRequestListener(
     //   (pageKey) async {
@@ -118,16 +119,95 @@ class ApplicationCubit extends Cubit<ApplicationState> {
   //     print(e);
   //   }
   // }
+  void navigateBack({required BuildContext context, required int groupId}) {
+
+    if (folderHistory.isNotEmpty) {
+      final previousFolderId = folderHistory.removeLast();
+      if (folderHistory.isNotEmpty) {
+        getAllFilesFolder(context: context, groupId: groupId, folderId: previousFolderId);
+      } else {
+        getAllFilesBoard(context: context, groupId: groupId);
+      }
+    } else {
+      getAllFilesBoard(context: context, groupId: groupId);
+    }
+
+  }
+
+
+  Future<void> getAllFilesFolder(
+      {required BuildContext context,
+      required int groupId,
+      required int folderId}) async {
+    try {
+      print("===============Folder FILES====================");
+      print("===============Folder $folderId====================");
+      emit(GetAllApplicationsInFolderLoading());
+      String? token = CashNetwork.getCashData(key: 'token');
+
+      print("token get boards: $token");
+      final response = await dio().get(
+        'files/$folderId/children',
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      print('The status code is => ${response.statusCode}');
+      print(response.data);
+
+      if (response.statusCode == 200) {
+        final FilesList = response.data['data'] as List;
+        newBoardsApp.clear();
+        for (int i = 0; i < FilesList.length; i++) {
+          FileApiModel file = FileApiModel.fromJson(FilesList[i]);
+          if (file.extension == null) {
+            FolderModel folderModel = FolderModel.fromFileApi(file, groupId);
+            newBoardsApp.add(folderModel);
+          } else {
+            FileModel fileModel = FileModel.fromFileApi(file, groupId);
+            newBoardsApp.add(fileModel);
+          }
+        }
+        print('we will emit success');
+
+        emit(GetAllApplicationsInFolderSuccess(newBoardsApp: newBoardsApp));
+
+      } else {
+        print('Failed to fetch boards: ${response.statusCode}');
+        emit(GetAllApplicationsInBoardFailure(
+            errorMessage: response.data['message']));
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.connectionError) {
+        await checkInternet()
+            ? emit(GetAllApplicationsInBoardServerError())
+            : emit(GetAllApplicationsInBoardNoInternet());
+        print('Connection Error.');
+        return;
+      }
+      errorHandlerWithoutInternet(e: e, context: context);
+
+      print('The response is => ${e.response!.data}');
+      print('The failed status code is ${e.response!.statusCode}');
+      emit(GetAllApplicationsInBoardFailure(
+          errorMessage: e.response!.data['message']));
+    } catch (e) {
+      print('================ catch exception =================');
+      print(e);
+      emit(GetAllApplicationsInBoardFailure(errorMessage: 'Catch exception'));
+    }
+  }
 
   Future<void> getAllFilesBoard(
       {required BuildContext context, required int groupId}) async {
     try {
-
       print("===============Boards FILES====================");
       emit(GetAllApplicationsInBoardLoading());
       String? token = CashNetwork.getCashData(key: 'token');
 
-      print("token get boards: $token");
       final response = await dio().get(
         'groups/show/$groupId',
         options: Dio.Options(
@@ -141,20 +221,27 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       if (response.statusCode == 200) {
         final groupData = response.data['data'];
         GroupModel groupModel = GroupModel.fromJson(groupData);
+        newBoardsApp.clear();
+
         for (int i = 0; i < groupModel.files.length; i++) {
           FileApiModel file = groupModel.files[i];
-          if (file.extension == null) {
-            FolderModel folderModel = FolderModel.fromFileApi(file, groupId);
-            newBoardsApp.add(folderModel);
-          } else {
-            FileModel fileModel = FileModel.fromFileApi(file, groupId);
-            newBoardsApp.add(fileModel);
+          if(file.parentId == 0 || file.parentId == null){
+            print("we are adding.....");
+            if (file.extension == null) {
+              FolderModel folderModel = FolderModel.fromFileApi(file, groupId);
+              newBoardsApp.add(folderModel);
+            } else {
+              FileModel fileModel = FileModel.fromFileApi(file, groupId);
+              newBoardsApp.add(fileModel);
+            }
           }
+
         }
         print('we will emit success');
 
         emit(GetAllApplicationsInBoardSuccess(
             newBoardsApp: newBoardsApp, isReachMax: true));
+
       } else {
         print('Failed to fetch boards: ${response.statusCode}');
         emit(GetAllApplicationsInBoardFailure(

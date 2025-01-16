@@ -104,7 +104,7 @@ class SubBoardScreen extends StatelessWidget {
             ShowApplicationsData(
               allBoardsCubit: allBoardsCubit,
             ),
-            //Subpanels Data
+
           ],
         ),
       ),

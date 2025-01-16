@@ -25,6 +25,7 @@ class AddBoardScreen extends StatelessWidget {
     required this.allBoardsCubit,
     required this.uuid,
   });
+
   final AllBoardsCubit allBoardsCubit;
   final String uuid;
 
@@ -54,7 +55,7 @@ class AddBoardScreen extends StatelessWidget {
               },
             );
           } else if (state is AddBoardSuccessState) {
-            Navigator.pop(context);
+            // Navigator.pop(context);
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => MultiBlocProvider(
@@ -111,6 +112,16 @@ class AddBoardScreen extends StatelessWidget {
                           backgroundColor:
                               hexToColor(boardCubit.currentBoard.color),
                           appBar: AppBar(
+                            leading: IconButton(
+                              tooltip: S.of(context).back,
+                              icon: const Icon(Icons.arrow_back),
+                              onPressed: () {
+                                boardCubit.currentBoard.allFiles.clear();
+                                boardCubit.close();
+
+                                Navigator.of(context).pop();
+                              },
+                            ),
                             title: Text(
                               boardCubit.boardTitleController.text,
                               style: const TextStyle(
@@ -160,7 +171,8 @@ class AddBoardScreen extends StatelessWidget {
                                                   ..initState(),
                                           ),
                                           BlocProvider(
-                                              create: (context) => AddBoardCubit()),
+                                              create: (context) =>
+                                                  AddBoardCubit()),
                                         ],
                                         child: BoardSettingsScreen(
                                           allBoardCubit: allBoardsCubit,

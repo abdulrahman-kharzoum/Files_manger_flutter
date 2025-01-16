@@ -201,7 +201,7 @@ class AllApplicationsScreen extends StatelessWidget {
                             context: context,
                             fileName: selectedFile.name,
                             file: selectedFile,
-                            parent_id: 0,
+                            parent_id: applicationCubit.folderHistory.isNotEmpty ? applicationCubit.folderHistory.last.toInt():0,
                             is_folder: false,
                             group_id: boardCubit.currentBoard.id);
                         // boardCubit.currentBoard.allFiles.add(FileModel(
@@ -215,9 +215,11 @@ class AllApplicationsScreen extends StatelessWidget {
                         //     mode: 'free',
                         //     createdAt: DateTime.now(),
                         //     updatedAt: DateTime.now()));
+                        Navigator.pop(context);
+
                         await boardCubit.refresh();
                         await allBoardsCubit.refresh();
-                        Navigator.pop(context);
+                        // Navigator.pop(context);
                       } else {
                         // User canceled the picker
                       }
@@ -254,15 +256,15 @@ class AllApplicationsScreen extends StatelessWidget {
                                 .addApplicationFunction(
                                     context: context,
                                     fileName: folderName,
-                                    parent_id: 0,
+                                    parent_id:  applicationCubit.folderHistory.isNotEmpty ?applicationCubit.folderHistory.last:0,
                                     is_folder: true,
                                     group_id: boardCubit.currentBoard.id);
                           },
                         );
+                        Navigator.pop(context);
 
                         await boardCubit.refresh();
                         await allBoardsCubit.refresh();
-                        Navigator.pop(context);
                       },
                       title: 'New Folder'),
                 ],
