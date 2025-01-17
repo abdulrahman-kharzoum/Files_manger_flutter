@@ -168,7 +168,7 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                                   ),
                                 );
                                 print(
-                                    'Group ID: ${specificGroup.id}, Files: ${specificGroup.files}');
+                                    'Group ID: ${specificGroup.id}, title : ${specificGroup.name}');
 
                                 await boardSettingsCubit.updateBoard(
                                   groupId: boardSettingsCubit.currentBoard.id,

@@ -32,6 +32,7 @@ class Board {
   List<Application> allFiles;
   int? boardColorIndex;
   File? imageFile;
+  String? CreatorId;
 
   int getApplicationSelectedColor() {
     if (boardColorIndex == null) {
@@ -72,6 +73,7 @@ class Board {
     required this.children,
     required this.members,
     required this.invitedUsers,
+     this.CreatorId
   });
 
   factory Board.fromJson(Map<String, dynamic> json) {
@@ -105,6 +107,7 @@ class Board {
   /// Factory constructor to convert `Group` to `Board`
   factory Board.fromGroup(GroupModel group) {
     return Board(
+      CreatorId: group.creatorId.toString(),
       id: group.id,
       uuid: '', // UUID is not available in Group; leave empty or generate one.
       parentId: null, // Parent ID is not available; leave as null.

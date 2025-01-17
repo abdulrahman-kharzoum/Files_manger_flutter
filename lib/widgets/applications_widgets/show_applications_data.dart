@@ -149,7 +149,7 @@ class ShowApplicationsData extends StatelessWidget {
                           return boardCubit.currentBoard.allFiles[index]
                                   .isFolder()
                               ? Card(
-                                  color: Colors.white,
+                                  color: Theme.of(context).textTheme.labelLarge!.color,
                                   child: ListTile(
                                     onTap: () {
                                       applicationCubit.folderHistory.add(
@@ -222,7 +222,7 @@ class ShowApplicationsData extends StatelessWidget {
                                                         .getApplicationCreateDate(),
                                                   ),
                                                   style: TextStyle(
-                                                      color: Colors.black38),
+                                                      color: Theme.of(context).textTheme.headlineSmall!.color,),
                                                 ),
                                               )
                                             : const SizedBox(),
@@ -230,14 +230,14 @@ class ShowApplicationsData extends StatelessWidget {
                                     ),
                                     subtitle: Text(
                                       'Count of file ${boardCubit.currentBoard.allFiles[index].getApplicationFilesCount()}',
-                                      style: TextStyle(color: Colors.black26),
+                                      style: TextStyle(color: Theme.of(context).textTheme.headlineSmall!.color),
                                     ),
                                   ),
                                 ).animate().fade(
                                     duration: const Duration(milliseconds: 500),
                                   )
                               : Card(
-                                  color: Colors.white,
+                                  color:  Theme.of(context).textTheme.labelLarge!.color,
                                   child: ListTile(
                                     leading: Icon(boardCubit
                                         .currentBoard.allFiles[index]

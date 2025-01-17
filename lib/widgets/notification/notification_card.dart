@@ -1,13 +1,20 @@
+import 'package:files_manager/cubits/add_board_cubit/add_board_cubit.dart';
+import 'package:files_manager/cubits/pending_cubit/pending_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:files_manager/generated/l10n.dart';
-import 'package:files_manager/models/notification_model.dart';
 
 class NotificationCard extends StatefulWidget {
+
   final String title;
   final String content;
   final bool isRead;
   final String time;
-  final NotificationModel notificationModel;
+
+  final bool showAcceptDeniedButtons;
+
+  final VoidCallback? onAccept;
+  final VoidCallback? onDenied;
+  final VoidCallback? onDelete;
 
   const NotificationCard({
     super.key,
@@ -15,7 +22,12 @@ class NotificationCard extends StatefulWidget {
     required this.content,
     this.isRead = false,
     required this.time,
-    required this.notificationModel,
+    this.showAcceptDeniedButtons = false,
+
+
+    this.onAccept,
+    this.onDenied,
+    this.onDelete,
   });
 
   @override
@@ -29,10 +41,7 @@ class _NotificationCardState extends State<NotificationCard> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
 
-    final User? user = widget.notificationModel.task.users.isNotEmpty
-        ? widget.notificationModel.task.users.first
-        : null;
-    final description = widget.notificationModel.task.description;
+    final description = widget.content;
     final textPainter = TextPainter(
       text: TextSpan(
         text: description,
@@ -43,6 +52,7 @@ class _NotificationCardState extends State<NotificationCard> {
     );
     textPainter.layout(maxWidth: mediaQuery.width - 100);
     final isLongDescription = textPainter.didExceedMaxLines;
+
     return Card(
       color: Colors.white,
       margin: EdgeInsets.symmetric(
@@ -57,26 +67,21 @@ class _NotificationCardState extends State<NotificationCard> {
             ListTile(
               leading: CircleAvatar(
                 radius: 24,
-                backgroundImage: user != null && user.image.isNotEmpty
-                    ? NetworkImage(user.image) as ImageProvider
-                    : null,
                 backgroundColor: Colors.white,
-                child: user == null || user.image.isEmpty
-                    ? Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 255, 255, 255),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                                color:
-                                    const Color.fromARGB(255, 235, 175, 98))),
-                        child: Icon(
-                          Icons.notifications,
-                          color: const Color.fromARGB(255, 235, 175, 98),
-                          size: 30,
-                        ),
-                      )
-                    : null,
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                        color: const Color.fromARGB(255, 235, 175, 98)),
+                  ),
+                  child: Icon(
+                    Icons.notifications,
+                    color: const Color.fromARGB(255, 235, 175, 98),
+                    size: 30,
+                  ),
+                ),
               ),
               title: Text(
                 overflow: TextOverflow.ellipsis,
@@ -124,6 +129,44 @@ class _NotificationCardState extends State<NotificationCard> {
                       color: Colors.grey,
                     ),
                   ),
+                  // Conditionally show the Accept/Denied/Deleted buttons
+                  if (widget.showAcceptDeniedButtons) ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        TextButton(
+                          onPressed: widget.onAccept ??
+                                  ()  {
+
+                                print('Accept clicked');
+                              },
+                          child: const Text('Accept',
+                              style: TextStyle(color: Colors.green)),
+                        ),
+                        TextButton(
+                          onPressed: widget.onDenied ??
+                                  () {
+                                print('Denied clicked');
+                              },
+                          child: const Text('Denied',
+                              style: TextStyle(color: Colors.red)),
+                        ),
+                      ],
+                    ),
+                  ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      TextButton(
+                        onPressed: widget.onDelete ??
+                                () {
+                              print('Delete clicked');
+                            },
+                        child: const Text('Delete',
+                            style: TextStyle(color: Colors.blue)),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -133,3 +176,4 @@ class _NotificationCardState extends State<NotificationCard> {
     );
   }
 }
+

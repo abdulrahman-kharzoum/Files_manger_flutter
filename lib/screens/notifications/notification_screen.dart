@@ -66,29 +66,13 @@ class NotificationScreen extends StatelessWidget {
           return Container(
             // margin: EdgeInsets.only(top: mediaQuery.height / 6),
             child: ListView(padding: EdgeInsets.zero, children: [
-              NotificationCard(
-                notificationModel: NotificationModel(
-                    id: '1',
-                    type: 'type',
-                    notifiableType: '',
-                    notifiableId: 1,
-                    task: TaskData(
-                        id: 1,
-                        title: 'This is the title',
-                        description: 'Go and kill some people',
-                        time: '2002-20-20',
-                        completed: 1,
-                        modificationsCount: 1,
-                        createdAt: DateTime.now(),
-                        updatedAt: DateTime.now(),
-                        users: []),
-                    createdAt: DateTime.now(),
-                    updatedAt: DateTime.now()),
-                title: 'This is the title',
-                content: 'Go and kill some people',
-                isRead: false,
-                time: '2024-10-20',
-              ),
+              // NotificationCard(
+              //
+              //   title: 'This is the title',
+              //   content: 'Go and kill some people',
+              //   isRead: false,
+              //   time: '2024-10-20',
+              // ),
             ]).animate().fade(
                   duration: const Duration(milliseconds: 500),
                 ),

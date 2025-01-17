@@ -67,6 +67,14 @@ class NavigationScreen extends StatelessWidget {
                       ),
                       NavigationDestination(
                         icon: Icon(
+                          Icons.pending,
+                          color: Theme.of(context).iconTheme.color,
+                          size: Statics.isPlatformDesktop?mediaQuery.width / 55: mediaQuery.width / 15,
+                        ),
+                        label: S.of(context).pending,
+                      ),
+                      NavigationDestination(
+                        icon: Icon(
                           Icons.notifications,
                           color: Theme.of(context).iconTheme.color,
                           size: Statics.isPlatformDesktop?mediaQuery.width / 55: mediaQuery.width / 15,

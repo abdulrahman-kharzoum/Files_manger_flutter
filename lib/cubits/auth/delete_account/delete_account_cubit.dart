@@ -92,15 +92,21 @@ class DeleteAccountCubit extends Cubit<DeleteAccountState> {
             ),
             onPressed: () {
               Navigator.pop(context);
+              // Navigator.of(context).pushReplacementNamed('/login_screen');
+              // CashNetwork.clearCash();
+              // Hive.box('main').clear();
+              // Phoenix.rebirth(context);
+            },
+            child: Text(S.of(context).no, style: textStyle),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
               Navigator.of(context).pushReplacementNamed('/login_screen');
               CashNetwork.clearCash();
               Hive.box('main').clear();
               Phoenix.rebirth(context);
             },
-            child: Text(S.of(context).no, style: textStyle),
-          ),
-          TextButton(
-            onPressed: () => logoutFun(context),
             child: Text(S.of(context).yes, style: textStyle),
           ),
         ],

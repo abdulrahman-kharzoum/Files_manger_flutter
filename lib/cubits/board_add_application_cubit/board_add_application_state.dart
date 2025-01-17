@@ -6,6 +6,7 @@ sealed class BoardAddApplicationState {}
 final class BoardAddApplicationInitial extends BoardAddApplicationState {}
 
 final class BoardAddApplicationLoading extends BoardAddApplicationState {}
+final class BoardAddApplicationSuccessNeedWaiting extends BoardAddApplicationState {}
 
 final class BoardAddApplicationSuccess extends BoardAddApplicationState {
   Application addedApplication;

@@ -6621,6 +6621,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Invite has been Accepted`
+  String get invite_accepted {
+    return Intl.message(
+      'Invite has been Accepted',
+      name: 'invite_accepted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Success!, waiting for group admin's approval.`
+  String get waiting_admin {
+    return Intl.message(
+      'Success!, waiting for group admin\'s approval.',
+      name: 'waiting_admin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Files awaiting approval by the admin group`
+  String get files_to_approve {
+    return Intl.message(
+      'Files awaiting approval by the admin group',
+      name: 'files_to_approve',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `File accepted Successfully`
+  String get accepted {
+    return Intl.message(
+      'File accepted Successfully',
+      name: 'accepted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `File rejected Successfully`
+  String get rejected {
+    return Intl.message(
+      'File rejected Successfully',
+      name: 'rejected',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "FAQs": MessageLookupByLibrary.simpleMessage("الاسئلة الشائعة"),
         "about": MessageLookupByLibrary.simpleMessage("حول"),
         "about_us": MessageLookupByLibrary.simpleMessage("من نحن"),
+        "accepted": MessageLookupByLibrary.simpleMessage("تم قبول الملف بنجاح"),
         "account": MessageLookupByLibrary.simpleMessage("الحساب"),
         "add_address": MessageLookupByLibrary.simpleMessage("إضافة عنوان"),
         "add_application": MessageLookupByLibrary.simpleMessage("إضافة تطبيق"),
@@ -304,6 +305,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المنتجات المميزة"),
         "feed_back": MessageLookupByLibrary.simpleMessage("ملاحظات"),
         "field_empty": MessageLookupByLibrary.simpleMessage("حقل البحث فارغ"),
+        "files_to_approve": MessageLookupByLibrary.simpleMessage(
+            "ملفات بانتظار موافقة مسؤول المجموعة"),
         "filter_by": MessageLookupByLibrary.simpleMessage("تصفية حسب:"),
         "finish": MessageLookupByLibrary.simpleMessage("إنهاء"),
         "first_name": MessageLookupByLibrary.simpleMessage("الاسم "),
@@ -370,6 +373,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalid_username": MessageLookupByLibrary.simpleMessage(
             "يجب أن يكون اسم المستخدم 4 أحرف على الأقل"),
         "invite": MessageLookupByLibrary.simpleMessage("دعوة"),
+        "invite_accepted":
+            MessageLookupByLibrary.simpleMessage("تم قبول الدعوة"),
         "inviting": MessageLookupByLibrary.simpleMessage("يتم الدعوة"),
         "items": MessageLookupByLibrary.simpleMessage("عدد العناصر"),
         "job_opportunity": MessageLookupByLibrary.simpleMessage("فرصة عمل"),
@@ -640,6 +645,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "تم التسجيل بنجاح يمكنك تسجيل الدخول الآن."),
         "registered_user_name": MessageLookupByLibrary.simpleMessage(
             "اسم المستخدم المسجل/اسم العمل"),
+        "rejected": MessageLookupByLibrary.simpleMessage("تم رفض الملف بنجاح"),
         "related_product":
             MessageLookupByLibrary.simpleMessage("المنتجات ذات الصلة"),
         "remove": MessageLookupByLibrary.simpleMessage("حذف"),
@@ -889,6 +895,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "villa_number": MessageLookupByLibrary.simpleMessage("رقم الفيلا"),
         "visitor": MessageLookupByLibrary.simpleMessage("زائر"),
         "voice_message": MessageLookupByLibrary.simpleMessage("رسالة صوتية"),
+        "waiting_admin": MessageLookupByLibrary.simpleMessage(
+            "نجاح!، في انتظار موافقة مسؤول المجموعة."),
         "wallet": MessageLookupByLibrary.simpleMessage("المحفظة"),
         "wallet_amount": MessageLookupByLibrary.simpleMessage("مبلغ المحفظة"),
         "warning": MessageLookupByLibrary.simpleMessage("تنبيه"),

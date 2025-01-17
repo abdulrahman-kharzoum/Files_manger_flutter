@@ -1,4 +1,6 @@
 import 'package:files_manager/cubits/board_settings_cubit/board_settings_cubit.dart';
+import 'package:files_manager/cubits/pending_cubit/pending_cubit.dart';
+import 'package:files_manager/screens/pending_screen/pending_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +38,11 @@ class NavigationCubit extends Cubit<NavigationState> {
 
       ],
       child: const BoardScreen(),
+    ),
+    //==== Pending Screen =====//
+    BlocProvider(
+      create: (context) =>PendingCubit()..getInvites(context: context),
+      child: const PendingScreen(),
     ),
     //==== Notification Screen =====//
     BlocProvider(

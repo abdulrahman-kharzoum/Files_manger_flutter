@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:files_manager/cubits/pending_cubit/pending_cubit.dart';
+import 'package:files_manager/models/Api_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -18,6 +22,7 @@ import '../../core/shared/local_network.dart';
 import '../../cubits/board_settings_cubit/board_settings_cubit.dart';
 import '../../cubits/leave_from_board_cubit/leave_from_board_cubit.dart';
 import '../home/board_settings_screen.dart';
+import '../pending_screen/pending_files_screen.dart';
 
 class AddBoardScreen extends StatelessWidget {
   const AddBoardScreen({
@@ -98,6 +103,13 @@ class AddBoardScreen extends StatelessWidget {
           return BlocConsumer<BoardCubit, BoardState>(
             listener: (context, state) {},
             builder: (context, state) {
+              var user_model =  CashNetwork.getCashData(key: 'user_model');
+              var user = UserModel.fromJson(jsonDecode(user_model));
+              print('====user Id========');
+              print(user.id);
+              print('====CreatorId ========');
+              print(boardCubit.currentBoard.CreatorId);
+
               return boardCubit.currentBoard.parentId != null
                   ? SubBoardScreen(
                       allBoardsCubit: allBoardsCubit,
@@ -186,6 +198,26 @@ class AddBoardScreen extends StatelessWidget {
                                   });
                                 },
                               ),
+                             user.id.toString() == boardCubit.currentBoard.CreatorId?
+                             IconButton(
+                                tooltip: S.of(context).files_to_approve,
+                                icon: const Icon(Icons.pending),
+                                onPressed: () async {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider(
+                                            create: (context) =>
+                                                PendingCubit()..getAllFilesToApprove(context: context, groupId: boardCubit.currentBoard.id),
+                                          ),
+                                        ],
+                                        child: PendingFilesScreen()
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ):Container(),
                             ],
                           ),
                           body: TabBarView(

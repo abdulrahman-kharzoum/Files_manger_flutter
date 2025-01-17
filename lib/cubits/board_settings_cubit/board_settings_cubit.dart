@@ -153,7 +153,7 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       };
 
       final response = await dio().post(
-        '/group-invitations/create',
+        'group-invitations/create',
         data: requestData,
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $token'},
@@ -258,6 +258,9 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       String? token = CashNetwork.getCashData(key: 'token');
       var requestData;
       if (title != currentBoard.title) {
+        print("=============The Title Changed?!==============");
+        print("title $title");
+        print("currentBoard title ${currentBoard.title}");
         requestData = {
           'name': currentBoard.title,
           'description': description,

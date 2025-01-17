@@ -1,4 +1,5 @@
 import 'package:files_manager/core/functions/statics.dart';
+import 'package:files_manager/cubits/auth/delete_account/delete_account_cubit.dart';
 import 'package:files_manager/models/member_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -129,7 +130,7 @@ class BoardScreen extends StatelessWidget {
                     IconButton(
                       tooltip: S.of(context).logout,
                       onPressed: () {
-                        // Navigator.of(context).pushNamed('/report_screen');
+                        showDialogLogout(context);
                       },
                       icon: Icon(Icons.logout, size: mediaQuery.width / 50),
                     ),
@@ -250,34 +251,38 @@ class BoardScreen extends StatelessWidget {
                   // await allBoardsCubit.refreshData();
                 },
                 child: Statics.isPlatformDesktop
-                    ? Wrap(
-                        children: List.generate(
-                          allBoardsCubit.allBoards.length,
-                          (index) => BoardWidget(
-                            allBoardsCubit: allBoardsCubit,
-                            addBoardCubit: addBoardCubit,
-                            favoriteCubit: favoriteCubit,
-                            currentBoard: allBoardsCubit.allBoards[index],
-                            currentIndex: index,
-                          ).animate().fade(
-                                duration: const Duration(milliseconds: 500),
-                              ),
+                    ? SingleChildScrollView(
+                      child: Wrap(
+                          children: List.generate(
+                            allBoardsCubit.allBoards.length,
+                            (index) => BoardWidget(
+                              allBoardsCubit: allBoardsCubit,
+                              addBoardCubit: addBoardCubit,
+                              favoriteCubit: favoriteCubit,
+                              currentBoard: allBoardsCubit.allBoards[index],
+                              currentIndex: index,
+                            ).animate().fade(
+                                  duration: const Duration(milliseconds: 500),
+                                ),
+                          ),
                         ),
-                      )
-                    : ListView(
-                        children: List.generate(
-                          allBoardsCubit.allBoards.length,
-                          (index) => BoardWidget(
-                            allBoardsCubit: allBoardsCubit,
-                            addBoardCubit: addBoardCubit,
-                            favoriteCubit: favoriteCubit,
-                            currentBoard: allBoardsCubit.allBoards[index],
-                            currentIndex: index,
-                          ).animate().fade(
-                                duration: const Duration(milliseconds: 500),
-                              ),
+                    )
+                    : SingleChildScrollView(
+                      child: ListView(
+                          children: List.generate(
+                            allBoardsCubit.allBoards.length,
+                            (index) => BoardWidget(
+                              allBoardsCubit: allBoardsCubit,
+                              addBoardCubit: addBoardCubit,
+                              favoriteCubit: favoriteCubit,
+                              currentBoard: allBoardsCubit.allBoards[index],
+                              currentIndex: index,
+                            ).animate().fade(
+                                  duration: const Duration(milliseconds: 500),
+                                ),
+                          ),
                         ),
-                      ),
+                    ),
               );
             },
           );
@@ -285,4 +290,43 @@ class BoardScreen extends StatelessWidget {
       ),
     );
   }
+}
+void showDialogLogout(BuildContext context) {
+  const textStyle =
+  TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.w600);
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: AppColors.dark,
+      title: Text(S.of(context).logout),
+      content: Text(S.of(context).do_you_really_want_to_log_out),
+      actions: [
+        TextButton(
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(
+              AppColors.primaryColor.withOpacity(0.1),
+            ),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+            // Navigator.of(context).pushReplacementNamed('/login_screen');
+            // CashNetwork.clearCash();
+            // Hive.box('main').clear();
+            // Phoenix.rebirth(context);
+          },
+          child: Text(S.of(context).no, style: textStyle),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.of(context).pushReplacementNamed('/login_screen');
+            CashNetwork.clearCash();
+            Hive.box('main').clear();
+            Phoenix.rebirth(context);
+          },
+          child: Text(S.of(context).yes, style: textStyle),
+        ),
+      ],
+    ),
+  );
 }

@@ -57,11 +57,9 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
       }
 
       if (parent_id != 0 && parent_id != null) {
-
         print(parent_id.runtimeType);
 
         data['parent_id'] = parent_id;
-
       }
 
       final formData = FormData.fromMap(data);
@@ -77,15 +75,24 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
 
       if (response.statusCode == 200) {
         print("===========Folder And Files 200 ====================");
+        print(response.data);
+        print("===========message ====================");
+        print(response.data['message']);
+        var message = response.data['message'];
         final fileApi = FileApiModel.fromJson(response.data['data']);
         Application createdApplication = fileApi.extension == null
-            ? FolderModel.fromFileApi(fileApi,group_id)
-            : FileModel.fromFileApi(fileApi,group_id);
-
-        emit(BoardAddApplicationSuccess(addedApplication: createdApplication));
+            ? FolderModel.fromFileApi(fileApi, group_id)
+            : FileModel.fromFileApi(fileApi, group_id);
+        if (message ==
+            'Success!, waiting for group admin\'s approval.') {
+          emit(BoardAddApplicationSuccessNeedWaiting());
+        } else {
+          emit(
+              BoardAddApplicationSuccess(addedApplication: createdApplication));
+        }
       } else {
-        emit(BoardAddApplicationFailure(
-            errorMessage: response.data['message']));
+        emit(
+            BoardAddApplicationFailure(errorMessage: response.data['message']));
       }
     } on DioException catch (e) {
       errorHandler(e: e, context: context);
@@ -94,12 +101,10 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
         emit(BoardAddApplicationExpiredToken());
       } else {
         emit(BoardAddApplicationFailure(
-            errorMessage: e.response?.data['message'] ));
+            errorMessage: e.response?.data['message']));
       }
-    }
-    catch (e) {
-      emit(BoardAddApplicationFailure(
-          errorMessage: e.toString()));
+    } catch (e) {
+      emit(BoardAddApplicationFailure(errorMessage: e.toString()));
     }
   }
 }

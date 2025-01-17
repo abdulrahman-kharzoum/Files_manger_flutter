@@ -655,5 +655,12 @@
   "wrongEmailOrPass": "Wrong Email or Password",
   "invite": "Invite",
   "inviting": "inviting",
-  "user_invited": "User is Invited to the group"
+  "user_invited": "User is Invited to the group",
+  "invite_accepted": "Invite has been Accepted",
+  "waiting_admin": "Success!, waiting for group admin's approval.",
+  "files_to_approve": "Files awaiting approval by the admin group",
+  "accepted": "File accepted Successfully",
+  "rejected": "File rejected Successfully"
+
+
 }

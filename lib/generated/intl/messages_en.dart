@@ -27,6 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "FAQs": MessageLookupByLibrary.simpleMessage("FAQs"),
         "about": MessageLookupByLibrary.simpleMessage("About"),
         "about_us": MessageLookupByLibrary.simpleMessage("About us"),
+        "accepted":
+            MessageLookupByLibrary.simpleMessage("File accepted Successfully"),
         "account": MessageLookupByLibrary.simpleMessage("Account"),
         "add_address": MessageLookupByLibrary.simpleMessage("Add Address"),
         "add_application":
@@ -315,6 +317,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "feed_back": MessageLookupByLibrary.simpleMessage("Feed Back"),
         "field_empty":
             MessageLookupByLibrary.simpleMessage("Search field is empty"),
+        "files_to_approve": MessageLookupByLibrary.simpleMessage(
+            "Files awaiting approval by the admin group"),
         "filter_by": MessageLookupByLibrary.simpleMessage("Filter by:"),
         "finish": MessageLookupByLibrary.simpleMessage("Finish"),
         "first_name": MessageLookupByLibrary.simpleMessage("Name"),
@@ -381,6 +385,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalid_username": MessageLookupByLibrary.simpleMessage(
             "The username must be at least 4 characters"),
         "invite": MessageLookupByLibrary.simpleMessage("Invite"),
+        "invite_accepted":
+            MessageLookupByLibrary.simpleMessage("Invite has been Accepted"),
         "inviting": MessageLookupByLibrary.simpleMessage("inviting"),
         "items": MessageLookupByLibrary.simpleMessage("Items"),
         "job_opportunity":
@@ -667,6 +673,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Registration has been successful. You can log in now."),
         "registered_user_name": MessageLookupByLibrary.simpleMessage(
             "Registered user name/ Business name"),
+        "rejected":
+            MessageLookupByLibrary.simpleMessage("File rejected Successfully"),
         "related_product":
             MessageLookupByLibrary.simpleMessage("Related Product"),
         "remove": MessageLookupByLibrary.simpleMessage("Remove"),
@@ -927,6 +935,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "villa_number": MessageLookupByLibrary.simpleMessage("Villa Number"),
         "visitor": MessageLookupByLibrary.simpleMessage("Visitor"),
         "voice_message": MessageLookupByLibrary.simpleMessage("Voice message"),
+        "waiting_admin": MessageLookupByLibrary.simpleMessage(
+            "Success!, waiting for group admin\'s approval."),
         "wallet": MessageLookupByLibrary.simpleMessage("Wallet"),
         "wallet_amount": MessageLookupByLibrary.simpleMessage("Wallet amount"),
         "warning": MessageLookupByLibrary.simpleMessage("Warning"),

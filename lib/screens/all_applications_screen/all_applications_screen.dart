@@ -171,14 +171,18 @@ class AllApplicationsScreen extends StatelessWidget {
               if (state is BoardAddApplicationLoading) {
                 loadingDialog(context: context, mediaQuery: mediaQuery);
               } else if (state is BoardAddApplicationSuccess) {
-                // Navigator.of(context).pop();
+
                 showLightSnackBar(context, S.of(context).added);
                 boardCubit.currentBoard.allFiles.add(state.addedApplication);
 
                 applicationCubit.pagingController
                     .appendLastPage([state.addedApplication]);
                 Navigator.of(context).pop();
-              } else if (state is BoardAddApplicationFailure) {
+              }else if (state is BoardAddApplicationSuccessNeedWaiting){
+                showLightSnackBar(context, S.of(context).waiting_admin);
+                Navigator.pop(context);
+              }
+              else if (state is BoardAddApplicationFailure) {
                 errorDialog(context: context, text: state.errorMessage);
               }
             },

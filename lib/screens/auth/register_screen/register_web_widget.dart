@@ -149,12 +149,7 @@ class RegisterWebWidget extends StatelessWidget {
                                 registerCubit.register(context: context);
                               }
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey.shade500,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
+
                             child: Text(
                               S.of(context).sign_up,
                               style: GoogleFonts.tajawal(
