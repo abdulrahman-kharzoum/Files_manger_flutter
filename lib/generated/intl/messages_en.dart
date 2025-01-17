@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Book_a_meeting":
             MessageLookupByLibrary.simpleMessage("Book a meeting"),
         "FAQs": MessageLookupByLibrary.simpleMessage("FAQs"),
+        "Kicking": MessageLookupByLibrary.simpleMessage("Kicking"),
         "about": MessageLookupByLibrary.simpleMessage("About"),
         "about_us": MessageLookupByLibrary.simpleMessage("About us"),
         "accepted":

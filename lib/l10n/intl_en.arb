@@ -654,6 +654,7 @@
   "enter_folder_name": "Enter the name of your new folder",
   "wrongEmailOrPass": "Wrong Email or Password",
   "invite": "Invite",
+  "Kicking": "Kicking",
   "inviting": "inviting",
   "user_invited": "User is Invited to the group",
   "user_kicked": "User is Kicked from the group",

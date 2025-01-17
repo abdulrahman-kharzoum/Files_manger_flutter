@@ -9,6 +9,7 @@ final class BoardSettingsSearchLoadingState extends BoardSettingsState {}
 final class BoardSettingsNoDataState extends BoardSettingsState {}
 final class BoardSettingsLoadingState extends BoardSettingsState {}
 final class BoardSettingsInviteLoadingState extends BoardSettingsState {}
+final class BoardSettingsKickLoadingState extends BoardSettingsState {}
 final class BoardSettingsSaved extends BoardSettingsState {
   final Board newBoard;
   BoardSettingsSaved({required this.newBoard});

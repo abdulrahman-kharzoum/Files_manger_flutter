@@ -6602,6 +6602,16 @@ class S {
     );
   }
 
+  /// `Kicking`
+  String get Kicking {
+    return Intl.message(
+      'Kicking',
+      name: 'Kicking',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `inviting`
   String get inviting {
     return Intl.message(

@@ -236,13 +236,13 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
     required int groupId,
   }) async {
     try {
-      emit(BoardSettingsInviteLoadingState());
+      emit(BoardSettingsKickLoadingState());
 
       String? token = CashNetwork.getCashData(key: 'token');
 
 
 
-      final response = await dio().post(
+      final response = await dio().delete(
         'groups/$groupId/users/$userId/kick',
 
         options: Dio.Options(

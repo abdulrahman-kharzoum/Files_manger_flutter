@@ -46,6 +46,13 @@ class BoardUsersSection extends StatelessWidget {
                 mediaQuery: mediaQuery,
                 title: S.of(context).inviting);
           });
+        } else if (state is BoardSettingsKickLoadingState) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            loadingDialog(
+                context: context,
+                mediaQuery: mediaQuery,
+                title: S.of(context).Kicking);
+          });
         } else if (state is BoardSettingsInviteSuccessState) {
           if (context.mounted) Navigator.pop(context);
           showLightSnackBar(context, S.of(context).user_invited);
@@ -147,7 +154,7 @@ class BoardUsersSection extends StatelessWidget {
                                     UserModel.fromJson(jsonDecode(user_model));
 
                                 bool isThisMe = user.id ==  boardSettingsCubit.searchMembers[index].id;
-                                bool isThisMeAdmin = user.id ==  boardSettingsCubit.searchMembers[index].id &&user.id.toString() ==
+                                bool isTheMemberAdmin = boardSettingsCubit.searchMembers[index].id.toString() ==
                                     boardSettingsCubit.currentBoard.CreatorId
                                         .toString();
                                 bool isAdmin = user.id.toString() ==
@@ -227,7 +234,7 @@ class BoardUsersSection extends StatelessWidget {
                                                         FontWeight.bold),
                                               ),
                                               subtitle: Text(
-                                                '${isMember ? 'Member' : isAdmin? 'Admin':boardSettingsCubit.searchMembers[index].role}',
+                                                '${(isTheMemberAdmin && isMember)? 'Admin':isMember ? 'Member' :boardSettingsCubit.searchMembers[index].role}',
                                                 style: TextStyle(
                                                     color: isDarkTheme
                                                         ? Colors.white54
@@ -294,7 +301,7 @@ class BoardUsersSection extends StatelessWidget {
                                               ),
                                             ),
                                     ),
-                                    isAdmin
+                                    isAdmin && !isThisMe
                                         ? ElevatedButton(
                                             onPressed: isMember
                                                 ? () async {
@@ -351,7 +358,7 @@ class BoardUsersSection extends StatelessWidget {
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           )
-                                        : isThisMe?SizedBox():isThisMeAdmin?SizedBox():SizedBox(),
+                                        : SizedBox(),
                                   ],
                                 );
                               },
