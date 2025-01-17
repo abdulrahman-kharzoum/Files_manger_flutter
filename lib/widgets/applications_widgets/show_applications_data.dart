@@ -1,4 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:files_manager/core/functions/snackbar_function.dart';
+import 'package:files_manager/cubits/board_add_application_cubit/board_add_application_cubit.dart';
+import 'package:files_manager/generated/l10n.dart';
 import 'package:files_manager/interfaces/applications_abstract.dart';
 import 'package:files_manager/models/file_model.dart';
 
@@ -25,21 +28,19 @@ class ShowApplicationsData extends StatelessWidget {
   const ShowApplicationsData({super.key, required this.allBoardsCubit});
 
   final AllBoardsCubit allBoardsCubit;
-
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     final applicationCubit = context.read<ApplicationCubit>();
     final boardCubit = context.read<BoardCubit>();
 
+
     return Localizations.override(
       context: context,
       child: BlocConsumer<ApplicationCubit, ApplicationState>(
-        listener: (context, state)
-          {
+        listener: (context, state) {
           if (state is GetAllApplicationsInBoardLoading ||
-              state is GetAllApplicationsInFolderLoading
-            ) {
+              state is GetAllApplicationsInFolderLoading) {
             // loadingDialog(context: context, mediaQuery: mediaQuery);
           }
 
@@ -57,17 +58,16 @@ class ShowApplicationsData extends StatelessWidget {
           } else if (state is AllBoardsNoInternetState) {
             internetDialog(context: context, mediaQuery: mediaQuery);
           } else if (state is GetAllApplicationsInBoardSuccess) {
-
             final isLastPage = state.isReachMax;
             print('Is the last page => $isLastPage');
             boardCubit.currentBoard.allFiles.clear();
 
-              for (Application a in state.newBoardsApp) {
-                boardCubit.currentBoard.allFiles.add(a);
-              }
-              // if(state is GetAllApplicationsInFolderLoading||state is GetAllApplicationsInBoardLoading){
-              //   Navigator.pop(context);
-              // }
+            for (Application a in state.newBoardsApp) {
+              boardCubit.currentBoard.allFiles.add(a);
+            }
+            // if(state is GetAllApplicationsInFolderLoading||state is GetAllApplicationsInBoardLoading){
+            //   Navigator.pop(context);
+            // }
 
             // // Use set to avoid duplicating items.
             // final existingItems =
@@ -95,12 +95,15 @@ class ShowApplicationsData extends StatelessWidget {
           } else if (state is GetAllApplicationsInFolderSuccess) {
             boardCubit.currentBoard.allFiles.clear();
 
-
             boardCubit.currentBoard.allFiles.addAll(state.newBoardsApp);
 
-
             // Navigator.pop(context);
+          }else if (state is BoardDeleteApplicationSuccess){
+            showLightSnackBar(context, S.of(context).delete);
+            Navigator.of(context).pop();
 
+          }if (state is BoardDeleteApplicationLoading) {
+            loadingDialog(context: context, mediaQuery: mediaQuery);
           }
         },
         builder: (context, state) {
@@ -122,7 +125,7 @@ class ShowApplicationsData extends StatelessWidget {
                     Expanded(
                       child: Text(
                         applicationCubit.folderHistory.isNotEmpty
-                            ?  applicationCubit.folderNames.join(' / ')
+                            ? applicationCubit.folderNames.join(' / ')
                             : 'Root',
                         style: TextStyle(
                             fontSize: 16,
@@ -149,7 +152,10 @@ class ShowApplicationsData extends StatelessWidget {
                           return boardCubit.currentBoard.allFiles[index]
                                   .isFolder()
                               ? Card(
-                                  color: Theme.of(context).textTheme.labelLarge!.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .color,
                                   child: ListTile(
                                     onTap: () {
                                       applicationCubit.folderHistory.add(
@@ -179,17 +185,21 @@ class ShowApplicationsData extends StatelessWidget {
                                       },
                                       itemBuilder: (context) => [
                                         PopupMenuItem(
-                                          value: 'share',
+                                          value: 'Delete',
                                           child: ListTile(
-                                            leading: const Icon(Icons.link),
-                                            title: Text('Share'),
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'copy',
-                                          child: ListTile(
-                                            leading: const Icon(Icons.copy),
-                                            title: Text('Copy'),
+                                            onTap: () async {
+                                              await applicationCubit
+                                                  .deleteApplicationFunction(
+                                                  context: context,
+                                                  fileId: boardCubit
+                                                      .currentBoard
+                                                      .allFiles[index]
+                                                      .getApplicationId(),
+                                                  groupId: boardCubit
+                                                      .currentBoard.id);
+                                            },
+                                            leading: const Icon(Icons.delete),
+                                            title: Text('Delete'),
                                           ),
                                         ),
                                       ],
@@ -209,7 +219,11 @@ class ShowApplicationsData extends StatelessWidget {
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               style: TextStyle(
-                                                color: Theme.of(context).textTheme.headlineSmall!.color,),
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .headlineSmall!
+                                                    .color,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -224,7 +238,11 @@ class ShowApplicationsData extends StatelessWidget {
                                                         .getApplicationCreateDate(),
                                                   ),
                                                   style: TextStyle(
-                                                      color: Theme.of(context).textTheme.headlineSmall!.color,),
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineSmall!
+                                                        .color,
+                                                  ),
                                                 ),
                                               )
                                             : const SizedBox(),
@@ -232,14 +250,21 @@ class ShowApplicationsData extends StatelessWidget {
                                     ),
                                     subtitle: Text(
                                       'Count of file ${boardCubit.currentBoard.allFiles[index].getApplicationFilesCount()}',
-                                      style: TextStyle(color: Theme.of(context).textTheme.headlineSmall!.color),
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .headlineSmall!
+                                              .color),
                                     ),
                                   ),
                                 ).animate().fade(
                                     duration: const Duration(milliseconds: 500),
                                   )
                               : Card(
-                                  color:  Theme.of(context).textTheme.labelLarge!.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .color,
                                   child: ListTile(
                                     leading: Icon(boardCubit
                                         .currentBoard.allFiles[index]
@@ -314,17 +339,28 @@ class ShowApplicationsData extends StatelessWidget {
                                           ),
                                         ),
                                         PopupMenuItem(
-                                          value: 'share',
+                                          value: 'Edit',
                                           child: ListTile(
-                                            leading: const Icon(Icons.link),
-                                            title: Text('Share'),
+                                            leading: const Icon(Icons.edit),
+                                            title: Text('Edit'),
                                           ),
                                         ),
                                         PopupMenuItem(
-                                          value: 'copy',
+                                          value: 'Delete',
                                           child: ListTile(
-                                            leading: const Icon(Icons.copy),
-                                            title: Text('Copy'),
+                                            onTap: () async {
+                                              await applicationCubit
+                                                  .deleteApplicationFunction(
+                                                      context: context,
+                                                      fileId: boardCubit
+                                                          .currentBoard
+                                                          .allFiles[index]
+                                                          .getApplicationId(),
+                                                      groupId: boardCubit
+                                                          .currentBoard.id);
+                                            },
+                                            leading: const Icon(Icons.delete),
+                                            title: Text('Delete'),
                                           ),
                                         ),
                                       ],
@@ -336,12 +372,17 @@ class ShowApplicationsData extends StatelessWidget {
                                             width: Statics.isPlatformDesktop
                                                 ? mediaQuery.width / 2.5
                                                 : mediaQuery.width / 1.5,
-                                            child: Text(boardCubit
-                                                .currentBoard.allFiles[index]
-                                                .getApplicationName(),
-                                                style: TextStyle(
-                                                color: Theme.of(context).textTheme.headlineSmall!.color,),
-                                  ),
+                                            child: Text(
+                                              boardCubit
+                                                  .currentBoard.allFiles[index]
+                                                  .getApplicationName(),
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .headlineSmall!
+                                                    .color,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                         Statics.isPlatformDesktop
@@ -351,9 +392,12 @@ class ShowApplicationsData extends StatelessWidget {
                                                         .currentBoard
                                                         .allFiles[index]
                                                         .getApplicationCreateDate()),
-                                          style: TextStyle(
-                                            color: Theme.of(context).textTheme.headlineSmall!.color,),
-
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .headlineSmall!
+                                                      .color,
+                                                ),
                                               )
                                             : const SizedBox()
                                       ],

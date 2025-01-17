@@ -105,10 +105,7 @@ class AddBoardScreen extends StatelessWidget {
             builder: (context, state) {
               var user_model =  CashNetwork.getCashData(key: 'user_model');
               var user = UserModel.fromJson(jsonDecode(user_model));
-              print('====user Id========');
-              print(user.id);
-              print('====CreatorId ========');
-              print(boardCubit.currentBoard.CreatorId);
+
 
               return boardCubit.currentBoard.parentId != null
                   ? SubBoardScreen(
@@ -225,6 +222,7 @@ class AddBoardScreen extends StatelessWidget {
                               //Applications Data
                               ShowApplicationsData(
                                 allBoardsCubit: allBoardsCubit,
+
                               ),
                             ],
                           ),

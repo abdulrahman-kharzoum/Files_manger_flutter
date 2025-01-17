@@ -107,4 +107,5 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
       emit(BoardAddApplicationFailure(errorMessage: e.toString()));
     }
   }
+
 }

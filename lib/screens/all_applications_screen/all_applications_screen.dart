@@ -170,7 +170,8 @@ class AllApplicationsScreen extends StatelessWidget {
             listener: (context, state) {
               if (state is BoardAddApplicationLoading) {
                 loadingDialog(context: context, mediaQuery: mediaQuery);
-              } else if (state is BoardAddApplicationSuccess) {
+              }
+              else if (state is BoardAddApplicationSuccess) {
 
                 showLightSnackBar(context, S.of(context).added);
                 boardCubit.currentBoard.allFiles.add(state.addedApplication);
@@ -178,7 +179,8 @@ class AllApplicationsScreen extends StatelessWidget {
                 applicationCubit.pagingController
                     .appendLastPage([state.addedApplication]);
                 Navigator.of(context).pop();
-              }else if (state is BoardAddApplicationSuccessNeedWaiting){
+              }
+              else if (state is BoardAddApplicationSuccessNeedWaiting){
                 showLightSnackBar(context, S.of(context).waiting_admin);
                 Navigator.pop(context);
               }

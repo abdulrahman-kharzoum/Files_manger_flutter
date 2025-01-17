@@ -9,7 +9,9 @@ final class GetAllApplicationsInBoardLoading extends ApplicationState {}
 final class NavigationInProgress extends ApplicationState {}
 final class NavigationCompleted extends ApplicationState {}
 final class GetAllApplicationsInFolderLoading extends ApplicationState {}
+final class BoardDeleteApplicationLoading extends ApplicationState {}
 
+final class BoardDeleteApplicationSuccess extends ApplicationState {}
 final class GetAllApplicationsInBoardSuccess extends ApplicationState {
   final List<Application> newBoardsApp;
   final bool isReachMax;

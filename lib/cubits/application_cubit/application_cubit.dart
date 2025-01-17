@@ -138,7 +138,40 @@ class ApplicationCubit extends Cubit<ApplicationState> {
     }
 
   }
+  Future<void> deleteApplicationFunction({
+    required BuildContext context,
+    required int fileId,
+    required int groupId,
+  }) async {
+    emit(BoardDeleteApplicationLoading());
+    try {
+      String? token = CashNetwork.getCashData(key: 'token');
+      print("=========================Delete file=======================");
+      final response = await dio().delete(
+        'groups/$groupId/files/$fileId/remove',
 
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print("=========================Delete file 200=======================");
+        print(response.data);
+        print("===========message ====================");
+        print(response.data['message']);
+        emit(BoardDeleteApplicationSuccess());
+      }
+    } on DioException catch (e) {
+      errorHandler(e: e, context: context);
+
+        emit(GetAllApplicationsInBoardFailure(
+            errorMessage: e.response?.data['message']));
+      }
+    catch (e) {
+      emit(GetAllApplicationsInBoardFailure(errorMessage: e.toString()));
+    }
+  }
 
   Future<void> getAllFilesFolder(
       {required BuildContext context,
