@@ -1,3 +1,5 @@
+import 'package:files_manager/models/Api_user.dart';
+
 class GroupModel {
   final int id;
   final String name;
@@ -6,6 +8,7 @@ class GroupModel {
   final String lang;
   final int creatorId;
   final List<FileApiModel> files;
+  final List<UserModel>? members;
 
   GroupModel({
     required this.id,
@@ -15,6 +18,7 @@ class GroupModel {
     required this.lang,
     required this.creatorId,
     required this.files,
+    this.members,
   });
 
   // From JSON
@@ -30,6 +34,10 @@ class GroupModel {
           ?.map((file) => FileApiModel.fromJson(file))
           .toList() ??
           [],
+      members: (json['members'] as List<dynamic>?)
+          ?.map((member) => UserModel.fromJson(member))
+          .toList() ??
+          [],
     );
   }
 
@@ -43,6 +51,7 @@ class GroupModel {
       'lang': lang,
       'creator_id': creatorId,
       'files': files.map((file) => file.toJson()).toList(),
+      'members': members?.map((member) => member.toJson()).toList(),
     };
   }
 }

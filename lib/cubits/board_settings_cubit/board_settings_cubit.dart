@@ -6,7 +6,9 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as Dio;
+import 'package:files_manager/core/functions/apis_error_handler.dart';
 import 'package:files_manager/models/Api_user.dart';
+import 'package:files_manager/models/group.dart';
 import 'package:files_manager/models/member_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -133,6 +135,53 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       }
     });
   }
+  Future<void> getBoardInfo(
+      {required BuildContext context, required int groupId}) async {
+    try {
+      print("===============Group  INFO====================");
+      emit(BoardSettingsSearchLoadingState());
+      String? token = CashNetwork.getCashData(key: 'token');
+
+      final response = await dio().get(
+        'groups/show/$groupId',
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      print('The status code is => ${response.statusCode}');
+      print(response.data);
+
+      if (response.statusCode == 200) {
+        final groupData = response.data['data'];
+        GroupModel groupModel = GroupModel.fromJson(groupData);
+        currentBoard.members = groupModel.members!
+            .map((user) => Member.fromUserModel(user))
+            .toList();
+
+
+
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.connectionError) {
+
+        print('Connection Error.');
+        return;
+      }
+      errorHandlerWithoutInternet(e: e, context: context);
+
+      print('The response is => ${e.response!.data}');
+      print('The failed status code is ${e.response!.statusCode}');
+      emit(BoardSettingsFailedState(
+          errorMessage: e.response!.data['message']));
+    } catch (e) {
+      print('================ catch exception =================');
+      print(e);
+      emit(BoardSettingsFailedState(errorMessage: 'Catch exception'));
+    }
+  }
   Future<void> inviteUser({
     required BuildContext context,
     required int userId,
@@ -181,7 +230,45 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       }
     }
   }
+  Future<void> kickUser({
+    required BuildContext context,
+    required int userId,
+    required int groupId,
+  }) async {
+    try {
+      emit(BoardSettingsInviteLoadingState());
 
+      String? token = CashNetwork.getCashData(key: 'token');
+
+
+
+      final response = await dio().post(
+        'groups/$groupId/users/$userId/kick',
+
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print("User Kicked ");
+
+
+        emit(BoardSettingsKickedSuccessState());
+      }
+    } on DioException catch (e) {
+      print('Dio Exception => ${e.response?.data}');
+      if (!isClosed) {
+        emit(BoardSettingsFailedState(
+            errorMessage: e.response?.data['message'] ?? 'Unknown error'));
+      }
+    } catch (e) {
+      print('Catch Exception => $e');
+      if (!isClosed) {
+        emit(BoardSettingsFailedState(errorMessage: 'Unexpected error'));
+      }
+    }
+  }
 
 
 

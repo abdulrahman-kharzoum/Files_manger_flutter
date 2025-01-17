@@ -383,6 +383,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "لقد تم استلام طلب العمل الخاص بك بنجاح وسنقوم بإرسال إشعار لك عند الموافقة عليهس"),
         "job_title": MessageLookupByLibrary.simpleMessage("المسمى الوظيفي"),
         "join_with_code": MessageLookupByLibrary.simpleMessage("الانضمام برمز"),
+        "kick": MessageLookupByLibrary.simpleMessage("طرد"),
         "language": MessageLookupByLibrary.simpleMessage("اللغة"),
         "last_modified": MessageLookupByLibrary.simpleMessage("آخر تعديل"),
         "last_name": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
@@ -874,6 +875,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "يستطيع الإضافة و الحذف و التعديل داخل التطبيق, لكن لن يكون بإمكانه إضافة تطبيقات أو التحكم بالإعدادات"),
         "user_invited":
             MessageLookupByLibrary.simpleMessage("تم دعوة المستخدم للمجموعة"),
+        "user_kicked":
+            MessageLookupByLibrary.simpleMessage("تم طرد المستخدم من المجموعة"),
         "username": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
         "users": MessageLookupByLibrary.simpleMessage("المستخدمين"),
         "verification": MessageLookupByLibrary.simpleMessage("التحقق"),

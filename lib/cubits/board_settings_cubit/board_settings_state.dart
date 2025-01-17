@@ -17,6 +17,7 @@ final class BoardSettingsSaved extends BoardSettingsState {
 
 final class BoardSettingsSuccessState extends BoardSettingsState {}
 final class BoardSettingsInviteSuccessState extends BoardSettingsState {}
+final class BoardSettingsKickedSuccessState extends BoardSettingsState {}
 final class BoardSettingsSearchSuccessState extends BoardSettingsState {}
 
 final class BoardSettingsFailedState extends BoardSettingsState {

@@ -6622,6 +6622,16 @@ class S {
     );
   }
 
+  /// `User is Kicked from the group`
+  String get user_kicked {
+    return Intl.message(
+      'User is Kicked from the group',
+      name: 'user_kicked',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Invite has been Accepted`
   String get invite_accepted {
     return Intl.message(
@@ -6677,6 +6687,16 @@ class S {
     return Intl.message(
       'File rejected Successfully',
       name: 'rejected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kick`
+  String get kick {
+    return Intl.message(
+      'Kick',
+      name: 'kick',
       desc: '',
       args: [],
     );

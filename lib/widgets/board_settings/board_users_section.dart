@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:files_manager/core/animation/dialogs/dialogs.dart';
 import 'package:files_manager/core/functions/snackbar_function.dart';
+import 'package:files_manager/core/shared/local_network.dart';
+import 'package:files_manager/models/Api_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:files_manager/cubits/add_member_cubit/add_member_cubit.dart';
@@ -35,24 +39,25 @@ class BoardUsersSection extends StatelessWidget {
             );
             _searchFocusNode.unfocus();
           });
-        }
-       else if (state is BoardSettingsInviteLoadingState) {
+        } else if (state is BoardSettingsInviteLoadingState) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             loadingDialog(
-              context: context,
-              mediaQuery: mediaQuery,
-              title: S.of(context).inviting
-            );
-
+                context: context,
+                mediaQuery: mediaQuery,
+                title: S.of(context).inviting);
           });
-        }else if (state is BoardSettingsInviteSuccessState){
+        } else if (state is BoardSettingsInviteSuccessState) {
           if (context.mounted) Navigator.pop(context);
           showLightSnackBar(context, S.of(context).user_invited);
+        }else if (state is BoardSettingsKickedSuccessState) {
+          if (context.mounted) Navigator.pop(context);
+          showLightSnackBar(context, S.of(context).user_kicked);
         }
-          else if (state is BoardSettingsNoDataState) {
+        else if (state is BoardSettingsNoDataState) {
           NoData(iconData: Icons.search, text: S.of(context).no_data);
         } else if (state is BoardSettingsSearchSuccessState) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) Navigator.pop(context);
             if (context.mounted) Navigator.pop(context);
           });
         } else if (state is BoardSettingsFailedState) {
@@ -90,6 +95,9 @@ class BoardUsersSection extends StatelessWidget {
                                 context: context,
                                 userName:
                                     boardSettingsCubit.searchController.text);
+                            await boardSettingsCubit.getBoardInfo(
+                                context: context,
+                                groupId: boardSettingsCubit.currentBoard.id);
                           },
                           styleInput: TextStyle(
                               color: Theme.of(context)
@@ -133,6 +141,24 @@ class BoardUsersSection extends StatelessWidget {
                             children: List.generate(
                               boardSettingsCubit.searchMembers.length,
                               (index) {
+                                var user_model =
+                                    CashNetwork.getCashData(key: 'user_model');
+                                var user =
+                                    UserModel.fromJson(jsonDecode(user_model));
+
+                                bool isThisMe = user.id ==  boardSettingsCubit.searchMembers[index].id;
+                                bool isThisMeAdmin = user.id ==  boardSettingsCubit.searchMembers[index].id &&user.id.toString() ==
+                                    boardSettingsCubit.currentBoard.CreatorId
+                                        .toString();
+                                bool isAdmin = user.id.toString() ==
+                                    boardSettingsCubit.currentBoard.CreatorId
+                                        .toString();
+                                bool isMember = boardSettingsCubit
+                                    .currentBoard.members
+                                    .any((member) =>
+                                        member.id ==
+                                        boardSettingsCubit
+                                            .searchMembers[index].id);
                                 return Row(
                                   children: [
                                     Expanded(
@@ -175,7 +201,17 @@ class BoardUsersSection extends StatelessWidget {
                                                     .searchMembers[index]
                                                     .firstName,
                                                 role: boardSettingsCubit
-                                                    .searchMembers[index].role,
+                                                        .currentBoard.members
+                                                        .any((member) =>
+                                                            member.id ==
+                                                            boardSettingsCubit
+                                                                .searchMembers[
+                                                                    index]
+                                                                .id)
+                                                    ? 'Member'
+                                                    : boardSettingsCubit
+                                                        .searchMembers[index]
+                                                        .role,
                                                 mediaQuery: mediaQuery,
                                                 userImage: boardSettingsCubit
                                                     .searchMembers[index].image,
@@ -191,7 +227,7 @@ class BoardUsersSection extends StatelessWidget {
                                                         FontWeight.bold),
                                               ),
                                               subtitle: Text(
-                                                '${boardSettingsCubit.searchMembers[index].role}',
+                                                '${isMember ? 'Member' : isAdmin? 'Admin':boardSettingsCubit.searchMembers[index].role}',
                                                 style: TextStyle(
                                                     color: isDarkTheme
                                                         ? Colors.white54
@@ -258,30 +294,64 @@ class BoardUsersSection extends StatelessWidget {
                                               ),
                                             ),
                                     ),
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        boardSettingsCubit.inviteUser(
-                                            context: context,
-                                            userId: boardSettingsCubit
-                                                .searchMembers[index].id,
-                                            groupId: boardSettingsCubit
-                                                .currentBoard.id);
-                                        await boardSettingsCubit.resetSearch();
-                                        await boardSettingsCubit.refresh();
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.blueAccent,
-                                      ),
-                                      child: Text(
-                                        S.of(context).invite,
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                .color,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
+                                    isAdmin
+                                        ? ElevatedButton(
+                                            onPressed: isMember
+                                                ? () async {
+                                                    boardSettingsCubit.kickUser(
+                                                        context: context,
+                                                        userId:
+                                                            boardSettingsCubit
+                                                                .searchMembers[
+                                                                    index]
+                                                                .id,
+                                                        groupId:
+                                                            boardSettingsCubit
+                                                                .currentBoard
+                                                                .id);
+                                                    await boardSettingsCubit
+                                                        .resetSearch();
+                                                    await boardSettingsCubit
+                                                        .refresh();
+                                                  }
+                                                : () async {
+                                                    boardSettingsCubit.inviteUser(
+                                                        context: context,
+                                                        userId:
+                                                            boardSettingsCubit
+                                                                .searchMembers[
+                                                                    index]
+                                                                .id,
+                                                        groupId:
+                                                            boardSettingsCubit
+                                                                .currentBoard
+                                                                .id);
+                                                    await boardSettingsCubit
+                                                        .resetSearch();
+                                                    await boardSettingsCubit
+                                                        .refresh();
+                                                  },
+                                            style: isMember
+                                                ? ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.red,
+                                                  )
+                                                : ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.blueAccent,
+                                                  ),
+                                            child: Text(
+                                              isMember
+                                                  ? S.of(context).kick
+                                                  : S.of(context).invite,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall!
+                                                      .color,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : isThisMe?SizedBox():isThisMeAdmin?SizedBox():SizedBox(),
                                   ],
                                 );
                               },

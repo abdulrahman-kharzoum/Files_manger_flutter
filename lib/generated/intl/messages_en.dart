@@ -398,6 +398,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "job_title": MessageLookupByLibrary.simpleMessage("Job Title"),
         "join_with_code":
             MessageLookupByLibrary.simpleMessage("Join with Code"),
+        "kick": MessageLookupByLibrary.simpleMessage("Kick"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "last_modified": MessageLookupByLibrary.simpleMessage("Last modified"),
         "last_name": MessageLookupByLibrary.simpleMessage("User Name"),
@@ -915,6 +916,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "He can add, delete and edit within the app, but he will not be able to add apps or control settings."),
         "user_invited": MessageLookupByLibrary.simpleMessage(
             "User is Invited to the group"),
+        "user_kicked": MessageLookupByLibrary.simpleMessage(
+            "User is Kicked from the group"),
         "username": MessageLookupByLibrary.simpleMessage("Username"),
         "users": MessageLookupByLibrary.simpleMessage("Users"),
         "verification": MessageLookupByLibrary.simpleMessage("Verification"),
