@@ -54,6 +54,7 @@ class FileApiModel {
   final String? extension;
   final int? parentId;
   final int creatorId;
+  final DateTime? dateTime;
 
   FileApiModel({
     required this.id,
@@ -62,6 +63,7 @@ class FileApiModel {
     this.extension,
     this.parentId,
     required this.creatorId,
+    this.dateTime,
   });
 
   // From JSON
@@ -71,8 +73,13 @@ class FileApiModel {
       name: json['name'] ?? '',
       path: json['path'],
       extension: json['extension'],
-      parentId: json['parent_id'],
+      parentId: json['parent_id'] != null
+          ? int.tryParse(json['parent_id'].toString())
+          : null,
       creatorId: json['creator_id'] ?? 0,
+      dateTime: json['date_time'] != null
+          ? DateTime.tryParse(json['date_time'])
+          : null,
     );
   }
 
@@ -85,6 +92,8 @@ class FileApiModel {
       'extension': extension,
       'parent_id': parentId,
       'creator_id': creatorId,
+      'date_time': dateTime?.toIso8601String(),
     };
   }
 }
+

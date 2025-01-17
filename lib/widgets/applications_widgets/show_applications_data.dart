@@ -94,11 +94,11 @@ class ShowApplicationsData extends StatelessWidget {
             // }
           } else if (state is GetAllApplicationsInFolderSuccess) {
             boardCubit.currentBoard.allFiles.clear();
-            print(boardCubit.currentBoard.allFiles.length);
+
 
             boardCubit.currentBoard.allFiles.addAll(state.newBoardsApp);
 
-            print(boardCubit.currentBoard.allFiles.length);
+
             // Navigator.pop(context);
 
           }
@@ -122,7 +122,7 @@ class ShowApplicationsData extends StatelessWidget {
                     Expanded(
                       child: Text(
                         applicationCubit.folderHistory.isNotEmpty
-                            ? applicationCubit.folderHistory.join(' / ')
+                            ?  applicationCubit.folderNames.join(' / ')
                             : 'Root',
                         style: TextStyle(
                             fontSize: 16,
@@ -156,6 +156,10 @@ class ShowApplicationsData extends StatelessWidget {
                                           boardCubit
                                               .currentBoard.allFiles[index]
                                               .getApplicationId());
+                                      applicationCubit.folderNames.add(
+                                          boardCubit
+                                              .currentBoard.allFiles[index]
+                                              .getApplicationName());
                                       applicationCubit.getAllFilesFolder(
                                           context: context,
                                           groupId: boardCubit.currentBoard.id,

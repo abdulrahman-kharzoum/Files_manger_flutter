@@ -197,11 +197,12 @@ class AllApplicationsScreen extends StatelessWidget {
                       if (result != null) {
                         final selectedFile = result.files.first;
 
+
                         await boardAddApplicationCubit.addApplicationFunction(
                             context: context,
                             fileName: selectedFile.name,
                             file: selectedFile,
-                            parent_id: applicationCubit.folderHistory.isNotEmpty ? applicationCubit.folderHistory.last.toInt():0,
+                            parent_id: applicationCubit.folderHistory.isNotEmpty ? applicationCubit.folderHistory.last:0,
                             is_folder: false,
                             group_id: boardCubit.currentBoard.id);
                         // boardCubit.currentBoard.allFiles.add(FileModel(
@@ -249,6 +250,7 @@ class AllApplicationsScreen extends StatelessWidget {
                         //     parent_id: 0,
                         //     is_folder: true,
                         //     group_id: boardCubit.currentBoard.id);
+
                         await showFolderNameDialog(
                           context: context,
                           onConfirm: (folderName) async {

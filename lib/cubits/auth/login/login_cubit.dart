@@ -87,6 +87,7 @@ class LoginCubit extends Cubit<LoginState> {
         print('------------------------------------------------');
         emit(LoginSuccess());
       }
+
     } on DioException catch (e) {
       print('Dio Error is ${e.message}');
       print('Type Dio Error is ${e.type}');
@@ -96,16 +97,18 @@ class LoginCubit extends Cubit<LoginState> {
       if (e.response!.statusCode! > 400) {
         print('The response code is => ${e.response!.statusCode!}');
         emit(LoginFailure(errorMessage: S.of(context).login_faild));
-        return;
+       return;
       }
       print('The response code is => ${e.response!.statusCode!}');
       print(e.response);
-      emit(LoginFailure(errorMessage: e.response!.data.toString()));
+      emit(LoginFailure(errorMessage: S.of(context).login_faild));
+      return;
     } catch (e) {
       print('General Error is $e');
 
       print('================catch exception ======================');
-      emit(LoginFailure(errorMessage: e.toString()));
+      emit(LoginFailure(errorMessage: S.of(context).login_faild));
+      return;
     }
   }
 

@@ -22,41 +22,51 @@ class FolderModel extends Application {
   IconData icon = Icons.folder;
   DateTime updatedAt;
   List<FileMode> allFiles = [];
-  FolderModel({
-    required this.id,
-    required this.boardId,
-    required this.title,
-    required this.mode,
-    required this.allFiles,
-    required this.createdAt,
-    required this.updatedAt,
-    this.localPath,
-    this.boardCubit,
-  });
+  String? filesCount;
+
+  FolderModel(
+      {required this.id,
+      required this.boardId,
+      required this.title,
+      required this.mode,
+      required this.allFiles,
+      required this.createdAt,
+      required this.updatedAt,
+      this.localPath,
+      this.boardCubit,
+      this.filesCount});
 
   factory FolderModel.fromJson(Map<String, dynamic> json) {
     return FolderModel(
-      id: json['id'],
-      boardId: json['board_id'],
-      allFiles: [],
-      title: json['title'],
-      mode: json['mode'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      localPath: ''
-    );
+        id: json['id'],
+        boardId: json['board_id'],
+        allFiles: [],
+        title: json['title'],
+        mode: json['mode'],
+        createdAt: json['created_at'],
+        updatedAt: json['updated_at'],
+        localPath: '');
   }
+
   // Add fromFileApi method for FolderModel
-  factory FolderModel.fromFileApi(FileApiModel fileApi,int group_id) {
+  factory FolderModel.fromFileApi(FileApiModel fileApi, int group_id) {
     return FolderModel(
       id: fileApi.id,
       boardId: group_id,
       title: fileApi.name,
       mode: fileApi.extension ?? 'unknown',
-      allFiles: [],  // If you have files in the folder, initialize them here
-      createdAt: DateTime.now(),  // Assign based on the API response or current time
-      updatedAt: DateTime.now(),  // Assign based on the API response or current time
+      allFiles: [],
+
+      createdAt: fileApi.dateTime!,
+      // Assign based on the API response or current time
+      updatedAt:
+          fileApi.dateTime!, // Assign based on the API response or current time
     );
+  }
+
+  @override
+  DateTime getApplicationCreateDate() {
+    return updatedAt;
   }
 
   @override
@@ -66,7 +76,7 @@ class FolderModel extends Application {
 
   @override
   int getApplicationFilesCount() {
-    return allFiles.length;
+    return filesCount != null ? int.parse(filesCount!) : 0;
   }
 
   @override
@@ -118,6 +128,7 @@ class ChatMessageModel {
   bool? isFormAPi;
   bool? isSent;
   bool? isMedia;
+
   ChatMessageModel({
     required this.id,
     required this.messageType,
@@ -161,6 +172,7 @@ class UserMessageData {
     required this.name,
     required this.userImage,
   });
+
   factory UserMessageData.fromJson(Map<String, dynamic> json) {
     return UserMessageData(
       id: json['id'],
@@ -184,6 +196,7 @@ class ReplyingModel {
   bool isFormAPi;
   bool isSent;
   bool isMedia;
+
   ReplyingModel({
     required this.id,
     required this.messageType,

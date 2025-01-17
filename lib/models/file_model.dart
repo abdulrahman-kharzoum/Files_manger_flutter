@@ -61,8 +61,8 @@ import 'package:files_manager/models/member_model.dart';
         boardId: group_id,  // You can assign boardId based on your logic
         title: fileApi.name,
         mode: fileApi.extension ?? 'unknown',
-        createdAt: DateTime.now(),  // Assign based on the API response or current time
-        updatedAt: DateTime.now(),  // Assign based on the API response or current time
+        createdAt: fileApi.dateTime!,
+        updatedAt:  fileApi.dateTime!,
       );
     }
 
@@ -70,7 +70,10 @@ import 'package:files_manager/models/member_model.dart';
     Member? getApplicationOwner() {
       return member;
     }
-
+    @override
+    DateTime getApplicationCreateDate() {
+      return updatedAt;
+    }
     @override
     IconData getIcon() {
       return icon;

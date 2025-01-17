@@ -56,8 +56,12 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
         }
       }
 
-      if (parent_id != 0|| parent_id != null) {
-        data['parent_id'] = parent_id.toInt();
+      if (parent_id != 0 && parent_id != null) {
+
+        print(parent_id.runtimeType);
+
+        data['parent_id'] = parent_id;
+
       }
 
       final formData = FormData.fromMap(data);
@@ -81,7 +85,7 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
         emit(BoardAddApplicationSuccess(addedApplication: createdApplication));
       } else {
         emit(BoardAddApplicationFailure(
-            errorMessage: response.data['message'] ?? 'Error occurred'));
+            errorMessage: response.data['message']));
       }
     } on DioException catch (e) {
       errorHandler(e: e, context: context);
@@ -90,9 +94,10 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
         emit(BoardAddApplicationExpiredToken());
       } else {
         emit(BoardAddApplicationFailure(
-            errorMessage: e.response?.data['message'] ?? 'Dio error occurred'));
+            errorMessage: e.response?.data['message'] ));
       }
-    } catch (e) {
+    }
+    catch (e) {
       emit(BoardAddApplicationFailure(
           errorMessage: e.toString()));
     }

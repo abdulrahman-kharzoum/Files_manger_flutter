@@ -19,6 +19,8 @@ class ApplicationCubit extends Cubit<ApplicationState> {
   ApplicationCubit() : super(ApplicationInitial());
   final int pageSize = 10;
   final List<int> folderHistory = [];
+  final List<String> folderNames = [];
+  Map<int, int> folderFileCount = {};
 
   PagingController<int, Application> pagingController =
       PagingController(firstPageKey: 1);
@@ -123,8 +125,11 @@ class ApplicationCubit extends Cubit<ApplicationState> {
 
     if (folderHistory.isNotEmpty) {
       final previousFolderId = folderHistory.removeLast();
+      folderNames.removeLast();
       if (folderHistory.isNotEmpty) {
-        getAllFilesFolder(context: context, groupId: groupId, folderId: previousFolderId);
+        getAllFilesFolder(context: context, groupId: groupId, folderId: folderHistory.last);
+
+
       } else {
         getAllFilesBoard(context: context, groupId: groupId);
       }
@@ -159,10 +164,18 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       if (response.statusCode == 200) {
         final FilesList = response.data['data'] as List;
         newBoardsApp.clear();
-        for (int i = 0; i < FilesList.length; i++) {
+
+
+          for (int i = 0; i < FilesList.length; i++) {
           FileApiModel file = FileApiModel.fromJson(FilesList[i]);
+
+
           if (file.extension == null) {
             FolderModel folderModel = FolderModel.fromFileApi(file, groupId);
+
+            if (folderFileCount.containsKey(file.id)) {
+              folderModel.filesCount = folderFileCount[file.id].toString();
+            }
             newBoardsApp.add(folderModel);
           } else {
             FileModel fileModel = FileModel.fromFileApi(file, groupId);
@@ -222,13 +235,18 @@ class ApplicationCubit extends Cubit<ApplicationState> {
         final groupData = response.data['data'];
         GroupModel groupModel = GroupModel.fromJson(groupData);
         newBoardsApp.clear();
-
         for (int i = 0; i < groupModel.files.length; i++) {
           FileApiModel file = groupModel.files[i];
+          int targetParentId = file.id;
+
+
+          List<FileApiModel> filesInFolder = groupModel.files.where((file) => file.parentId == targetParentId).toList();
+          int numberOfFilesInFolder = filesInFolder.length;
+          folderFileCount[targetParentId] = numberOfFilesInFolder;
           if(file.parentId == 0 || file.parentId == null){
-            print("we are adding.....");
             if (file.extension == null) {
-              FolderModel folderModel = FolderModel.fromFileApi(file, groupId);
+             FolderModel folderModel = FolderModel.fromFileApi(file, groupId,);
+             folderModel.filesCount = numberOfFilesInFolder.toString();
               newBoardsApp.add(folderModel);
             } else {
               FileModel fileModel = FileModel.fromFileApi(file, groupId);
