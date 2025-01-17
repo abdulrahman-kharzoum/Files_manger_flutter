@@ -99,98 +99,98 @@ class BoardCubit extends Cubit<BoardState> {
       emit(DeleteApplicationsInBoardFailure(errorMessage: e.toString()));
     }
   }
-
-  Future<void> moveApplicationToBoard({
-    required BuildContext context,
-    required int boardId,
-  }) async {
-    emit(MoveApplicationsToBoardLoading());
-    try {
-      String? token = CashNetwork.getCashData(key: 'token');
-
-      final response = await dio().post(
-        'board-applications/move-application-to-board/$boardId',
-        data: {
-          'move_to_board_id': boardId,
-        },
-        options: Dio.Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-      );
-      print('The status code is => ${response.statusCode}');
-      print(response.data);
-      if (response.statusCode == 200) {
-        emit(MoveApplicationsToBoardSuccess());
-      } else if (response.statusCode == 206) {
-        Navigator.pop(context);
-        emit(MoveApplicationsToBoardFailure(
-            errorMessage: response.data['message']));
-      }
-    } on DioException catch (e) {
-      Navigator.pop(context);
-      errorHandler(e: e, context: context);
-      if (e.response!.statusCode == 401) {
-        emit(MoveApplicationsToBoardExpiredToken());
-        return;
-      }
-      print('The response is => ${e.response!.data}');
-      print('The failed status code is ${e.response!.statusCode}');
-      emit(MoveApplicationsToBoardFailure(
-          errorMessage: e.response!.data['message']));
-    } catch (e) {
-      Navigator.pop(context);
-      print('================ catch exception =================');
-      print(e);
-      emit(MoveApplicationsToBoardFailure(errorMessage: 'Catch exception'));
-      print(e);
-    }
-  }
-
-  Future<void> copyApplicationToBoard({
-    required BuildContext context,
-    required int boardId,
-    required bool withContent,
-  }) async {
-    emit(CopyApplicationsToBoardLoading());
-    try {
-      String? token = CashNetwork.getCashData(key: 'token');
-
-      final response = await dio().post(
-        'board-applications/copy-application-to-board/$boardId',
-        data: {
-          'move_to_board_id': boardId,
-          'content': withContent,
-        },
-        options: Dio.Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-      );
-      print('The status code is => ${response.statusCode}');
-      print(response.data);
-      if (response.statusCode == 200) {
-        emit(CopyApplicationsToBoardSuccess());
-      } else if (response.statusCode == 206) {
-        Navigator.pop(context);
-        emit(CopyApplicationsToBoardFailure(
-            errorMessage: response.data['message']));
-      }
-    } on DioException catch (e) {
-      Navigator.pop(context);
-      errorHandler(e: e, context: context);
-      if (e.response!.statusCode == 401) {
-        emit(CopyApplicationsToBoardExpiredToken());
-        return;
-      }
-      print('The response is => ${e.response!.data}');
-      print('The failed status code is ${e.response!.statusCode}');
-      emit(CopyApplicationsToBoardFailure(
-          errorMessage: e.response!.data['message']));
-    } catch (e) {
-      Navigator.pop(context);
-      print('================ catch exception =================');
-      print(e);
-      emit(CopyApplicationsToBoardFailure(errorMessage: 'Catch exception'));
-      print(e);
-    }
-  }
+  //
+  // Future<void> moveApplicationToBoard({
+  //   required BuildContext context,
+  //   required int boardId,
+  // }) async {
+  //   emit(MoveApplicationsToBoardLoading());
+  //   try {
+  //     String? token = CashNetwork.getCashData(key: 'token');
+  //
+  //     final response = await dio().post(
+  //       'board-applications/move-application-to-board/$boardId',
+  //       data: {
+  //         'move_to_board_id': boardId,
+  //       },
+  //       options: Dio.Options(
+  //         headers: {'Authorization': 'Bearer $token'},
+  //       ),
+  //     );
+  //     print('The status code is => ${response.statusCode}');
+  //     print(response.data);
+  //     if (response.statusCode == 200) {
+  //       emit(MoveApplicationsToBoardSuccess());
+  //     } else if (response.statusCode == 206) {
+  //       Navigator.pop(context);
+  //       emit(MoveApplicationsToBoardFailure(
+  //           errorMessage: response.data['message']));
+  //     }
+  //   } on DioException catch (e) {
+  //     Navigator.pop(context);
+  //     errorHandler(e: e, context: context);
+  //     if (e.response!.statusCode == 401) {
+  //       emit(MoveApplicationsToBoardExpiredToken());
+  //       return;
+  //     }
+  //     print('The response is => ${e.response!.data}');
+  //     print('The failed status code is ${e.response!.statusCode}');
+  //     emit(MoveApplicationsToBoardFailure(
+  //         errorMessage: e.response!.data['message']));
+  //   } catch (e) {
+  //     Navigator.pop(context);
+  //     print('================ catch exception =================');
+  //     print(e);
+  //     emit(MoveApplicationsToBoardFailure(errorMessage: 'Catch exception'));
+  //     print(e);
+  //   }
+  // }
+  //
+  // Future<void> copyApplicationToBoard({
+  //   required BuildContext context,
+  //   required int boardId,
+  //   required bool withContent,
+  // }) async {
+  //   emit(CopyApplicationsToBoardLoading());
+  //   try {
+  //     String? token = CashNetwork.getCashData(key: 'token');
+  //
+  //     final response = await dio().post(
+  //       'board-applications/copy-application-to-board/$boardId',
+  //       data: {
+  //         'move_to_board_id': boardId,
+  //         'content': withContent,
+  //       },
+  //       options: Dio.Options(
+  //         headers: {'Authorization': 'Bearer $token'},
+  //       ),
+  //     );
+  //     print('The status code is => ${response.statusCode}');
+  //     print(response.data);
+  //     if (response.statusCode == 200) {
+  //       emit(CopyApplicationsToBoardSuccess());
+  //     } else if (response.statusCode == 206) {
+  //       Navigator.pop(context);
+  //       emit(CopyApplicationsToBoardFailure(
+  //           errorMessage: response.data['message']));
+  //     }
+  //   } on DioException catch (e) {
+  //     Navigator.pop(context);
+  //     errorHandler(e: e, context: context);
+  //     if (e.response!.statusCode == 401) {
+  //       emit(CopyApplicationsToBoardExpiredToken());
+  //       return;
+  //     }
+  //     print('The response is => ${e.response!.data}');
+  //     print('The failed status code is ${e.response!.statusCode}');
+  //     emit(CopyApplicationsToBoardFailure(
+  //         errorMessage: e.response!.data['message']));
+  //   } catch (e) {
+  //     Navigator.pop(context);
+  //     print('================ catch exception =================');
+  //     print(e);
+  //     emit(CopyApplicationsToBoardFailure(errorMessage: 'Catch exception'));
+  //     print(e);
+  //   }
+  // }
 }

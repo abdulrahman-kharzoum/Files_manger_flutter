@@ -33,6 +33,7 @@ class Board {
   int? boardColorIndex;
   File? imageFile;
   String? CreatorId;
+  int? filesNumber;
 
   int getApplicationSelectedColor() {
     if (boardColorIndex == null) {
@@ -73,7 +74,8 @@ class Board {
     required this.children,
     required this.members,
     required this.invitedUsers,
-     this.CreatorId
+     this.CreatorId,
+    this.filesNumber
   });
 
   factory Board.fromJson(Map<String, dynamic> json) {
@@ -115,7 +117,7 @@ class Board {
       language: Language(id: 1, name: 'english', code: group.lang, direction: 'lr'), // Map `lang` to `Language`.
       roleInBoard: null, // Role in board is not available; leave as null.
       color: group.color, // Map directly from Group's color.
-      allFiles: [], // Files not available in Group; leave as empty.
+      allFiles: [],
       tasksCommentsCount: 0, // Not available in Group; default to 0.
       shareLink: '', // Not available in Group; leave empty.
       title: group.name, // Use Group's name as the title.
@@ -128,7 +130,8 @@ class Board {
       createdAt: DateTime.now(), // Not available; use current time.
       children: [], // Children are not available; leave as empty.
       members: [], // Members need mapping if available in Group.
-      invitedUsers: [], // Invited users need mapping if available in Group.
+      invitedUsers: [],
+      filesNumber: group.files.length
     );
   }
 }

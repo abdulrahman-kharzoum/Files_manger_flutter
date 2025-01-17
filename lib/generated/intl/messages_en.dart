@@ -387,6 +387,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "invite": MessageLookupByLibrary.simpleMessage("Invite"),
         "invite_accepted":
             MessageLookupByLibrary.simpleMessage("Invite has been Accepted"),
+        "invite_deleted":
+            MessageLookupByLibrary.simpleMessage("Invite has been Deleted"),
         "inviting": MessageLookupByLibrary.simpleMessage("inviting"),
         "items": MessageLookupByLibrary.simpleMessage("Items"),
         "job_opportunity":

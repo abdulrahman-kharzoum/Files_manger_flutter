@@ -34,18 +34,15 @@ class PendingFilesScreen extends StatelessWidget {
             listener: (BuildContext context, PendingState state) {
               if (state is PendingLoading) {
                 loadingDialog(context: context, mediaQuery: mediaQuery);
-              }
-              if (state is PendingFileAcceptedOrRejectedSuccessState) {
+              } else if (state is PendingFileAcceptedOrRejectedSuccessState) {
                 Navigator.pop(context);
                 Navigator.pop(context);
                 accepted
                     ? showLightSnackBar(context, S.of(context).accepted)
                     : showLightSnackBar(context, S.of(context).rejected);
-              }
-              if (state is PendingNoData) {
+              } else if (state is PendingNoData) {
                 NoData(iconData: Icons.search, text: S.of(context).no_data);
-              }
-              if (state is PendingFailedState) {
+              } else if (state is PendingFailedState) {
                 errorDialog(context: context, text: state.errorMessage);
               }
             },

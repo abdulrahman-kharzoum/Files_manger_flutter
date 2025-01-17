@@ -208,6 +208,8 @@ class ShowApplicationsData extends StatelessWidget {
                                                   .getApplicationName(),
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
+                                              style: TextStyle(
+                                                color: Theme.of(context).textTheme.headlineSmall!.color,),
                                             ),
                                           ),
                                         ),
@@ -336,7 +338,10 @@ class ShowApplicationsData extends StatelessWidget {
                                                 : mediaQuery.width / 1.5,
                                             child: Text(boardCubit
                                                 .currentBoard.allFiles[index]
-                                                .getApplicationName()),
+                                                .getApplicationName(),
+                                                style: TextStyle(
+                                                color: Theme.of(context).textTheme.headlineSmall!.color,),
+                                  ),
                                           ),
                                         ),
                                         Statics.isPlatformDesktop
@@ -346,8 +351,9 @@ class ShowApplicationsData extends StatelessWidget {
                                                         .currentBoard
                                                         .allFiles[index]
                                                         .getApplicationCreateDate()),
-                                                style: TextStyle(
-                                                    color: Colors.black38),
+                                          style: TextStyle(
+                                            color: Theme.of(context).textTheme.headlineSmall!.color,),
+
                                               )
                                             : const SizedBox()
                                       ],

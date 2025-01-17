@@ -6632,6 +6632,16 @@ class S {
     );
   }
 
+  /// `Invite has been Deleted`
+  String get invite_deleted {
+    return Intl.message(
+      'Invite has been Deleted',
+      name: 'invite_deleted',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Success!, waiting for group admin's approval.`
   String get waiting_admin {
     return Intl.message(

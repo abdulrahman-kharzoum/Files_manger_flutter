@@ -38,7 +38,7 @@ class PendingScreen extends StatelessWidget {
               if (state is PendingLoading) {
                 loadingDialog(context: context, mediaQuery: mediaQuery);
               }
-              if(state is PendingNoData){
+              if (state is PendingNoData) {
                 NoData(iconData: Icons.search, text: S.of(context).no_data);
               }
               if (state is PendingFailedState) {
@@ -47,6 +47,10 @@ class PendingScreen extends StatelessWidget {
               if (state is PendingInviteAcceptedSuccessState) {
                 Navigator.pop(context);
                 showLightSnackBar(context, S.of(context).invite_accepted);
+              }
+              if (state is PendingInviteDeletedSuccessState) {
+                Navigator.pop(context);
+                showLightSnackBar(context, S.of(context).invite_deleted);
               }
             },
             builder: (context, state) {
@@ -59,7 +63,7 @@ class PendingScreen extends StatelessWidget {
                     invitationResponse.invitationsToMe;
 
                 if (invitations.isEmpty) {
-                  return Center(child: Text('No invitations available.'));
+                  return Center(child: NoData(iconData: Icons.search, text: S.of(context).no_data));
                 }
 
                 return Expanded(
@@ -97,20 +101,33 @@ class PendingScreen extends StatelessWidget {
                                   inviteId: invitation.id,
                                 );
                               },
-                        onDelete: invitation.inviter?.name == user.name
-                            ? null
-                            : () async {
-                                await cubit.deleteInvite(
-                                  context: context,
-                                  inviteId: invitation.id,
-                                );
-                              },
+                        onDelete: () async {
+
+                          invitations.removeAt(index);
+
+
+                          if (invitation.inviter?.name == user.name) {
+                            invitationResponse.invitationsFromMe.removeWhere((invite) => invite.id == invitation.id);
+
+                            await cubit.deleteInvite(
+                              context: context,
+                              inviteId: invitation.id,
+                            );
+                          } else {
+                            invitationResponse.invitationsToMe.removeWhere((invite) => invite.id == invitation.id);
+                          }
+
+
+                          cubit.emitUpdatedState(invitations);
+
+
+                        },
+                        // cubit.(invitations);
                       );
                     },
                   ),
                 );
               }
-
 
               return Container();
             },

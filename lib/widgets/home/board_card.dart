@@ -202,7 +202,8 @@ class BoardWidget extends StatelessWidget {
                                         : mediaQuery.width / 90,
                                   ),
                                   Text(
-                                    '${currentBoard!.allFiles.length}',
+
+                                    '${currentBoard!.filesNumber}',
                                     style: const TextStyle(
                                       color: Colors.black38,
                                       fontSize: 13,

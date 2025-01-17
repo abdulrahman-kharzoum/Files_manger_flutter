@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:files_manager/core/functions/apis_error_handler.dart';
@@ -10,6 +12,7 @@ import 'package:files_manager/models/group.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as Dio;
 import '../../core/server/dio_settings.dart';
+import '../../models/Api_user.dart';
 import '../../models/invite_model.dart';
 
 part 'pending_state.dart';
@@ -18,6 +21,8 @@ class PendingCubit extends Cubit<PendingState> {
   PendingCubit() : super(PendingInitial());
   final List<Application> applicationsToApprove = [];
   int? group_id ;
+  List<Invite> invitations = [];
+
   Future<void> getAllFilesToApprove({
     required BuildContext context,
     required int groupId,
@@ -42,6 +47,10 @@ class PendingCubit extends Cubit<PendingState> {
       if (response.statusCode == 200) {
         if (response.data['data'] == null || (response.data["data"] as List).isEmpty){
           emit(PendingNoData());
+          print("no data");
+          return;
+
+
         }
         final FilesList = response.data['data'] as List;
         applicationsToApprove.clear();
@@ -105,8 +114,10 @@ class PendingCubit extends Cubit<PendingState> {
       if (response.statusCode == 200) {
         final data = response.data['data'];
         print(response.data['data']);
-        if (response.data['data'] == null || (response.data["data"] as List).isEmpty){
+
+        if (data == null || (data['invitationsFromMe'] == null && data['invitationsToMe'] == null)) {
           emit(PendingNoData());
+          return;
         }
         InvitationResponse invitationResponse =
             InvitationResponse.fromJson(data);
@@ -177,6 +188,18 @@ class PendingCubit extends Cubit<PendingState> {
       }
     }
   }
+  void emitUpdatedState(List<Invite> updatedInvitations) {
+    var userModelData = CashNetwork.getCashData(key: 'user_model');
+    var user = UserModel.fromJson(jsonDecode(userModelData));
+    emit(PendingSuccessState(
+      invitationResponse: InvitationResponse(
+        invitationsFromMe: updatedInvitations.where((i) => i.inviterId == user.id).toList(),
+        invitationsToMe: updatedInvitations.where((i) => i.userId == user.id).toList(),
+        message: 'Invitations updated',
+      ),
+    ));
+  }
+
   Future<void> deleteInvite({
     required BuildContext context,
     required int inviteId,
@@ -194,6 +217,8 @@ class PendingCubit extends Cubit<PendingState> {
       );
       print('===================Invitation Delete==============');
       if (response.statusCode == 200) {
+        invitations.removeWhere((invite) => invite.id == inviteId);
+        emitUpdatedState(invitations);
         // final data = response.data['data'];
         print(response.data['data']);
 
