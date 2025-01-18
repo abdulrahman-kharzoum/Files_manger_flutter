@@ -247,7 +247,7 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
             .map<GroupModel>((item) => GroupModel.fromJson(item))
             .toList();
 
-            // Convert the list of GroupModel to a JSON string
+
         String allGroupsJsonString = jsonEncode(
           allGroups.map((group) => group.toJson()).toList(),
         );
@@ -258,47 +258,50 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
           value: allGroupsJsonString,
         );
 
-
-        // Retrieve the JSON string from cache
-        final cachedData = await CashNetwork.getCashData(key: 'my_groups');
-
-        if (cachedData != null && cachedData is String) {
-          // Decode the JSON string
-          List<dynamic> groupJsonList = jsonDecode(cachedData);
-
-          // Convert to a list of GroupModel
-          List<GroupModel> allGroups = groupJsonList
-              .map<GroupModel>((json) => GroupModel.fromJson(json))
-              .toList();
-
-          // Example: Retrieve a specific group by ID
-          int groupIdToFind = 15; // Replace with the desired group ID
-          GroupModel? specificGroup = allGroups.firstWhere(
-                (group) => group.id == groupIdToFind,
-            orElse: () => GroupModel(
-              id: 0, // Default ID
-              name: '', // Default name
-              description: '', // Default description
-              color: '', // Default color
-              lang: '', // Default language
-              creatorId: 0, // Default creator ID
-              files: [], // Empty list for files
-            ),
-          );
-
-
-          if (specificGroup != null) {
-            print('Group ID: ${specificGroup.id}');
-            print('Files: ${specificGroup.files}');
-          } else {
-            print('Group not found');
-          }
-        }
+        //
+        // // Retrieve the JSON string from cache
+        // final cachedData = await CashNetwork.getCashData(key: 'my_groups');
+        //
+        // if (cachedData != null && cachedData is String) {
+        //   // Decode the JSON string
+        //   List<dynamic> groupJsonList = jsonDecode(cachedData);
+        //
+        //   // Convert to a list of GroupModel
+        //   List<GroupModel> allGroups = groupJsonList
+        //       .map<GroupModel>((json) => GroupModel.fromJson(json))
+        //       .toList();
+        //
+        //   // Example: Retrieve a specific group by ID
+        //   int groupIdToFind = 15; // Replace with the desired group ID
+        //   GroupModel? specificGroup = allGroups.firstWhere(
+        //         (group) => group.id == groupIdToFind,
+        //     orElse: () => GroupModel(
+        //       id: 0, // Default ID
+        //       name: '', // Default name
+        //       description: '', // Default description
+        //       color: '', // Default color
+        //       lang: '', // Default language
+        //       creatorId: 0, // Default creator ID
+        //       files: [], // Empty list for files
+        //     ),
+        //   );
+        //
+        //
+        //   if (specificGroup != null) {
+        //     print('Group ID: ${specificGroup.id}');
+        //     print('Files: ${specificGroup.files}');
+        //   } else {
+        //     print('Group not found');
+        //   }
+        // }
 
         print('Total groups fetched: ${allGroups.length}');
 
         List<Board> newBoards = allGroups.map((group) {
           final Board newBoard = Board.fromGroup(group);
+          newBoard.members = group.members!
+              .map((user) => Member.fromUserModel(user))
+              .toList();
           allBoards.add(newBoard);
           print('Fetched board for group ${group.name}');
           return newBoard;

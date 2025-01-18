@@ -133,6 +133,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Change password"),
         "change_role": MessageLookupByLibrary.simpleMessage("Change Role"),
         "chat": MessageLookupByLibrary.simpleMessage("Chat"),
+        "checked":
+            MessageLookupByLibrary.simpleMessage("File Checked Successfully"),
         "checkout": MessageLookupByLibrary.simpleMessage("Checkout"),
         "choose_one_gift":
             MessageLookupByLibrary.simpleMessage("Choose one Gift"),

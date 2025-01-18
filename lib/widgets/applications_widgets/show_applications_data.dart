@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:files_manager/core/functions/snackbar_function.dart';
 import 'package:files_manager/cubits/board_add_application_cubit/board_add_application_cubit.dart';
 import 'package:files_manager/generated/l10n.dart';
 import 'package:files_manager/interfaces/applications_abstract.dart';
+import 'package:files_manager/models/Api_user.dart';
 import 'package:files_manager/models/file_model.dart';
 
 import 'package:flutter/material.dart';
@@ -28,13 +32,14 @@ class ShowApplicationsData extends StatelessWidget {
   const ShowApplicationsData({super.key, required this.allBoardsCubit});
 
   final AllBoardsCubit allBoardsCubit;
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     final applicationCubit = context.read<ApplicationCubit>();
     final boardCubit = context.read<BoardCubit>();
-
-
+    var user_model = CashNetwork.getCashData(key: 'user_model');
+    var user = UserModel.fromJson(jsonDecode(user_model));
     return Localizations.override(
       context: context,
       child: BlocConsumer<ApplicationCubit, ApplicationState>(
@@ -98,12 +103,16 @@ class ShowApplicationsData extends StatelessWidget {
             boardCubit.currentBoard.allFiles.addAll(state.newBoardsApp);
 
             // Navigator.pop(context);
-          }else if (state is BoardDeleteApplicationSuccess){
+          } else if (state is BoardDeleteApplicationSuccess) {
             showLightSnackBar(context, S.of(context).delete);
             Navigator.of(context).pop();
-
-          }if (state is BoardDeleteApplicationLoading) {
+          }
+          if (state is BoardDeleteApplicationLoading ||
+              state is BoardCheckApplicationLoading) {
             loadingDialog(context: context, mediaQuery: mediaQuery);
+          } else if (state is BoardCheckApplicationSuccess) {
+            showLightSnackBar(context, S.of(context).checked);
+            Navigator.of(context).pop();
           }
         },
         builder: (context, state) {
@@ -190,13 +199,13 @@ class ShowApplicationsData extends StatelessWidget {
                                             onTap: () async {
                                               await applicationCubit
                                                   .deleteApplicationFunction(
-                                                  context: context,
-                                                  fileId: boardCubit
-                                                      .currentBoard
-                                                      .allFiles[index]
-                                                      .getApplicationId(),
-                                                  groupId: boardCubit
-                                                      .currentBoard.id);
+                                                      context: context,
+                                                      fileId: boardCubit
+                                                          .currentBoard
+                                                          .allFiles[index]
+                                                          .getApplicationId(),
+                                                      groupId: boardCubit
+                                                          .currentBoard.id);
                                             },
                                             leading: const Icon(Icons.delete),
                                             title: Text('Delete'),
@@ -300,15 +309,44 @@ class ShowApplicationsData extends StatelessWidget {
                                       icon: const Icon(Icons.more_vert),
                                       onSelected: (value) async {
                                         if (value == 'checkout') {
+                                          FilePickerResult? result =
+                                              await FilePicker.platform
+                                                  .pickFiles();
+
+                                          if (result != null) {
+                                            final selectedFile =
+                                                result.files.first;
+                                            print(
+                                                "=========files selected to check out ===========");
+                                            print(result.files.length);
+                                            await applicationCubit
+                                                .checkOutApplicationFunction(
+                                                    context: context,
+                                                    fileId: boardCubit
+                                                        .currentBoard
+                                                        .allFiles[index]
+                                                        .getApplicationId(),
+                                                    file: selectedFile);
+                                          }
+
                                           await boardCubit.checkOut(
                                               file: boardCubit.currentBoard
                                                       .allFiles[index]
                                                   as FileModel);
                                         } else if (value == 'checkIn') {
-                                          await boardCubit.checkIn(
-                                              file: boardCubit.currentBoard
+
+                                          await applicationCubit
+                                              .checkApplicationFunction(
+                                                  context: context,
+                                                  fileId: boardCubit
+                                                      .currentBoard
                                                       .allFiles[index]
-                                                  as FileModel);
+                                                      .getApplicationId());
+                                          await boardCubit.checkIn(
+                                              m: Member.fromUserModel(user),
+                                              file: boardCubit.currentBoard
+                                                  .allFiles[index]
+                                              as FileModel);
                                         } else if (value == 'share') {
                                           print('Share');
                                           // share();
@@ -323,6 +361,15 @@ class ShowApplicationsData extends StatelessWidget {
                                               ? 'checkout'
                                               : 'checkIn',
                                           child: ListTile(
+                                            onTap: () async {
+                                              await applicationCubit
+                                                  .checkApplicationFunction(
+                                                      context: context,
+                                                      fileId: boardCubit
+                                                          .currentBoard
+                                                          .allFiles[index]
+                                                          .getApplicationId());
+                                            },
                                             leading: Icon(boardCubit
                                                         .currentBoard
                                                         .allFiles[index]

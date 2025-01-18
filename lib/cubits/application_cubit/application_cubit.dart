@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 
 import 'package:dio/dio.dart' as Dio;
+import 'package:file_picker/file_picker.dart';
 import 'package:files_manager/models/folder_model.dart';
 import 'package:files_manager/models/file_model.dart';
 import 'package:files_manager/models/group.dart';
@@ -169,6 +170,137 @@ class ApplicationCubit extends Cubit<ApplicationState> {
             errorMessage: e.response?.data['message']));
       }
     catch (e) {
+      emit(GetAllApplicationsInBoardFailure(errorMessage: e.toString()));
+    }
+  }
+
+  Future<void> checkApplicationFunction({
+    required BuildContext context,
+    required int fileId,
+
+  }) async {
+    emit(BoardCheckApplicationLoading());
+    try {
+      String? token = CashNetwork.getCashData(key: 'token');
+      print("=========================Check file=======================");
+      final response = await dio().post(
+        'files/$fileId/check-in',
+
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print("=========================Check file 200=======================");
+        print(response.data);
+
+        emit(BoardCheckApplicationSuccess());
+      }
+    } on DioException catch (e) {
+      errorHandler(e: e, context: context);
+
+      emit(GetAllApplicationsInBoardFailure(
+          errorMessage: e.response?.data['message']));
+    }
+    catch (e) {
+      emit(GetAllApplicationsInBoardFailure(errorMessage: e.toString()));
+    }
+  }
+
+
+  Future<void> checkMultiApplicationFunction({
+    required BuildContext context,
+    required List<int> filesId,
+
+  }) async {
+    emit(BoardMultiCheckApplicationLoading());
+    try {
+      String? token = CashNetwork.getCashData(key: 'token');
+      print("=========================Check Multi=======================");
+      final response = await dio().post(
+        'files/4,5,6/bulk-check-in',
+
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print("=========================Check Multi 200=======================");
+        print(response.data);
+
+        emit(BoardMultiCheckApplicationSuccess());
+      }
+    } on DioException catch (e) {
+      errorHandler(e: e, context: context);
+
+      emit(GetAllApplicationsInBoardFailure(
+          errorMessage: e.response?.data['message']));
+    }
+    catch (e) {
+      emit(GetAllApplicationsInBoardFailure(errorMessage: e.toString()));
+    }
+  }
+
+  Future<void> checkOutApplicationFunction({
+    required BuildContext context,
+
+    required int fileId,
+
+    required PlatformFile? file,
+  }) async {
+    emit(BoardCheckOutApplicationLoading());
+
+    try {
+      String? token = CashNetwork.getCashData(key: 'token');
+       Map<String,dynamic> data = {
+
+      };
+
+      if (file != null) {
+        if (file.bytes != null) {
+
+          data['path'] = MultipartFile.fromBytes(
+            file.bytes!,
+            filename: file.name,
+          );
+        } else if (file.path != null) {
+          // Use the path for other platforms
+          data['path'] = await MultipartFile.fromFile(
+            file.path!,
+            filename: file.name,
+          );
+        } else {
+          throw Exception('File is invalid. Both path and bytes are null.');
+        }
+      }
+
+
+      final formData = FormData.fromMap(data);
+
+      final response = await dio().post(
+        'files/create',
+        data: formData,
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print("==========Check OUT 200====================");
+        print(response.data);
+      emit(BoardCheckOutApplicationSuccess());
+      } else {
+        emit(
+            GetAllApplicationsInBoardFailure(errorMessage: response.data['message']));
+      }
+    } on DioException catch (e) {
+      errorHandler(e: e, context: context);
+   emit(GetAllApplicationsInBoardFailure(
+            errorMessage: e.response?.data['message']));
+
+    } catch (e) {
       emit(GetAllApplicationsInBoardFailure(errorMessage: e.toString()));
     }
   }

@@ -13,7 +13,7 @@ import '../../../core/animation/dialogs/dialogs.dart';
 import '../../../core/notification/notification_web.dart';
 import '../../../core/shared/connect.dart';
 
-import '../../../core/shared/connectWeb.dart';
+
 import '../../../generated/l10n.dart';
 import '../../../models/Api_user.dart';
 

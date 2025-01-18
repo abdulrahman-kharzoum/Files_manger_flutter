@@ -18,9 +18,9 @@ class SplashScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is SplashLoginState) {
             if (cubit.checkInternetCounter >= 0) {
-              print('hello 3');
-
-              Navigator.pop(context);
+              print('===============No Internet===========');
+              errorDialog(context: context, text: "No Internet");
+              // Navigator.pop(context);
             }
             print('hello 1');
             state.isLogIn == true

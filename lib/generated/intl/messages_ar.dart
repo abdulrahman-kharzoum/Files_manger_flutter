@@ -129,6 +129,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تغيير كلمة المرور"),
         "change_role": MessageLookupByLibrary.simpleMessage("تغيير الدور"),
         "chat": MessageLookupByLibrary.simpleMessage("محادثة"),
+        "checked": MessageLookupByLibrary.simpleMessage("تم حجز الملف بنجاح"),
         "checkout": MessageLookupByLibrary.simpleMessage("تسجيل الدفع"),
         "choose_one_gift":
             MessageLookupByLibrary.simpleMessage("اختر هدية واحدة"),

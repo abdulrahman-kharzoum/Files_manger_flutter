@@ -10,6 +10,12 @@ final class NavigationInProgress extends ApplicationState {}
 final class NavigationCompleted extends ApplicationState {}
 final class GetAllApplicationsInFolderLoading extends ApplicationState {}
 final class BoardDeleteApplicationLoading extends ApplicationState {}
+final class BoardCheckApplicationLoading extends ApplicationState {}
+final class BoardMultiCheckApplicationLoading extends ApplicationState {}
+final class BoardCheckOutApplicationLoading extends ApplicationState {}
+final class BoardCheckApplicationSuccess extends ApplicationState {}
+final class BoardCheckOutApplicationSuccess extends ApplicationState {}
+final class BoardMultiCheckApplicationSuccess extends ApplicationState {}
 
 final class BoardDeleteApplicationSuccess extends ApplicationState {}
 final class GetAllApplicationsInBoardSuccess extends ApplicationState {

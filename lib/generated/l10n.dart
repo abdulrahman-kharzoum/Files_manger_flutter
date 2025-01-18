@@ -6702,6 +6702,16 @@ class S {
     );
   }
 
+  /// `File Checked Successfully`
+  String get checked {
+    return Intl.message(
+      'File Checked Successfully',
+      name: 'checked',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Kick`
   String get kick {
     return Intl.message(

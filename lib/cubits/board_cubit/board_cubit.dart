@@ -47,21 +47,8 @@ class BoardCubit extends Cubit<BoardState> {
   }
 
 
-  Future<void> checkIn({required FileModel file}) async {
-    file.member = Member(
-        id: 1,
-        country: Country(id: 1, name: 'damascus', iso3: '+963', code: '123'),
-        language: Language(id: 1, name: 'english', code: 'en', direction: 'lr'),
-        gender: Gender(id: 1, type: 'male'),
-        firstName: 'Alaa',
-        lastName: 'Shibany',
-        mainRole: 'admin',
-        role: 'admin',
-        dateOfBirth: '2002-11-28',
-        countryCode: '+963',
-        phone: '981233473',
-        email: 'alaashibany@gmail.com',
-        image: '');
+  Future<void> checkIn({required FileModel file, required Member m}) async {
+    file.member = m;
     emit(BoardInitial());
   }
 

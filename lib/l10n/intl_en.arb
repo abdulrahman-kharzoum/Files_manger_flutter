@@ -664,6 +664,7 @@
   "files_to_approve": "Files awaiting approval by the admin group",
   "accepted": "File accepted Successfully",
   "rejected": "File rejected Successfully",
+  "checked": "File Checked Successfully",
   "kick": "Kick"
 
 
