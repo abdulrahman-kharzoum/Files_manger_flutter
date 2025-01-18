@@ -10,8 +10,10 @@ import 'package:files_manager/core/server/dio_settings.dart';
 import 'package:files_manager/core/shared/local_network.dart';
 
 import '../../../core/animation/dialogs/dialogs.dart';
+import '../../../core/notification/notification_web.dart';
 import '../../../core/shared/connect.dart';
 
+import '../../../core/shared/connectWeb.dart';
 import '../../../generated/l10n.dart';
 import '../../../models/Api_user.dart';
 
@@ -33,22 +35,28 @@ class LoginCubit extends Cubit<LoginState> {
     required BuildContext context,
   }) async {
     try {
+      final notificationService = NotificationService();
       String? fcmToken =
           "jsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdfffffffffffffffffffffffffffffffffffffffffffdsfffffffff";
-      if (!Statics.isPlatformDesktop) {
+      fcmToken  =  await notificationService.getToken();
+      print("=============Check Internet===========");
+      // if (!Statics.isPlatformDesktop) {
+
         if (!await checkInternet()) {
           internetToast(context: context);
-          Navigator.of(context);
-          return;
-        }
-      } else {
-        // if (!await checkInternetForWeb()!) {
-        //   internetToast(context: context);
-        //   Navigator.of(context);
-        //   return;
-        // }
-      }
 
+          // Navigator.of(context).;
+          return;
+        // }
+      // } else {
+      //   print("=============Check Internet For web===========");
+      //   if (!await hasNetwork()!) {
+      //     internetToast(context: context);
+      //     Navigator.of(context);
+      //     return;
+      //   }
+      }
+      print("=============Internet Found===========");
       emit(LoginLoading());
       // print('The fcm token we will send to back => ${fcmToken.toString()}');
       // await FirebaseMessaging.instance.deleteToken().then(
@@ -59,6 +67,7 @@ class LoginCubit extends Cubit<LoginState> {
       //         key: 'fcm_token', value: fcmToken.toString());
       //   },
       // );
+
       print('The fcm token is => $fcmToken');
       final response = await dio().post('/auth/login', data: {
         'email': email,
