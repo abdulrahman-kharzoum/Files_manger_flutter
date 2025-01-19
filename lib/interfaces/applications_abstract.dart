@@ -9,7 +9,9 @@ abstract class Application {
   IconData getIcon() {
     return Icons.category;
   }
-
+String getPath(){
+    return ' ';
+}
   String getApplicationName() {
     return 'application';
   }

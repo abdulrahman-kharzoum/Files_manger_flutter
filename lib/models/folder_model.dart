@@ -14,7 +14,7 @@ class FolderModel extends Application {
   BoardCubit? boardCubit;
   int? applicationColor;
   int id;
-  String? localPath;
+
   int boardId;
   String title;
   String mode;
@@ -23,6 +23,7 @@ class FolderModel extends Application {
   DateTime updatedAt;
   List<FileMode> allFiles = [];
   String? filesCount;
+  String? path;
 
   FolderModel(
       {required this.id,
@@ -32,9 +33,9 @@ class FolderModel extends Application {
       required this.allFiles,
       required this.createdAt,
       required this.updatedAt,
-      this.localPath,
       this.boardCubit,
-      this.filesCount});
+      this.filesCount,
+      this.path});
 
   factory FolderModel.fromJson(Map<String, dynamic> json) {
     return FolderModel(
@@ -45,7 +46,7 @@ class FolderModel extends Application {
         mode: json['mode'],
         createdAt: json['created_at'],
         updatedAt: json['updated_at'],
-        localPath: '');
+        path: '');
   }
 
   // Add fromFileApi method for FolderModel
@@ -56,14 +57,17 @@ class FolderModel extends Application {
       title: fileApi.name,
       mode: fileApi.extension ?? 'unknown',
       allFiles: [],
-
+      path: fileApi.path,
       createdAt: fileApi.dateTime!,
       // Assign based on the API response or current time
       updatedAt:
           fileApi.dateTime!, // Assign based on the API response or current time
     );
   }
-
+  @override
+  String getPath(){
+    return path!;
+  }
   @override
   DateTime getApplicationCreateDate() {
     return updatedAt;

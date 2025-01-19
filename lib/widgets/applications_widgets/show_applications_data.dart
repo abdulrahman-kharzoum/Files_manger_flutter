@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:files_manager/core/functions/snackbar_function.dart';
-import 'package:files_manager/cubits/board_add_application_cubit/board_add_application_cubit.dart';
 import 'package:files_manager/generated/l10n.dart';
 import 'package:files_manager/interfaces/applications_abstract.dart';
 import 'package:files_manager/models/Api_user.dart';
@@ -28,10 +27,35 @@ import '../../core/functions/statics.dart';
 import '../../models/member_model.dart';
 import '../../theme/color.dart';
 
-class ShowApplicationsData extends StatelessWidget {
+class ShowApplicationsData extends StatefulWidget {
   const ShowApplicationsData({super.key, required this.allBoardsCubit});
 
   final AllBoardsCubit allBoardsCubit;
+
+  @override
+  State<ShowApplicationsData> createState() => _ShowApplicationsDataState();
+}
+
+class _ShowApplicationsDataState extends State<ShowApplicationsData> {
+  final Set<String> selectedFiles = {};
+  final Set<int> selectedIndexes = {};
+  int currentIndex = -1;
+
+  void toggleSelection(String fileId) {
+    setState(() {
+      if (selectedFiles.contains(fileId)) {
+        selectedFiles.remove(fileId);
+      } else {
+        selectedFiles.add(fileId);
+      }
+    });
+  }
+
+  void clearSelection() {
+    setState(() {
+      selectedFiles.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +67,15 @@ class ShowApplicationsData extends StatelessWidget {
     return Localizations.override(
       context: context,
       child: BlocConsumer<ApplicationCubit, ApplicationState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is GetAllApplicationsInBoardLoading ||
               state is GetAllApplicationsInFolderLoading) {
             // loadingDialog(context: context, mediaQuery: mediaQuery);
           }
 
           if (state is GetAllApplicationsInBoardFailure) {
+            Navigator.pop(context);
+
             errorDialog(context: context, text: state.errorMessage);
           } else if (state is AllBoardsExpiredState) {
             showExpiredDialog(
@@ -108,11 +134,47 @@ class ShowApplicationsData extends StatelessWidget {
             Navigator.of(context).pop();
           }
           if (state is BoardDeleteApplicationLoading ||
-              state is BoardCheckApplicationLoading) {
+              state is BoardCheckApplicationLoading ||
+              state is BoardMultiCheckApplicationLoading ||
+              state is BoardCheckOutApplicationLoading) {
             loadingDialog(context: context, mediaQuery: mediaQuery);
           } else if (state is BoardCheckApplicationSuccess) {
             showLightSnackBar(context, S.of(context).checked);
             Navigator.of(context).pop();
+          } else if (state is BoardMultiCheckApplicationSuccess) {
+            showLightSnackBar(context, S.of(context).checked);
+            Navigator.of(context).pop();
+            setState(() {
+
+              selectedFiles.clear();
+            });
+          } else if (state is BoardCheckOutApplicationSuccess) {
+            showLightSnackBar(context, S.of(context).checkout);
+            Navigator.of(context).pop();
+          }
+          if (state is BoardCheckApplicationSuccess && currentIndex != -1) {
+            await boardCubit.checkIn(
+                m: Member.fromUserModel(user),
+                file: boardCubit.currentBoard.allFiles[currentIndex]
+                    as FileModel);
+            await applicationCubit.getFileApplicationFunction(
+                context: context,
+                fileName: boardCubit.currentBoard.allFiles[currentIndex]
+                    .getApplicationName(),
+                filePath:
+                    boardCubit.currentBoard.allFiles[currentIndex].getPath());
+          } else if (state is BoardCheckOutApplicationSuccess &&
+              currentIndex != -1) {
+            await boardCubit.checkOut(
+                file: boardCubit.currentBoard.allFiles[currentIndex]
+                    as FileModel);
+          } else if (state is BoardMultiCheckApplicationSuccess &&
+              selectedIndexes.isNotEmpty) {
+            for (int indexx in selectedIndexes) {
+              await boardCubit.checkIn(
+                  m: Member.fromUserModel(user),
+                  file: boardCubit.currentBoard.allFiles[indexx] as FileModel);
+            }
           }
         },
         builder: (context, state) {
@@ -138,14 +200,47 @@ class ShowApplicationsData extends StatelessWidget {
                             : 'Root',
                         style: TextStyle(
                             fontSize: 16,
-                            color: Theme.of(context)
-                                .textTheme
-                                .headlineSmall!
-                                .color,
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                    if (selectedFiles.isNotEmpty)
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: clearSelection,
+                            child: Text(
+                              "Unselect",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
+                            onPressed: () async {
+                              await applicationCubit
+                                  .checkMultiApplicationFunction(
+                                      context: context, filesId: selectedFiles);
+
+                              print("Check In: $selectedFiles");
+                            },
+                            child: Text(
+                              "Check In",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -185,13 +280,13 @@ class ShowApplicationsData extends StatelessWidget {
                                     leading: Icon(Icons.folder),
                                     trailing: PopupMenuButton(
                                       icon: const Icon(Icons.more_vert),
-                                      onSelected: (value) {
-                                        if (value == 'settings') {
-                                        } else if (value == 'share') {
-                                          print('Share');
-                                          // share();
-                                        }
-                                      },
+                                      // onSelected: (value) {
+                                      //   if (value == 'settings') {
+                                      //   } else if (value == 'share') {
+                                      //     print('Share');
+                                      //     // share();
+                                      //   }
+                                      // },
                                       itemBuilder: (context) => [
                                         PopupMenuItem(
                                           value: 'Delete',
@@ -275,9 +370,30 @@ class ShowApplicationsData extends StatelessWidget {
                                       .labelLarge!
                                       .color,
                                   child: ListTile(
-                                    leading: Icon(boardCubit
-                                        .currentBoard.allFiles[index]
-                                        .getIcon()),
+                                    leading: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Checkbox(
+                                          value: selectedFiles.contains(
+                                              boardCubit
+                                                  .currentBoard.allFiles[index]
+                                                  .getApplicationId()
+                                                  .toString()),
+                                          onChanged: (isSelected) {
+                                            selectedIndexes.add(index);
+                                            toggleSelection(boardCubit
+                                                .currentBoard.allFiles[index]
+                                                .getApplicationId()
+                                                .toString());
+                                          },
+                                        ),
+                                        Icon(boardCubit
+                                            .currentBoard.allFiles[index]
+                                            .getIcon()),
+                                      ],
+                                    ),
                                     subtitle: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -327,14 +443,14 @@ class ShowApplicationsData extends StatelessWidget {
                                                         .allFiles[index]
                                                         .getApplicationId(),
                                                     file: selectedFile);
+                                            currentIndex = index;
                                           }
-
-                                          await boardCubit.checkOut(
-                                              file: boardCubit.currentBoard
-                                                      .allFiles[index]
-                                                  as FileModel);
                                         } else if (value == 'checkIn') {
-
+                                          print(
+                                              "===========File Path==============");
+                                          print(boardCubit
+                                              .currentBoard.allFiles[index]
+                                              .getPath());
                                           await applicationCubit
                                               .checkApplicationFunction(
                                                   context: context,
@@ -342,11 +458,7 @@ class ShowApplicationsData extends StatelessWidget {
                                                       .currentBoard
                                                       .allFiles[index]
                                                       .getApplicationId());
-                                          await boardCubit.checkIn(
-                                              m: Member.fromUserModel(user),
-                                              file: boardCubit.currentBoard
-                                                  .allFiles[index]
-                                              as FileModel);
+                                          currentIndex = index;
                                         } else if (value == 'share') {
                                           print('Share');
                                           // share();
@@ -361,15 +473,6 @@ class ShowApplicationsData extends StatelessWidget {
                                               ? 'checkout'
                                               : 'checkIn',
                                           child: ListTile(
-                                            onTap: () async {
-                                              await applicationCubit
-                                                  .checkApplicationFunction(
-                                                      context: context,
-                                                      fileId: boardCubit
-                                                          .currentBoard
-                                                          .allFiles[index]
-                                                          .getApplicationId());
-                                            },
                                             leading: Icon(boardCubit
                                                         .currentBoard
                                                         .allFiles[index]

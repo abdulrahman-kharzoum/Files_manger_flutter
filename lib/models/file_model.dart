@@ -16,7 +16,7 @@ import 'package:files_manager/models/member_model.dart';
     IconData icon = Icons.file_copy;
     int? applicationColor;
     Member? member;
-    String? localPath;
+    String? path;
     FileModel({
       required this.id,
       required this.boardId,
@@ -24,7 +24,7 @@ import 'package:files_manager/models/member_model.dart';
       required this.mode,
       required this.createdAt,
       required this.updatedAt,
-      this.localPath
+      this.path
       // required this.applicationName,
       // required this.boardCubit,
     });
@@ -49,7 +49,7 @@ import 'package:files_manager/models/member_model.dart';
         mode: json['mode'],
         createdAt: DateTime.parse(json['created_at']),
         updatedAt: DateTime.parse(json['updated_at']),
-        localPath: ''
+        path: ''
       );
     }
 
@@ -63,9 +63,13 @@ import 'package:files_manager/models/member_model.dart';
         mode: fileApi.extension ?? 'unknown',
         createdAt: fileApi.dateTime!,
         updatedAt:  fileApi.dateTime!,
+        path: fileApi.path
       );
     }
-
+    @override
+    String getPath(){
+      return path!;
+    }
     @override
     Member? getApplicationOwner() {
       return member;

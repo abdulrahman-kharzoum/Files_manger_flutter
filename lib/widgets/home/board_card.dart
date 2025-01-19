@@ -203,7 +203,7 @@ class BoardWidget extends StatelessWidget {
                                   ),
                                   Text(
 
-                                    '${currentBoard!.filesNumber}',
+                                    '${currentBoard!.filesNumber == null ?0:currentBoard!.filesNumber}',
                                     style: const TextStyle(
                                       color: Colors.black38,
                                       fontSize: 13,
