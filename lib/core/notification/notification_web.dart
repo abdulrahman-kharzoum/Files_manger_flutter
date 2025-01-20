@@ -9,6 +9,10 @@ class NotificationService {
 
   void _showFlutterNotification(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
+    print("==============Notification==================");
+    print('------------------------------------------------------');
+    print('The body is =>${notification?.title}');
+    print('------------------------------------------------------');
     print('------------------------------------------------------');
     print('The body is =>${notification?.body}');
     print('------------------------------------------------------');

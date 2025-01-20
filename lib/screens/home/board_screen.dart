@@ -107,7 +107,7 @@ class BoardScreen extends StatelessWidget {
           IconButton(
             tooltip: S.of(context).daily_report,
             onPressed: () {
-              Navigator.of(context).pushNamed('/report_screen');
+              Navigator.of(context).pushNamed('/diff_screen');
             },
             icon: Icon(
               Icons.edit_document,

@@ -1,3 +1,4 @@
+import 'package:files_manager/screens/diff_screen/difference_screen.dart';
 import 'package:files_manager/screens/report_screen/admin_report_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,4 +106,13 @@ final Map<String, WidgetBuilder> routes = {
         create: (context) => PolicyCubit(),
         child: const TermsAndConditions(),
       ),
+  '/diff_screen': (context) => MultiBlocProvider(
+    providers: [
+      // BlocProvider(
+      //     create: (context) => FileReportCubit()..loadFileReportData()),
+      // BlocProvider(
+      //     create: (context) => UserReportCubit()..loadUserReportData()),
+    ],
+    child: DiffViewer(),
+  ),
 };
