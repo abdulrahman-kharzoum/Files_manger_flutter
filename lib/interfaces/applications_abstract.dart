@@ -1,3 +1,4 @@
+import 'package:files_manager/models/group.dart';
 import 'package:flutter/material.dart';
 import 'package:files_manager/cubits/all_boards_cubit/all_boards_cubit.dart';
 import 'package:files_manager/cubits/application_cubit/application_cubit.dart';
@@ -27,9 +28,18 @@ String getPath(){
   Member? getApplicationOwner() {
     return null;
   }
+  void setApplicationOwner(Member? m) {
+   m = null;
+
+  }
+
 
   bool isFolder() {
     return false;
+  }
+
+  ActiveCheckin? getCheckinInfo(){
+    return null;
   }
 
   String getLanguage() {

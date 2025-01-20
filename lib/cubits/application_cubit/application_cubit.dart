@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:file_saver/file_saver.dart';
@@ -263,10 +263,11 @@ class ApplicationCubit extends Cubit<ApplicationState> {
 
   Future<void> downloadFile() async {
     final url =
-        'http://127.0.0.1:8000/storage/files/UiHuvXzYt94HRePGcg9gXZjUu3y3vd1VXaJgQmai.bin';
+        'http://127.0.0.1:8000/storage/files/2hIJtYXM6a48h13EJLyv6Zm0e7bses.txt';
 
     // Fetch the file
     final response = await http.get(Uri.parse(url));
+
     print('respose $response');
     if (response.statusCode == 200) {
       // Create a blob from the response data
@@ -303,10 +304,39 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       print("===========Downlaod File ==============");
       // await downloadFile();
       if (filePath != null) {
-        String content = await rootBundle.loadString('assets/texts/abood.txt');
-        ByteData byteData = await rootBundle.load('assets/texts/abood.txt');
-        Uint8List fileBytes = byteData.buffer.asUint8List();
-        await FileSaver.instance.saveFile(name: 'test', bytes: fileBytes, ext: 'txt');
+
+        var client = dio();
+        client.options.baseUrl = FileUrl.fileUrl+filePath;
+        final response = await client.get(
+          '',
+
+        );
+
+        if (response.statusCode == 200) {
+
+          final bytes = response.data is String
+              ? utf8.encode(response.data) // Convert String to List<int>
+              : response.data;
+
+          // Encode as base64
+          final content = base64Encode(bytes);
+
+          // Create a download link and trigger a download
+          final anchor = html.AnchorElement(
+            href: 'data:application/octet-stream;base64,$content',
+          )
+            ..target = 'blank'
+            ..download = fileName; // File name for the download
+          anchor.click();
+          print('File downloaded successfully as $fileName');
+
+
+        }
+
+        // String content = await rootBundle.loadString('assets/texts/abood.txt');
+        // ByteData byteData = await rootBundle.load('assets/texts/abood.txt');
+        // Uint8List fileBytes = byteData.buffer.asUint8List();
+        // await FileSaver.instance.saveFile(name: 'test', bytes: fileBytes, ext: 'txt');
         // // Convert the file content to bytes (you can also directly pass bytes if you have them)
         // Uint8List fileBytes = Uint8List.fromList(fileContent.codeUnits);
         // // Pick a location to save the file using FilePicker
@@ -382,6 +412,10 @@ class ApplicationCubit extends Cubit<ApplicationState> {
   Future<void> checkApplicationFunction({
     required BuildContext context,
     required int fileId,
+    required int groupId,
+    required int index,
+
+
   }) async {
     emit(BoardCheckApplicationLoading());
     try {
@@ -397,14 +431,63 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       if (response.statusCode == 200) {
         print("=========================Check file 200=======================");
         print(response.data);
+        newBoardsApp.clear();
+        if(folderHistory.isEmpty){
+          await  getAllFilesBoard(context: context, groupId: groupId);
 
-        emit(BoardCheckApplicationSuccess());
+        }else{
+          await getAllFilesFolder(context: context, groupId: groupId, folderId: folderHistory.last);
+        }
+       // await initState(context:context,groupId: groupId);
+      emit(BoardCheckApplicationSuccess());
+       //  await showApplicationFunction(context: context,index: index,fileId: fileId,group_id: groupId);
       }else{
         emit(GetAllApplicationsInBoardFailure(
             errorMessage: response.data['message']));
       }
     } on DioException catch (e) {
       // errorHandler(e: e, context: context);
+
+      emit(GetAllApplicationsInBoardFailure(
+          errorMessage: e.response?.data['message']));
+    } catch (e) {
+      emit(GetAllApplicationsInBoardFailure(errorMessage: e.toString()));
+    }
+  }
+
+  Future<void> showApplicationFunction({
+    required BuildContext context,
+    required int fileId,
+    required int group_id,
+    required int index,
+
+  }) async {
+    // emit(BoardCheckApplicationLoading());
+    try {
+      String? token = CashNetwork.getCashData(key: 'token');
+      print("=========================Show file=======================");
+      final response = await dio().get(
+        'files/show/$fileId',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print("=========================Show file 200=======================");
+        FileApiModel fileApiModel = FileApiModel.fromJson(response.data);
+        // print(response);
+        print(fileApiModel.activeCheckin!.checkedInAt);
+        // newBoardsApp[index] = FileModel.fromFileApi(fileApiModel, group_id);
+        // emit(BoardCheckApplicationSuccess(file: newBoardsApp[index]));
+
+        // emit(BoardCheckApplicationSuccess());
+      }else{
+        emit(GetAllApplicationsInBoardFailure(
+            errorMessage: response.data['message']));
+      }
+    } on DioException catch (e) {
+      errorHandler(e: e, context: context);
 
       emit(GetAllApplicationsInBoardFailure(
           errorMessage: e.response?.data['message']));

@@ -37,10 +37,10 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       emit(LoginLoading());
 
-      // final notificationService = NotificationService();
+      final notificationService = NotificationService();
       String? fcmToken =
           "jsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdfffffffffffffffffffffffffffffffffffffffffffdsfffffffff";
-      // fcmToken  =  await notificationService.getToken();
+      fcmToken  =  await notificationService.getToken();
       print("=============Check Internet===========");
       // if (!Statics.isPlatformDesktop) {
 
@@ -58,6 +58,8 @@ class LoginCubit extends Cubit<LoginState> {
       //     return;
       //   }
       }
+      print("==========fcm==========");
+      print(await notificationService.getToken());
       print("=============Internet Found===========");
       // print('The fcm token we will send to back => ${fcmToken.toString()}');
       // await FirebaseMessaging.instance.deleteToken().then(

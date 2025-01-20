@@ -145,7 +145,6 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
             showLightSnackBar(context, S.of(context).checked);
             Navigator.of(context).pop();
             setState(() {
-
               selectedFiles.clear();
             });
           } else if (state is BoardCheckOutApplicationSuccess) {
@@ -153,6 +152,7 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
             Navigator.of(context).pop();
           }
           if (state is BoardCheckApplicationSuccess && currentIndex != -1) {
+
             await boardCubit.checkIn(
                 m: Member.fromUserModel(user),
                 file: boardCubit.currentBoard.allFiles[currentIndex]
@@ -168,6 +168,12 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
             await boardCubit.checkOut(
                 file: boardCubit.currentBoard.allFiles[currentIndex]
                     as FileModel);
+
+            boardCubit.currentBoard.allFiles[currentIndex]
+                .setApplicationOwner(null);
+
+            print(
+                "Check out ${boardCubit.currentBoard.allFiles[currentIndex].getApplicationOwner()?.email ?? 'No Owner'}");
           } else if (state is BoardMultiCheckApplicationSuccess &&
               selectedIndexes.isNotEmpty) {
             for (int indexx in selectedIndexes) {
@@ -253,6 +259,11 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                       children: List.generate(
                         boardCubit.currentBoard.allFiles.length,
                         (index) {
+                          print(
+                              'File ID: ${boardCubit.currentBoard.allFiles[index].getApplicationId()}, '
+                              'Owner: ${boardCubit.currentBoard.allFiles[index].getApplicationOwner()}, '
+                              'CheckinInfo: ${boardCubit.currentBoard.allFiles[index].getCheckinInfo()}');
+
                           return boardCubit.currentBoard.allFiles[index]
                                   .isFolder()
                               ? Card(
@@ -261,7 +272,7 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                       .labelLarge!
                                       .color,
                                   child: ListTile(
-                                    onTap: () {
+                                    onTap: () async {
                                       applicationCubit.folderHistory.add(
                                           boardCubit
                                               .currentBoard.allFiles[index]
@@ -270,7 +281,7 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                           boardCubit
                                               .currentBoard.allFiles[index]
                                               .getApplicationName());
-                                      applicationCubit.getAllFilesFolder(
+                                      await applicationCubit.getAllFilesFolder(
                                           context: context,
                                           groupId: boardCubit.currentBoard.id,
                                           folderId: boardCubit
@@ -399,26 +410,47 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                           CrossAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        boardCubit.currentBoard.allFiles[index]
-                                                    .getApplicationOwner() !=
-                                                null
-                                            ? Text('Booked by',
+                                        if (boardCubit
+                                                .currentBoard.allFiles[index]
+                                                .getApplicationOwner() !=
+                                            null)
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Booked by ${boardCubit.currentBoard.allFiles[index].getCheckinInfo()?.user?.name ?? 'Unknown'}',
                                                 style: TextStyle(
-                                                    color: Colors.red))
-                                            : Text(
-                                                'Free for editing',
-                                                style: TextStyle(
-                                                    color: Colors.green),
+                                                    color: Colors.red),
                                               ),
-                                        boardCubit.currentBoard.allFiles[index]
-                                                    .getApplicationOwner() !=
-                                                null
-                                            ? memberWidget(
-                                                member: boardCubit.currentBoard
-                                                    .allFiles[index]
-                                                    .getApplicationOwner()!,
-                                                mediaQuery: mediaQuery)
-                                            : const SizedBox()
+                                              Text(
+                                                'Check At ${boardCubit.currentBoard.allFiles[index].getCheckinInfo()?.checkedInAt != null ? DateFormat('yyyy-MM-dd HH:mm').format(boardCubit.currentBoard.allFiles[index].getCheckinInfo()!.checkedInAt!) : 'No Check-in Info'}',
+                                                style: TextStyle(
+                                                    color: Colors.redAccent),
+                                              ),
+                                            ],
+                                          )
+                                        else if (boardCubit
+                                                .currentBoard.allFiles[index]
+                                                .getApplicationOwner() ==
+                                            null)
+                                          Text(
+                                            'Free for editing',
+                                            style:
+                                                TextStyle(color: Colors.green),
+                                          ),
+                                        if (boardCubit
+                                                .currentBoard.allFiles[index]
+                                                .getApplicationOwner() !=
+                                            null)
+                                          memberWidget(
+                                            member: boardCubit
+                                                .currentBoard.allFiles[index]
+                                                .getApplicationOwner()!,
+                                            mediaQuery: mediaQuery,
+                                          )
+                                        else
+                                          const SizedBox(),
                                       ],
                                     ),
                                     trailing: PopupMenuButton(
@@ -432,9 +464,7 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                           if (result != null) {
                                             final selectedFile =
                                                 result.files.first;
-                                            print(
-                                                "=========files selected to check out ===========");
-                                            print(result.files.length);
+
                                             await applicationCubit
                                                 .checkOutApplicationFunction(
                                                     context: context,
@@ -453,11 +483,31 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                               .getPath());
                                           await applicationCubit
                                               .checkApplicationFunction(
+                                            index: index,
                                                   context: context,
                                                   fileId: boardCubit
                                                       .currentBoard
                                                       .allFiles[index]
-                                                      .getApplicationId());
+                                                      .getApplicationId(),
+                                                  groupId: boardCubit
+                                                      .currentBoard.id);
+                                          currentIndex = index;
+                                        } else if (value == 'checkIn') {
+                                          print(
+                                              "===========File Path==============");
+                                          print(boardCubit
+                                              .currentBoard.allFiles[index]
+                                              .getPath());
+                                          await applicationCubit
+                                              .checkApplicationFunction(
+                                                  context: context,
+                                                  fileId: boardCubit
+                                                      .currentBoard
+                                                      .allFiles[index]
+                                                      .getApplicationId(),
+                                                  index: index,
+                                                  groupId: boardCubit
+                                                      .currentBoard.id);
                                           currentIndex = index;
                                         } else if (value == 'share') {
                                           print('Share');

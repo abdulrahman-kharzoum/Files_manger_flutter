@@ -64,6 +64,7 @@ class FileApiModel {
   final int? parentId;
   final int creatorId;
   final DateTime? dateTime;
+  final ActiveCheckin? activeCheckin;
 
   FileApiModel({
     required this.id,
@@ -73,6 +74,7 @@ class FileApiModel {
     this.parentId,
     required this.creatorId,
     this.dateTime,
+    this.activeCheckin,
   });
 
   // From JSON
@@ -89,6 +91,9 @@ class FileApiModel {
       dateTime: json['date_time'] != null
           ? DateTime.tryParse(json['date_time'])
           : null,
+      activeCheckin: json['activeCheckin'] != null
+          ? ActiveCheckin.fromJson(json['activeCheckin'])
+          : null,
     );
   }
 
@@ -102,7 +107,55 @@ class FileApiModel {
       'parent_id': parentId,
       'creator_id': creatorId,
       'date_time': dateTime?.toIso8601String(),
+      'activeCheckin': activeCheckin?.toJson(),
     };
   }
 }
+
+class ActiveCheckin {
+  final int id;
+  final int fileId;
+  final int userId;
+  final DateTime? checkedInAt;
+  final DateTime? checkedOutAt;
+  final UserModel? user;
+
+  ActiveCheckin({
+    required this.id,
+    required this.fileId,
+    required this.userId,
+    this.checkedInAt,
+    this.checkedOutAt,
+    this.user,
+  });
+
+  // From JSON
+  factory ActiveCheckin.fromJson(Map<String, dynamic> json) {
+    return ActiveCheckin(
+      id: json['id'] ?? 0,
+      fileId: json['file_id'] ?? 0,
+      userId: json['user_id'] ?? 0,
+      checkedInAt: json['checked_in_at'] != null
+          ? DateTime.tryParse(json['checked_in_at'])
+          : null,
+      checkedOutAt: json['checked_out_at'] != null
+          ? DateTime.tryParse(json['checked_out_at'])
+          : null,
+      user: json['user'] != null ? UserModel.fromJson(json['user']) : null,
+    );
+  }
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'file_id': fileId,
+      'user_id': userId,
+      'checked_in_at': checkedInAt?.toIso8601String(),
+      'checked_out_at': checkedOutAt?.toIso8601String(),
+      'user': user?.toJson(),
+    };
+  }
+}
+
 
