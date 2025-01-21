@@ -58,9 +58,12 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
           );
         } else if (addBoardState is AddBoardSuccessState) {
           Navigator.pop(context);
+          Navigator.pop(context);
           showLightSnackBar(context, S.of(context).adding_board);
+
         } else if (addBoardState is AddBoardFailedState) {
           errorDialog(context: context, text: addBoardState.errorMessage);
+          Navigator.pop(context);
         }
       },
       builder: (context, addBoardState) {
@@ -180,9 +183,7 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                                 );
                               }
                             } else {
-
-
-                              int id =
+                                 int id =
                                   await context.read<AddBoardCubit>().addBoard(
                                         context: context,
                                         title: newBoard.title,
@@ -191,8 +192,10 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                                         lang: newBoard.language.code,
                                       );
                               newBoard.id = id;
-                              widget.allBoardCubit
-                                  .addNewBoard(newBoard: newBoard);
+                              widget.allBoardCubit.allBoards.clear();
+                            await  widget.allBoardCubit.getAllBoards(context: context);
+                              // widget.allBoardCubit
+                              //     .addNewBoard(newBoard: newBoard);
                             }
 
                             widget.allBoardCubit.refresh();

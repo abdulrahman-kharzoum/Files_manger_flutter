@@ -27,13 +27,13 @@ class Validate {
     }
 
     // Check if password contains at least one letter, one number, and one special character
-    final hasLetter = RegExp(r'[A-Za-z]').hasMatch(password);
-    final hasDigit = RegExp(r'\d').hasMatch(password);
-    final hasSpecialChar = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password);
-
-    if (!hasLetter || !hasDigit || !hasSpecialChar) {
-      return S.of(context).password_length;
-    }
+    // final hasLetter = RegExp(r'[A-Za-z]').hasMatch(password);
+    // final hasDigit = RegExp(r'\d').hasMatch(password);
+    // final hasSpecialChar = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password);
+    //
+    // if (!hasLetter || !hasDigit || !hasSpecialChar) {
+    //   return S.of(context).password_length;
+    // }
 
     return null;
   }

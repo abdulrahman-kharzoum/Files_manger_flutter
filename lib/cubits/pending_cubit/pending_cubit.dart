@@ -256,7 +256,7 @@ class PendingCubit extends Cubit<PendingState> {
     required int fileId,
   }) async {
     try {
-      emit(PendingLoading());
+      emit(PendingFileAcceptedOrRejectedLoadingState());
 
       String? token = CashNetwork.getCashData(key: 'token');
 
@@ -273,9 +273,11 @@ class PendingCubit extends Cubit<PendingState> {
       );
       print('===================Accept Or Reject File==============');
       if (response.statusCode == 200) {
+        applicationsToApprove.clear();
+        await getAllFilesToApprove(context: context, groupId: groupId);
 
 
-        emit(PendingFileAcceptedOrRejectedSuccessState());
+        emit(PendingFileAcceptedOrRejectedSuccessState(accepted: status=="accepted"?true:false));
       } else {
         emit(PendingFailedState(errorMessage: 'Failed to load invites'));
       }

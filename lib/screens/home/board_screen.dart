@@ -11,21 +11,20 @@ import 'package:files_manager/core/animation/dialogs/expired_dialog.dart';
 import 'package:files_manager/core/shared/local_network.dart';
 import 'package:files_manager/cubits/add_board_cubit/add_board_cubit.dart';
 import 'package:files_manager/cubits/all_boards_cubit/all_boards_cubit.dart';
-import 'package:files_manager/cubits/application_cubit/application_cubit.dart';
+
 import 'package:files_manager/cubits/board_favorite_cubit/board_favorite_cubit.dart';
 import 'package:files_manager/generated/l10n.dart';
 import 'package:files_manager/widgets/home/board_card.dart';
 import 'package:files_manager/widgets/home/custom_appbar.dart';
-import '../../core/functions/color_to_hex.dart';
-import '../../cubits/board_cubit/board_cubit.dart';
+
 import '../../cubits/board_settings_cubit/board_settings_cubit.dart';
 import '../../cubits/leave_from_board_cubit/leave_from_board_cubit.dart';
 import '../../models/board_model.dart';
 import '../../theme/color.dart';
 import '../../widgets/theme_toggle_button.dart';
-import '../../models/member_model.dart';
+
 import '../../models/user_model.dart';
-import '../add_board_screen/add_board_screen.dart';
+
 import 'board_settings_screen.dart';
 
 class BoardScreen extends StatelessWidget {

@@ -17,7 +17,7 @@ final ThemeData DarkThemeData = ThemeData(
     titleMedium: GoogleFonts.cairo(color: Colors.white),
     titleSmall: GoogleFonts.cairo(color: Colors.white),
     displayLarge: GoogleFonts.cairo(color: Colors.white),
-    displayMedium: GoogleFonts.cairo(color: Colors.white),
+    displayMedium: GoogleFonts.cairo(color: Colors.grey),
     displaySmall: GoogleFonts.cairo(color: Colors.white),
     headlineLarge: GoogleFonts.cairo(color: Colors.black12),
     headlineMedium: GoogleFonts.cairo(color: Colors.white),

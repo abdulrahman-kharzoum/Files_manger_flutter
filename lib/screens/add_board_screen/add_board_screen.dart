@@ -209,7 +209,8 @@ class AddBoardScreen extends StatelessWidget {
                                                 PendingCubit()..getAllFilesToApprove(context: context, groupId: boardCubit.currentBoard.id),
                                           ),
                                         ],
-                                        child: PendingFilesScreen()
+                                        child: PendingFilesScreen(applicationCubit: applicationCubit,groupId: boardCubit.currentBoard.id,
+                                        )
                                       ),
                                     ),
                                   );
