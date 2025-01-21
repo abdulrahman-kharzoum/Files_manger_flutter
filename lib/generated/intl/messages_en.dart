@@ -697,6 +697,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "removeAccount": MessageLookupByLibrary.simpleMessage("Remove account"),
         "remove_account":
             MessageLookupByLibrary.simpleMessage("Remove account"),
+        "renamed": MessageLookupByLibrary.simpleMessage("Renamed Successfully"),
         "reorder": MessageLookupByLibrary.simpleMessage("Reorder"),
         "replying_to": MessageLookupByLibrary.simpleMessage("Replying to"),
         "report": MessageLookupByLibrary.simpleMessage("Report"),

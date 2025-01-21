@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:files_manager/core/functions/statics.dart';
+import 'package:files_manager/cubits/notification_cubit/notification_cubit.dart';
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -36,8 +37,10 @@ class LoginCubit extends Cubit<LoginState> {
   }) async {
     try {
       emit(LoginLoading());
-
+      // final notificationCubit = NotificationCubit();
       final notificationService = NotificationService();
+
+      notificationService.initialize();
       String? fcmToken =
           "jsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdfffffffffffffffffffffffffffffffffffffffffffdsfffffffff";
       fcmToken  =  await notificationService.getToken();

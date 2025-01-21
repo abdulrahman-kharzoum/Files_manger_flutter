@@ -153,6 +153,11 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
           } else if (state is BoardCheckOutApplicationSuccess) {
             showLightSnackBar(context, S.of(context).checkout);
             Navigator.of(context).pop();
+          } else if (state is RenameAppSuccess) {
+            showLightSnackBar(context, S.of(context).renamed);
+            Navigator.of(context).pop();
+          } else if (state is RenameAppLoading) {
+            loadingDialog(context: context, mediaQuery: mediaQuery);
           }
           if (state is BoardCheckApplicationSuccess && currentIndex != -1) {
             await boardCubit.checkIn(
@@ -319,12 +324,20 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                                   context: context,
                                                   isEdit: true,
                                                   onConfirm: (folderNa) async {
-                                                    boardCubit.changeFolderName(
-                                                        folderName: folderNa,
-                                                        folder: boardCubit
+                                                    // boardCubit.changeFolderName(
+                                                    //     folderName: folderNa,
+                                                    //     folder: boardCubit
+                                                    //             .currentBoard
+                                                    //             .allFiles[index]
+                                                    //         as FolderModel);
+                                                    await applicationCubit
+                                                        .renameApplicationName(
+                                                            isFolder: true,
+                                                            appName: folderNa,
+                                                            app: boardCubit
                                                                 .currentBoard
-                                                                .allFiles[index]
-                                                            as FolderModel);
+                                                                .allFiles[index],
+                                                            context: context);
                                                   });
                                             },
                                           ),
@@ -575,13 +588,15 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                                   context: context,
                                                   isEdit: true,
                                                   onConfirm: (fileName) async {
-                                                    boardCubit.changeFileName(
-                                                        fileName: fileName +
-                                                            '.${boardCubit.currentBoard.allFiles[index].getApplicationExtension()}',
-                                                        file: boardCubit
+                                                    await applicationCubit
+                                                        .renameApplicationName(
+                                                            isFolder: true,
+                                                            appName: fileName +
+                                                                '.${boardCubit.currentBoard.allFiles[index].getApplicationExtension()}',
+                                                            app: boardCubit
                                                                 .currentBoard
-                                                                .allFiles[index]
-                                                            as FileModel);
+                                                                .allFiles[index],
+                                                            context: context);
                                                   });
                                             },
                                           ),

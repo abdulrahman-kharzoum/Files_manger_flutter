@@ -8,11 +8,13 @@ final class BoardInitial extends BoardState {}
 final class BoardSelectTap extends BoardState {}
 
 final class BoardAddApplication extends BoardState {}
+
 final class BoardUpdatedState extends BoardState {
   final List<Application> files;
 
   BoardUpdatedState({required this.files});
 }
+
 //Delete Application State
 final class DeleteApplicationsInBoardLoading extends BoardState {}
 

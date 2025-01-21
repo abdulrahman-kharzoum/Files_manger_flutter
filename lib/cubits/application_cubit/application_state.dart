@@ -40,7 +40,8 @@ final class GetAllApplicationsInBoardFailure extends ApplicationState {
 
   GetAllApplicationsInBoardFailure({required this.errorMessage});
 }
-
+final class RenameAppSuccess extends ApplicationState {}
+final class RenameAppLoading extends ApplicationState {}
 final class GetAllApplicationsInBoardExpiredToken extends ApplicationState {}
 
 final class GetAllApplicationsInBoardServerError extends ApplicationState {}

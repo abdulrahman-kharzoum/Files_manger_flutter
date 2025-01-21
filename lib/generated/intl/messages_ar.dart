@@ -666,6 +666,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "remove": MessageLookupByLibrary.simpleMessage("حذف"),
         "removeAccount": MessageLookupByLibrary.simpleMessage("إزالة الحساب"),
         "remove_account": MessageLookupByLibrary.simpleMessage("إزالة الحساب"),
+        "renamed":
+            MessageLookupByLibrary.simpleMessage("تم إعادة التسمية بنجاح"),
         "reorder": MessageLookupByLibrary.simpleMessage("أعد الطلب"),
         "replying_to": MessageLookupByLibrary.simpleMessage("الرد على"),
         "report": MessageLookupByLibrary.simpleMessage("تقرير"),

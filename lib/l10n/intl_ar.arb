@@ -677,5 +677,6 @@
   "checked": "تم حجز الملف بنجاح",
   "kick": "طرد",
   "error_Images_video_not_allowed": "خطأ: لا يُسمح بالصور ومقاطع الفيديو.",
-  "error_cant_delete_file": "خطأ: تم حجز الملف، لا يمكنك حذفه"
+  "error_cant_delete_file": "خطأ: تم حجز الملف، لا يمكنك حذفه",
+  "renamed": "تم إعادة التسمية بنجاح"
 }

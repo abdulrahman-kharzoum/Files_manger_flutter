@@ -46,7 +46,7 @@ class NavigationCubit extends Cubit<NavigationState> {
     ),
     //==== Notification Screen =====//
     BlocProvider(
-      create: (context) => NotificationCubit()..getData(context: context),
+      create: (context) => NotificationCubit(),
       child: const NotificationScreen(),
     ),
     //==== Favorite Screen =====//

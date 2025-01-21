@@ -409,6 +409,7 @@ class ApplicationCubit extends Cubit<ApplicationState> {
     }
   }
 
+
   Future<void> checkApplicationFunction({
     required BuildContext context,
     required int fileId,
@@ -748,6 +749,58 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       print('The failed status code is ${e.response!.statusCode}');
       emit(GetAllApplicationsInBoardFailure(
           errorMessage: e.response!.data['message']));
+    } catch (e) {
+      print('================ catch exception =================');
+      print(e);
+      emit(GetAllApplicationsInBoardFailure(errorMessage: 'Catch exception'));
+    }
+  }
+
+  Future<void> renameApplicationName({
+    required bool isFolder,
+    required String appName,
+    required Application app,
+    required BuildContext context,
+  }) async {
+    try {
+      print("=============Rename Folder====================");
+      emit(RenameAppLoading());
+      String? token = CashNetwork.getCashData(key: 'token');
+
+      print("token get boards: $token");
+      final response = await dio().post(
+        'files/${app.getApplicationId()}/rename',
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      print('The status code is => ${response.statusCode}');
+      print(response.data);
+
+      if (response.statusCode == 200) {
+        if(isFolder){
+          var a = app as FolderModel;
+          a.title = appName;
+
+        }else{
+          var a = app as FileModel;
+          a.title = appName;
+        }
+
+        emit(RenameAppSuccess());
+      } else {
+        print('Failed to fetch boards: ${response.statusCode}');
+        emit(GetAllApplicationsInBoardFailure(errorMessage: response.data['message']));
+      }
+    } on DioException catch (e) {
+      Navigator.pop(context);
+      errorHandler(e: e, context: context);
+
+      print('The response is => ${e.response!.data}');
+      print('The failed status code is ${e.response!.statusCode}');
+      emit(
+          GetAllApplicationsInBoardFailure(errorMessage: e.response!.data['message']));
     } catch (e) {
       print('================ catch exception =================');
       print(e);

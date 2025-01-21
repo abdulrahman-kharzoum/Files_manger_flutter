@@ -1,6 +1,7 @@
 import 'package:files_manager/core/notification/notification_web.dart';
 import 'package:files_manager/core/shared/local_network.dart';
 import 'package:files_manager/core/functions/statics.dart';
+import 'package:files_manager/cubits/notification_cubit/notification_cubit.dart';
 
 import 'package:files_manager/cubits/theme_cubit/app_theme_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,10 +40,13 @@ void main() async {
         measurementId: "G-JY8BYQKVCK"
     ),
   );
+  final notificationCubit = NotificationCubit();
   final notificationService = NotificationService();
-  await notificationService.listenNotifications();
-  // print("==========fcm==========");
-  // print(await notificationService.getToken());
+notificationService.initialize();
+  // final notificationService = NotificationService();
+  // // await notificationService.listenNotifications();
+  print("==========fcm==========");
+  print(await notificationService.getToken());
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   Bloc.observer = SimpleBlocObserver();
   runApp(
@@ -66,11 +70,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<AllBoardsCubit>(
           create: (context) => AllBoardsCubit(),
         ),
-        // BlocProvider<AllBoardsCubit>(
-        //   create: (context) => AllBoardsCubit()..initState(context: context),
-        // ),
-        BlocProvider<BoardFavoriteCubit>(
-          create: (context) => BoardFavoriteCubit(),
+        BlocProvider<AllBoardsCubit>(
+          create: (context) => AllBoardsCubit(),
+        ),
+        BlocProvider<NotificationCubit>(
+          create: (context) => NotificationCubit(),
         ),
         BlocProvider(
             create: (context) => FileReportCubit()..loadFileReportData()),

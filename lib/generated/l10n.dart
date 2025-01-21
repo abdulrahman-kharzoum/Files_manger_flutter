@@ -6781,6 +6781,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Renamed Successfully`
+  String get renamed {
+    return Intl.message(
+      'Renamed Successfully',
+      name: 'renamed',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
