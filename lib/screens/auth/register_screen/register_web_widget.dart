@@ -73,7 +73,7 @@ class RegisterWebWidget extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColors.primaryColor,
-                            fontSize: mediaQuery.width / 16,
+                            fontSize: mediaQuery.width / 25,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

@@ -231,7 +231,8 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                             onPressed: () async {
                               await applicationCubit
                                   .checkMultiApplicationFunction(
-                                      context: context, filesId: selectedFiles);
+                                      context: context, filesId: selectedFiles,
+                              groupId: boardCubit.currentBoard.id);
 
                               print("Check In: $selectedFiles");
                             },
@@ -467,12 +468,26 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
 
                                             await applicationCubit
                                                 .checkOutApplicationFunction(
+                                              groupId: boardCubit.currentBoard.id,
                                                     context: context,
                                                     fileId: boardCubit
                                                         .currentBoard
                                                         .allFiles[index]
                                                         .getApplicationId(),
                                                     file: selectedFile);
+                                            currentIndex = index;
+                                          }
+                                          else{
+
+                                            await applicationCubit
+                                                .checkOutApplicationFunction(
+                                                groupId: boardCubit.currentBoard.id,
+                                                context: context,
+                                                fileId: boardCubit
+                                                    .currentBoard
+                                                    .allFiles[index]
+                                                    .getApplicationId(),
+                                                file: null);
                                             currentIndex = index;
                                           }
                                         } else if (value == 'checkIn') {
@@ -539,10 +554,10 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                           ),
                                         ),
                                         PopupMenuItem(
-                                          value: 'Edit',
+                                          value: 'Download',
                                           child: ListTile(
                                             leading: const Icon(Icons.edit),
-                                            title: Text('Edit'),
+                                            title: Text('Download'),
                                           ),
                                         ),
                                         PopupMenuItem(

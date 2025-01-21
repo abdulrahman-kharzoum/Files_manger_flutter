@@ -106,7 +106,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         print('------register response');
         print(response.data);
         print('------------------------------------------------');
-        emit(RegisterSuccessState());
+
       }
     } on DioException catch (e) {
       Navigator.pop(context);

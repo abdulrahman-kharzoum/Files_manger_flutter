@@ -171,7 +171,7 @@ class LoginWebWidget extends StatelessWidget {
                     // /Register Btn ///
                     SizedBox(
                       width: mediaQuery.width / 3,
-                      height: mediaQuery.height / 15,
+                      height: mediaQuery.height / 20  ,
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/register_screen');

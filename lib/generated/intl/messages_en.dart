@@ -184,6 +184,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "create_account": MessageLookupByLibrary.simpleMessage("Register Now"),
         "create_address":
             MessageLookupByLibrary.simpleMessage("Create address"),
+        "create_file": MessageLookupByLibrary.simpleMessage("Create New File"),
         "create_folder":
             MessageLookupByLibrary.simpleMessage("Create New Folder"),
         "created_at": MessageLookupByLibrary.simpleMessage("Created at"),
@@ -266,6 +267,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please Enter Your Email"),
         "enter_email_plz": MessageLookupByLibrary.simpleMessage(
             "Please enter an email address"),
+        "enter_file_name": MessageLookupByLibrary.simpleMessage(
+            "Enter the name of your new file"),
         "enter_folder_name": MessageLookupByLibrary.simpleMessage(
             "Enter the name of your new folder"),
         "enter_password":
@@ -290,6 +293,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_your_last_name":
             MessageLookupByLibrary.simpleMessage("Please Enter your last name"),
         "error": MessageLookupByLibrary.simpleMessage("Error"),
+        "error_Images_video_not_allowed": MessageLookupByLibrary.simpleMessage(
+            "Error: Images and videos are not allowed."),
         "event_organization":
             MessageLookupByLibrary.simpleMessage("Event Organization"),
         "events_feedback":
@@ -320,6 +325,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "feed_back": MessageLookupByLibrary.simpleMessage("Feed Back"),
         "field_empty":
             MessageLookupByLibrary.simpleMessage("Search field is empty"),
+        "file_name": MessageLookupByLibrary.simpleMessage("File Name"),
         "files_to_approve": MessageLookupByLibrary.simpleMessage(
             "Files awaiting approval by the admin group"),
         "filter_by": MessageLookupByLibrary.simpleMessage("Filter by:"),
@@ -392,6 +398,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invite has been Accepted"),
         "invite_deleted":
             MessageLookupByLibrary.simpleMessage("Invite has been Deleted"),
+        "invite_rejected":
+            MessageLookupByLibrary.simpleMessage("Invite has been Rejected"),
         "inviting": MessageLookupByLibrary.simpleMessage("inviting"),
         "items": MessageLookupByLibrary.simpleMessage("Items"),
         "job_opportunity":

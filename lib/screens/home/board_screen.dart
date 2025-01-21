@@ -245,7 +245,7 @@ class BoardScreen extends StatelessWidget {
               }
             },
             builder: (context, state) {
-
+              print("===========Platform============${Statics.isPlatformDesktop}");
               return RefreshIndicator(
                 onRefresh: () async {
                   // await allBoardsCubit.refreshData();
@@ -267,22 +267,20 @@ class BoardScreen extends StatelessWidget {
                           ),
                         ),
                     )
-                    : SingleChildScrollView(
-                      child: ListView(
-                          children: List.generate(
-                            allBoardsCubit.allBoards.length,
-                            (index) => BoardWidget(
-                              allBoardsCubit: allBoardsCubit,
-                              addBoardCubit: addBoardCubit,
-                              favoriteCubit: favoriteCubit,
-                              currentBoard: allBoardsCubit.allBoards[index],
-                              currentIndex: index,
-                            ).animate().fade(
-                                  duration: const Duration(milliseconds: 500),
-                                ),
-                          ),
+                    : ListView(
+                        children: List.generate(
+                          allBoardsCubit.allBoards.length,
+                          (index) => BoardWidget(
+                            allBoardsCubit: allBoardsCubit,
+                            addBoardCubit: addBoardCubit,
+                            favoriteCubit: favoriteCubit,
+                            currentBoard: allBoardsCubit.allBoards[index],
+                            currentIndex: index,
+                          ).animate().fade(
+                                duration: const Duration(milliseconds: 500),
+                              ),
                         ),
-                    ),
+                      ),
               );
             },
           );

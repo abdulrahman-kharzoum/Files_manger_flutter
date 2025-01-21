@@ -203,6 +203,7 @@ class PendingCubit extends Cubit<PendingState> {
   Future<void> deleteInvite({
     required BuildContext context,
     required int inviteId,
+    required bool isRejected,
   }) async {
     try {
       emit(PendingLoading());
@@ -227,8 +228,11 @@ class PendingCubit extends Cubit<PendingState> {
         //
         // print('Invitations from me: ${invitationResponse.invitationsFromMe.length}');
         // print('Invitations to me: ${invitationResponse.invitationsToMe.length}');
-
-        emit(PendingInviteDeletedSuccessState());
+        if(isRejected){
+          emit(PendingInviteRejectedSuccessState());
+        }else{
+          emit(PendingInviteDeletedSuccessState());
+        }
       } else {
         emit(PendingFailedState(errorMessage: 'Failed to load invites'));
       }

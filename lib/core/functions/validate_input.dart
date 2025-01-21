@@ -22,7 +22,7 @@ class Validate {
     }
 
     // Password length check
-    if (password.length < 8) {
+    if (password.length < 2) {
       return S.of(context).password_length;
     }
 

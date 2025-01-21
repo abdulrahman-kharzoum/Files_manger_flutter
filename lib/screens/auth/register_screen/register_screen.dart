@@ -36,10 +36,12 @@ class RegisterScreen extends StatelessWidget {
           loadingDialog(context: context, mediaQuery: mediaQuery);
         } else if (state is RegisterSuccessState) {
           showLightSnackBar(context, S.of(context).register_success_message);
+
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/login_screen',
                 (route) => false,
           );
+
         } else if (state is RegisterFailureState) {
           errorDialog(context: context, text: state.errorMessage);
         }

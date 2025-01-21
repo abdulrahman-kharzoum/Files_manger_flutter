@@ -499,6 +499,7 @@ class ApplicationCubit extends Cubit<ApplicationState> {
   Future<void> checkMultiApplicationFunction({
     required BuildContext context,
     required Set<String> filesId,
+    required int groupId,
   }) async {
     emit(BoardMultiCheckApplicationLoading());
     try {
@@ -517,7 +518,13 @@ class ApplicationCubit extends Cubit<ApplicationState> {
         print(
             "=========================Check Multi 200=======================");
         print(response.data);
+        newBoardsApp.clear();
+        if(folderHistory.isEmpty){
+          await  getAllFilesBoard(context: context, groupId: groupId);
 
+        }else{
+          await getAllFilesFolder(context: context, groupId: groupId, folderId: folderHistory.last);
+        }
         emit(BoardMultiCheckApplicationSuccess());
       }else{
         emit(GetAllApplicationsInBoardFailure(
@@ -536,6 +543,7 @@ class ApplicationCubit extends Cubit<ApplicationState> {
   Future<void> checkOutApplicationFunction({
     required BuildContext context,
     required int fileId,
+    required int groupId,
     required PlatformFile? file,
   }) async {
     emit(BoardCheckOutApplicationLoading());
@@ -579,6 +587,13 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       if (response.statusCode == 200) {
         print("==========Check OUT 200====================");
         print(response.data);
+        newBoardsApp.clear();
+        if(folderHistory.isEmpty){
+          await  getAllFilesBoard(context: context, groupId: groupId);
+
+        }else{
+          await getAllFilesFolder(context: context, groupId: groupId, folderId: folderHistory.last);
+        }
         emit(BoardCheckOutApplicationSuccess());
       } else {
         emit(GetAllApplicationsInBoardFailure(

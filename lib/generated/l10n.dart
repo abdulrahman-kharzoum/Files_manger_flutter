@@ -6552,6 +6552,26 @@ class S {
     );
   }
 
+  /// `File Name`
+  String get file_name {
+    return Intl.message(
+      'File Name',
+      name: 'file_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create New File`
+  String get create_file {
+    return Intl.message(
+      'Create New File',
+      name: 'create_file',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Folder name cannot be empty.`
   String get folder_name_not_empty {
     return Intl.message(
@@ -6577,6 +6597,16 @@ class S {
     return Intl.message(
       'Enter the name of your new folder',
       name: 'enter_folder_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter the name of your new file`
+  String get enter_file_name {
+    return Intl.message(
+      'Enter the name of your new file',
+      name: 'enter_file_name',
       desc: '',
       args: [],
     );
@@ -6652,6 +6682,16 @@ class S {
     );
   }
 
+  /// `Invite has been Rejected`
+  String get invite_rejected {
+    return Intl.message(
+      'Invite has been Rejected',
+      name: 'invite_rejected',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Invite has been Deleted`
   String get invite_deleted {
     return Intl.message(
@@ -6717,6 +6757,16 @@ class S {
     return Intl.message(
       'Kick',
       name: 'kick',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error: Images and videos are not allowed.`
+  String get error_Images_video_not_allowed {
+    return Intl.message(
+      'Error: Images and videos are not allowed.',
+      name: 'error_Images_video_not_allowed',
       desc: '',
       args: [],
     );

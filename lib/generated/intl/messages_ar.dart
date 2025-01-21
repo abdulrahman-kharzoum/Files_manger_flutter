@@ -177,7 +177,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "create_account": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
         "create_address":
             MessageLookupByLibrary.simpleMessage("إنشاء عنوان جديد"),
-        "create_folder": MessageLookupByLibrary.simpleMessage("إنشاء ملف جديد"),
+        "create_file": MessageLookupByLibrary.simpleMessage("إنشاء ملف جديد"),
+        "create_folder":
+            MessageLookupByLibrary.simpleMessage("إنشاء مجلد جديد"),
         "created_at": MessageLookupByLibrary.simpleMessage("تاريخ الإنشاء"),
         "credit_debit": MessageLookupByLibrary.simpleMessage("بطاقة الائتمان"),
         "crop_image": MessageLookupByLibrary.simpleMessage("قص الصورة"),
@@ -256,6 +258,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "الرجاء إدخال البريد الإلكتروني"),
         "enter_email_plz":
             MessageLookupByLibrary.simpleMessage("راجاء أدخل بريدك الإلكتروني"),
+        "enter_file_name": MessageLookupByLibrary.simpleMessage(
+            "أدخل اسم الملف الجديد الخاص بك"),
         "enter_folder_name": MessageLookupByLibrary.simpleMessage(
             "أدخل اسم المجلد الجديد الخاص بك"),
         "enter_password":
@@ -280,6 +284,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_your_last_name":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال اسمك الأخير"),
         "error": MessageLookupByLibrary.simpleMessage("خطأ"),
+        "error_Images_video_not_allowed": MessageLookupByLibrary.simpleMessage(
+            "خطأ: لا يُسمح بالصور ومقاطع الفيديو."),
         "event_organization":
             MessageLookupByLibrary.simpleMessage("تنظيم الأحداث"),
         "events_feedback":
@@ -307,6 +313,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المنتجات المميزة"),
         "feed_back": MessageLookupByLibrary.simpleMessage("ملاحظات"),
         "field_empty": MessageLookupByLibrary.simpleMessage("حقل البحث فارغ"),
+        "file_name": MessageLookupByLibrary.simpleMessage("اسم الملف"),
         "files_to_approve": MessageLookupByLibrary.simpleMessage(
             "ملفات بانتظار موافقة مسؤول المجموعة"),
         "filter_by": MessageLookupByLibrary.simpleMessage("تصفية حسب:"),
@@ -315,7 +322,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "flat": MessageLookupByLibrary.simpleMessage("شقة"),
         "flat_number": MessageLookupByLibrary.simpleMessage("رقم الشقة"),
         "flights": MessageLookupByLibrary.simpleMessage("الرحلات"),
-        "folder_name": MessageLookupByLibrary.simpleMessage("اسم الملف"),
+        "folder_name": MessageLookupByLibrary.simpleMessage("اسم المجلد"),
         "folder_name_not_empty": MessageLookupByLibrary.simpleMessage(
             "اسم الملف يجب أن لايكون فارغاً"),
         "foloosi_method_is_not_available":
@@ -378,6 +385,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "invite_accepted":
             MessageLookupByLibrary.simpleMessage("تم قبول الدعوة"),
         "invite_deleted": MessageLookupByLibrary.simpleMessage("تم حذف الدعوة"),
+        "invite_rejected":
+            MessageLookupByLibrary.simpleMessage("تم رفض الدعوة"),
         "inviting": MessageLookupByLibrary.simpleMessage("يتم الدعوة"),
         "items": MessageLookupByLibrary.simpleMessage("عدد العناصر"),
         "job_opportunity": MessageLookupByLibrary.simpleMessage("فرصة عمل"),

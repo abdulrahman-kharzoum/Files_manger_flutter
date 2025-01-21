@@ -98,169 +98,178 @@ class BoardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            height: Statics.isPlatformDesktop
-                                ? mediaQuery.height / 40
-                                : mediaQuery.height / 20,
-                            width: Statics.isPlatformDesktop
-                                ? mediaQuery.width / 30
-                                : mediaQuery.width / 10,
-                            child: currentBoard!.hasImage
-                                ? currentBoard!.image.isEmpty
-                                    ? ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(360),
-                                        child: Image.file(
-                                          currentBoard!.imageFile!,
-                                          fit: BoxFit.contain,
-                                        ),
-                                      )
-                                    : ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(360),
-                                        child: CachedNetworkImage(
-                                          imageUrl: currentBoard!.image,
-                                          placeholder: (context, url) =>
-                                              Shimmer.fromColors(
-                                            baseColor: Colors.grey[300]!,
-                                            highlightColor: Colors.grey[100]!,
-                                            child: Container(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                          fit: BoxFit.contain,
-                                        ),
-                                      )
-                                : CircleAvatar(
-                                    child: Text(
-                                      currentBoard!.icon,
-                                      style: TextStyle(
-                                          fontSize: Statics.isPlatformDesktop
-                                              ? mediaQuery.width / 90
-                                              : mediaQuery.width / 30),
-                                    ),
-                                  ),
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Flexible(
-                                child: Container(
-                                  color: Colors.transparent,
-                                  width: Statics.isPlatformDesktop
-                                      ? mediaQuery.width / 5
-                                      : mediaQuery.width / 2,
-                                  child: Text(
-                                    overflow: TextOverflow.ellipsis,
-                                    currentBoard!.title,
-                                    style: const TextStyle(
-                                      color: AppColors.dark,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    currentBoard!.parentId != null
-                                        ? S.of(context).subpanel
-                                        : 'Main Group',
-                                    style: const TextStyle(
-                                      color: Colors.black38,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: Statics.isPlatformDesktop
-                                        ? mediaQuery.width / 90
-                                        : mediaQuery.width / 40,
-                                  ),
-                                  Icon(
-                                    Icons.file_copy,
-                                    size: Statics.isPlatformDesktop
-                                        ? mediaQuery.width / 80
-                                        : mediaQuery.width / 25,
-                                    color: Colors.grey,
-                                  ),
-                                  SizedBox(
-                                    width: Statics.isPlatformDesktop
-                                        ? mediaQuery.width / 150
-                                        : mediaQuery.width / 90,
-                                  ),
-                                  Text(
+                  Expanded(
+                    child: Row(
 
-                                    '${currentBoard!.filesNumber == null ?0:currentBoard!.filesNumber}',
-                                    style: const TextStyle(
-                                      color: Colors.black38,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      PopupMenuButton(
-                          icon: const Icon(Icons.more_vert),
-                          onSelected: (value) async {
-                            if (value == 'settings') {
-                              print('Setting');
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider(
-                                        create: (context) => BoardSettingsCubit(
-                                            currentBoard: currentBoard!)
-                                          ..initState(),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              height: Statics.isPlatformDesktop
+                                  ? mediaQuery.height / 40
+                                  : mediaQuery.height / 20,
+                              width: Statics.isPlatformDesktop
+                                  ? mediaQuery.width / 30
+                                  : mediaQuery.width / 10,
+                              child: currentBoard!.hasImage
+                                  ? currentBoard!.image.isEmpty
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(360),
+                                          child: Image.file(
+                                            currentBoard!.imageFile!,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        )
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(360),
+                                          child: CachedNetworkImage(
+                                            imageUrl: currentBoard!.image,
+                                            placeholder: (context, url) =>
+                                                Shimmer.fromColors(
+                                              baseColor: Colors.grey[300]!,
+                                              highlightColor: Colors.grey[100]!,
+                                              child: Container(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            errorWidget: (context, url, error) =>
+                                                const Icon(Icons.error),
+                                            fit: BoxFit.contain,
+                                          ),
+                                        )
+                                  : CircleAvatar(
+                                      child: Text(
+                                        currentBoard!.icon,
+                                        style: TextStyle(
+                                            fontSize: Statics.isPlatformDesktop
+                                                ? mediaQuery.width / 90
+                                                : mediaQuery.width / 30),
                                       ),
-                                      BlocProvider(
-                                          create: (context) => AddBoardCubit()),
-                                    ],
-                                    child: BoardSettingsScreen(
-                                      allBoardCubit: allBoardsCubit,
+                                    ),
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    width: Statics.isPlatformDesktop
+                                        ? mediaQuery.width / 5
+                                        : mediaQuery.width / 2,
+                                    child: Text(
+                                      overflow: TextOverflow.ellipsis,
+                                      currentBoard!.title,
+                                      style: const TextStyle(
+                                        color: AppColors.dark,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              );
-                            } else if (value == 'leave') {
-                              await allBoardsCubit.removeBoard(
-                                  id: currentBoard!.id, index: currentIndex);
-                            }
-                          },
-                          itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  value: 'leave',
-                                  child: ListTile(
-                                    leading: const Icon(Icons.exit_to_app),
-                                    title: Text(S.of(context).leave_the_board),
-                                  ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      currentBoard!.parentId != null
+                                          ? S.of(context).subpanel
+                                          : 'Main Group',
+                                      style: const TextStyle(
+                                        color: Colors.black38,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: Statics.isPlatformDesktop
+                                          ? mediaQuery.width / 90
+                                          : mediaQuery.width / 40,
+                                    ),
+                                    Icon(
+                                      Icons.file_copy,
+                                      size: Statics.isPlatformDesktop
+                                          ? mediaQuery.width / 80
+                                          : mediaQuery.width / 25,
+                                      color: Colors.grey,
+                                    ),
+                                    SizedBox(
+                                      width: Statics.isPlatformDesktop
+                                          ? mediaQuery.width / 150
+                                          : mediaQuery.width / 90,
+                                    ),
+                                    Text(
+
+                                      '${currentBoard!.filesNumber == null ?0:currentBoard!.filesNumber}',
+                                      style: const TextStyle(
+                                        color: Colors.black38,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                PopupMenuItem(
-                                  value: 'settings',
-                                  child: ListTile(
-                                    leading: const Icon(Icons.settings),
-                                    title: Text(S.of(context).board_settings),
-                                  ),
-                                ),
-                              ]),
-                    ],
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: Statics.isPlatformDesktop? mediaQuery.width / 30: mediaQuery.width/10,
+
+                          child: PopupMenuButton(
+
+                              icon: const Icon(Icons.more_vert),
+                              onSelected: (value) async {
+                                if (value == 'settings') {
+                                  print('Setting');
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider(
+                                            create: (context) => BoardSettingsCubit(
+                                                currentBoard: currentBoard!)
+                                              ..initState(),
+                                          ),
+                                          BlocProvider(
+                                              create: (context) => AddBoardCubit()),
+                                        ],
+                                        child: BoardSettingsScreen(
+                                          allBoardCubit: allBoardsCubit,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else if (value == 'leave') {
+                                  await allBoardsCubit.removeBoard(
+                                      id: currentBoard!.id, index: currentIndex);
+                                }
+                              },
+                              itemBuilder: (context) => [
+                                    PopupMenuItem(
+                                      value: 'leave',
+                                      child: ListTile(
+                                        leading: const Icon(Icons.exit_to_app),
+                                        title: Text(S.of(context).leave_the_board),
+                                      ),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'settings',
+                                      child: ListTile(
+                                        leading: const Icon(Icons.settings),
+                                        title: Text(S.of(context).board_settings),
+                                      ),
+                                    ),
+                                  ]),
+                        ),
+                      ],
+                    ),
                   ),
                   // SizedBox(height: mediaQuery.height / 90),
                   Wrap(

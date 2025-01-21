@@ -31,7 +31,7 @@ Future<void> showFolderNameDialog({
           borderRadius: BorderRadius.circular(20),
         ),
         title: Text(
-        S.of(context).create_folder,
+          S.of(context).create_folder,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -41,7 +41,7 @@ Future<void> showFolderNameDialog({
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-             S.of(context).enter_folder_name,
+              S.of(context).enter_folder_name,
               style: TextStyle(
                 color: Theme.of(context).textTheme.bodySmall!.color,
                 fontWeight: FontWeight.bold,
@@ -51,7 +51,7 @@ Future<void> showFolderNameDialog({
             CustomFormTextField(
               controller: folderNameController,
               nameLabel: '',
-              hintText:S.of(context).folder_name,
+              hintText: S.of(context).folder_name,
               fillColor: Colors.transparent,
               borderColor: Theme.of(context).textTheme.labelSmall!.color!,
               styleInput: TextStyle(
@@ -65,7 +65,6 @@ Future<void> showFolderNameDialog({
                 return null;
               },
             ),
-
           ],
         ),
         actions: [
@@ -74,7 +73,7 @@ Future<void> showFolderNameDialog({
               Navigator.of(context).pop(); // Close the dialog
             },
             child: Text(
-            S.of(context).cancel,
+              S.of(context).cancel,
               style: TextStyle(color: Colors.red),
             ),
           ),
@@ -95,7 +94,93 @@ Future<void> showFolderNameDialog({
                 );
               }
             },
-            child: Text( S.of(context).create),
+            child: Text(S.of(context).create),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> showFileNameDialog({
+  required BuildContext context,
+  required Function(String fileName) onConfirm,
+}) async {
+  final TextEditingController fileNameController = TextEditingController();
+
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Theme.of(context).textTheme.headlineSmall!.color!,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text(
+          S.of(context).create_file,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              S.of(context).enter_file_name,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodySmall!.color,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            CustomFormTextField(
+              controller: fileNameController,
+              nameLabel: '',
+              hintText: S.of(context).file_name,
+              fillColor: Colors.transparent,
+              borderColor: Theme.of(context).textTheme.labelSmall!.color!,
+              styleInput: TextStyle(
+                  color: Theme.of(context).textTheme.bodySmall!.color),
+              maxLines: 5,
+              borderRadius: 25.0,
+              onChanged: (p0) async {
+                // await boardSettingsCubit.changeDescription();
+              },
+              validator: (p0) {
+                return null;
+              },
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: Text(
+              S.of(context).cancel,
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final folderName = fileNameController.text.trim();
+              if (folderName.isNotEmpty) {
+                await onConfirm(folderName);
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(S.of(context).folder_name_not_empty),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: Text(S.of(context).create),
           ),
         ],
       );
@@ -170,21 +255,17 @@ class AllApplicationsScreen extends StatelessWidget {
             listener: (context, state) {
               if (state is BoardAddApplicationLoading) {
                 loadingDialog(context: context, mediaQuery: mediaQuery);
-              }
-              else if (state is BoardAddApplicationSuccess) {
-
+              } else if (state is BoardAddApplicationSuccess) {
                 showLightSnackBar(context, S.of(context).added);
                 boardCubit.currentBoard.allFiles.add(state.addedApplication);
 
                 applicationCubit.pagingController
                     .appendLastPage([state.addedApplication]);
                 Navigator.of(context).pop();
-              }
-              else if (state is BoardAddApplicationSuccessNeedWaiting){
+              } else if (state is BoardAddApplicationSuccessNeedWaiting) {
                 showLightSnackBar(context, S.of(context).waiting_admin);
                 Navigator.pop(context);
-              }
-              else if (state is BoardAddApplicationFailure) {
+              } else if (state is BoardAddApplicationFailure) {
                 errorDialog(context: context, text: state.errorMessage);
               }
             },
@@ -195,22 +276,105 @@ class AllApplicationsScreen extends StatelessWidget {
                   ApplicationWidget(
                     mediaQuery: mediaQuery,
                     context: context,
-                    asset: 'assets/images/todo-hover.jpg',
+                    asset: 'assets/images/new-file-icon.jpg',
                     onTap: () async {
                       FilePickerResult? result =
-                          await FilePicker.platform.pickFiles();
+                          await FilePicker.platform.pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: [
+                          'txt',
+                          'csv',
+                          'json',
+                          'xml',
+                          'html',
+                          'htm',
+                          'css',
+                          'js',
+                          'bat',
+                          'cmd',
+                          'ini',
+                          'log',
+                          'reg',
+                          'vbs',
+                          'ps1',
+                          'py',
+                          'sh',
+                          'yml',
+                          'yaml',
+                          'md',
+                          'config',
+                          'inf',
+                          'nfo',
+                          'rtf',
+                          'srt',
+                          'url',
+                          'gitignore',
+                          'env',
+                          'properties',
+                          'sql',
+                          'ts',
+                          'tsv',
+                          'xaml',
+                          'xsd',
+                          'xsl',
+                          'xslt',
+                        ],
+                      );
 
                       if (result != null) {
+                        final imageExtensions = [
+                          'jpg',
+                          'jpeg',
+                          'png',
+                          'gif',
+                          'bmp',
+                          'webp'
+                        ];
+                        final videoExtensions = [
+                          'mp4',
+                          'mov',
+                          'avi',
+                          'mkv',
+                          'webm'
+                        ];
+
+
                         final selectedFile = result.files.first;
+                        // Check if the file is an image or video
+                        if (imageExtensions.contains(
+                            selectedFile.extension?.toLowerCase()) ||
+                            videoExtensions.contains(
+                                selectedFile.extension?.toLowerCase())) {
 
-
-                        await boardAddApplicationCubit.addApplicationFunction(
+                          // Show error if the file is an image or video
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  S.of(context).error_Images_video_not_allowed),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }else{
+                          await showFileNameDialog(
                             context: context,
-                            fileName: selectedFile.name,
-                            file: selectedFile,
-                            parent_id: applicationCubit.folderHistory.isNotEmpty ? applicationCubit.folderHistory.last:0,
-                            is_folder: false,
-                            group_id: boardCubit.currentBoard.id);
+                            onConfirm: (fileName) async {
+                              await boardAddApplicationCubit
+                                  .addApplicationFunction(
+                                  context: context,
+                                  fileName: fileName +
+                                      '.${selectedFile.extension!}',
+                                  file: selectedFile,
+                                  parent_id: applicationCubit
+                                      .folderHistory.isNotEmpty
+                                      ? applicationCubit.folderHistory.last
+                                      : 0,
+                                  is_folder: false,
+                                  group_id: boardCubit.currentBoard.id);
+                            },
+                          );
+                        }
+
+
                         // boardCubit.currentBoard.allFiles.add(FileModel(
                         //     id: boardCubit.currentBoard.allFiles.isEmpty
                         //         ? 1
@@ -236,7 +400,7 @@ class AllApplicationsScreen extends StatelessWidget {
                   ApplicationWidget(
                       mediaQuery: mediaQuery,
                       context: context,
-                      asset: 'assets/images/chat-hover.jpg',
+                      asset: 'assets/images/new-folder-icon.jpg',
                       onTap: () async {
                         // boardCubit.currentBoard.allFiles.add(FolderModel(
                         //     id: boardCubit.currentBoard.allFiles.isEmpty
@@ -264,7 +428,10 @@ class AllApplicationsScreen extends StatelessWidget {
                                 .addApplicationFunction(
                                     context: context,
                                     fileName: folderName,
-                                    parent_id:  applicationCubit.folderHistory.isNotEmpty ?applicationCubit.folderHistory.last:0,
+                                    parent_id: applicationCubit
+                                            .folderHistory.isNotEmpty
+                                        ? applicationCubit.folderHistory.last
+                                        : 0,
                                     is_folder: true,
                                     group_id: boardCubit.currentBoard.id);
                           },

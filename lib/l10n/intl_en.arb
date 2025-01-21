@@ -649,9 +649,12 @@
   "added": "Added Successfully",
   "folder_name":"Folder Name",
   "create_folder":"Create New Folder",
+  "file_name":"File Name",
+  "create_file": "Create New File",
   "folder_name_not_empty": "Folder name cannot be empty.",
   "create": "Create",
   "enter_folder_name": "Enter the name of your new folder",
+  "enter_file_name": "Enter the name of your new file",
   "wrongEmailOrPass": "Wrong Email or Password",
   "invite": "Invite",
   "Kicking": "Kicking",
@@ -659,13 +662,15 @@
   "user_invited": "User is Invited to the group",
   "user_kicked": "User is Kicked from the group",
   "invite_accepted": "Invite has been Accepted",
+  "invite_rejected": "Invite has been Rejected",
   "invite_deleted": "Invite has been Deleted",
   "waiting_admin": "Success!, waiting for group admin's approval.",
   "files_to_approve": "Files awaiting approval by the admin group",
   "accepted": "File accepted Successfully",
   "rejected": "File rejected Successfully",
   "checked": "File Checked Successfully",
-  "kick": "Kick"
+  "kick": "Kick",
+  "error_Images_video_not_allowed": "Error: Images and videos are not allowed."
 
 
 }

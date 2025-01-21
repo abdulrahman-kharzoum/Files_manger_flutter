@@ -11,7 +11,7 @@ class _DiffViewerState extends State<DiffViewer> {
   @override
   void initState() {
     super.initState();
-    const diff = "--- Original\n+++ New\n@@ @@\n-hello this is a new file\n-so so what\n+hello this is a new folder\n+so what\n\ni am still a rockstar..\n-idon't need you\n+ad\n+dd";
+    const diff = "--- Original\n+++ New\n@@ @@\n hello this is a new folder \r\n- so what \r\n+ \r\n \r\n-i am still a rockstar..\r\n \r\n-ad\r\n-dd\r\n+/////i am still a rockstar..\r\n+\r\n+abodododdododod\r\n+\r\n+hwuhe\r\n+\r\n+dfsdsf\n";
 
     // Parse the diff string into line-based differences
     generateLineDiffs(diff);
@@ -59,8 +59,13 @@ class _DiffViewerState extends State<DiffViewer> {
       }
     }
 
+    // Filter out lines without line numbers on either side
+    final filteredDiffs = processedDiffs.where((diff) {
+      return (diff['originalLine'] != null && diff['originalLine'] > 0) || (diff['newLine'] != null && diff['newLine'] > 0);
+    }).toList();
+
     setState(() {
-      _lineDiffs = processedDiffs;
+      _lineDiffs = filteredDiffs;
     });
   }
 

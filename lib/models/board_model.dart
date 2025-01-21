@@ -122,7 +122,7 @@ class Board {
       shareLink: '', // Not available in Group; leave empty.
       title: group.name, // Use Group's name as the title.
       description: group.description, // Map directly from Group.
-      icon: '', // Icon not available; leave empty.
+        icon: '\u{263A}', // Icon not available; leave empty.
       hasImage: false, // Not available; default to false.
       isFavorite: false, // Not available; default to false.
       image: '', // Image not available; leave empty.

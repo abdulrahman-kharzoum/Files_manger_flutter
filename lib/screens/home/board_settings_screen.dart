@@ -233,23 +233,23 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                                     text: S.of(context).settings,
                                     icon: Icon(
                                       Icons.settings,
-                                      size: mediaQuery.width / 30,
+                                      size: mediaQuery.width / 32,
                                     ),
                                   ),
                                   Tab(
                                     text: S.of(context).users,
                                     icon: Icon(
                                       Icons.person,
-                                      size: mediaQuery.width / 30,
+                                      size: mediaQuery.width / 32,
                                     ),
                                   ),
-                                  Tab(
-                                    text: S.of(context).privacy,
-                                    icon: Icon(
-                                      Icons.visibility,
-                                      size: mediaQuery.width / 30,
-                                    ),
-                                  ),
+                                  // Tab(
+                                  //   text: S.of(context).privacy,
+                                  //   icon: Icon(
+                                  //     Icons.visibility,
+                                  //     size: mediaQuery.width / 30,
+                                  //   ),
+                                  // ),
                                 ],
                         ),
                       ),

@@ -9,6 +9,7 @@ class NotificationCard extends StatefulWidget {
   final String content;
   final bool isRead;
   final String time;
+  final bool isThisNotificationToMe;
 
   final bool showAcceptDeniedButtons;
 
@@ -22,6 +23,7 @@ class NotificationCard extends StatefulWidget {
     required this.content,
     this.isRead = false,
     required this.time,
+    required this.isThisNotificationToMe,
     this.showAcceptDeniedButtons = false,
 
 
@@ -77,8 +79,11 @@ class _NotificationCardState extends State<NotificationCard> {
                         color: const Color.fromARGB(255, 235, 175, 98)),
                   ),
                   child: Icon(
-                    Icons.notifications,
-                    color: const Color.fromARGB(255, 235, 175, 98),
+                   widget.isThisNotificationToMe
+                  ? Icons.notifications
+                      : Icons.send,
+
+                  color: const Color.fromARGB(255, 235, 175, 98),
                     size: 30,
                   ),
                 ),
