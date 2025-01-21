@@ -6592,20 +6592,20 @@ class S {
     );
   }
 
-  /// `Enter the name of your new folder`
+  /// `Enter the name of your folder`
   String get enter_folder_name {
     return Intl.message(
-      'Enter the name of your new folder',
+      'Enter the name of your folder',
       name: 'enter_folder_name',
       desc: '',
       args: [],
     );
   }
 
-  /// `Enter the name of your new file`
+  /// `Enter the name of your file`
   String get enter_file_name {
     return Intl.message(
-      'Enter the name of your new file',
+      'Enter the name of your file',
       name: 'enter_file_name',
       desc: '',
       args: [],
@@ -6767,6 +6767,16 @@ class S {
     return Intl.message(
       'Error: Images and videos are not allowed.',
       name: 'error_Images_video_not_allowed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error: The file is Checked in, you can't delete it`
+  String get error_cant_delete_file {
+    return Intl.message(
+      'Error: The file is Checked in, you can\'t delete it',
+      name: 'error_cant_delete_file',
       desc: '',
       args: [],
     );

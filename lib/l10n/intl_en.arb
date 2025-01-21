@@ -653,8 +653,8 @@
   "create_file": "Create New File",
   "folder_name_not_empty": "Folder name cannot be empty.",
   "create": "Create",
-  "enter_folder_name": "Enter the name of your new folder",
-  "enter_file_name": "Enter the name of your new file",
+  "enter_folder_name": "Enter the name of your folder",
+  "enter_file_name": "Enter the name of your file",
   "wrongEmailOrPass": "Wrong Email or Password",
   "invite": "Invite",
   "Kicking": "Kicking",
@@ -670,7 +670,8 @@
   "rejected": "File rejected Successfully",
   "checked": "File Checked Successfully",
   "kick": "Kick",
-  "error_Images_video_not_allowed": "Error: Images and videos are not allowed."
+  "error_Images_video_not_allowed": "Error: Images and videos are not allowed.",
+  "error_cant_delete_file": "Error: The file is Checked in, you can't delete it"
 
 
 }

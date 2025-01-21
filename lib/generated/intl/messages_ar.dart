@@ -258,10 +258,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "الرجاء إدخال البريد الإلكتروني"),
         "enter_email_plz":
             MessageLookupByLibrary.simpleMessage("راجاء أدخل بريدك الإلكتروني"),
-        "enter_file_name": MessageLookupByLibrary.simpleMessage(
-            "أدخل اسم الملف الجديد الخاص بك"),
-        "enter_folder_name": MessageLookupByLibrary.simpleMessage(
-            "أدخل اسم المجلد الجديد الخاص بك"),
+        "enter_file_name":
+            MessageLookupByLibrary.simpleMessage("أدخل اسم الملف الخاص بك"),
+        "enter_folder_name":
+            MessageLookupByLibrary.simpleMessage("أدخل اسم المجلد الخاص بك"),
         "enter_password":
             MessageLookupByLibrary.simpleMessage("أدخل كلمة المرور"),
         "enter_report_here":
@@ -286,6 +286,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "error": MessageLookupByLibrary.simpleMessage("خطأ"),
         "error_Images_video_not_allowed": MessageLookupByLibrary.simpleMessage(
             "خطأ: لا يُسمح بالصور ومقاطع الفيديو."),
+        "error_cant_delete_file": MessageLookupByLibrary.simpleMessage(
+            "خطأ: تم حجز الملف، لا يمكنك حذفه"),
         "event_organization":
             MessageLookupByLibrary.simpleMessage("تنظيم الأحداث"),
         "events_feedback":

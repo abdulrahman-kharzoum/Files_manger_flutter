@@ -12,6 +12,7 @@ final class PendingInviteAcceptedSuccessState extends PendingState {}
 final class PendingFileAcceptedOrRejectedSuccessState extends PendingState {}
 final class PendingInviteRejectedSuccessState extends PendingState {}
 final class PendingInviteDeletedSuccessState extends PendingState {}
+final class PendingUpdatedSuccessState extends PendingState {}
 class PendingSuccessState extends PendingState {
   final InvitationResponse invitationResponse;
 

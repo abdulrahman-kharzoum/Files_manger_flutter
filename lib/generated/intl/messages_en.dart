@@ -267,10 +267,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please Enter Your Email"),
         "enter_email_plz": MessageLookupByLibrary.simpleMessage(
             "Please enter an email address"),
-        "enter_file_name": MessageLookupByLibrary.simpleMessage(
-            "Enter the name of your new file"),
+        "enter_file_name":
+            MessageLookupByLibrary.simpleMessage("Enter the name of your file"),
         "enter_folder_name": MessageLookupByLibrary.simpleMessage(
-            "Enter the name of your new folder"),
+            "Enter the name of your folder"),
         "enter_password":
             MessageLookupByLibrary.simpleMessage("Enter password"),
         "enter_report_here":
@@ -295,6 +295,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "error": MessageLookupByLibrary.simpleMessage("Error"),
         "error_Images_video_not_allowed": MessageLookupByLibrary.simpleMessage(
             "Error: Images and videos are not allowed."),
+        "error_cant_delete_file": MessageLookupByLibrary.simpleMessage(
+            "Error: The file is Checked in, you can\'t delete it"),
         "event_organization":
             MessageLookupByLibrary.simpleMessage("Event Organization"),
         "events_feedback":

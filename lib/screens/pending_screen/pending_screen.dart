@@ -29,6 +29,7 @@ class PendingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     final cubit = context.read<PendingCubit>();
+    PendingState? _previousState;
     List<Invite> invitations = [];
     return Scaffold(
       appBar: CustomAppBar(
@@ -49,11 +50,14 @@ class PendingScreen extends StatelessWidget {
                     NoData(iconData: Icons.search, text: S.of(context).no_data);
                   }
                   if (state is PendingFailedState) {
+                    Navigator.pop(context);
+
                     errorDialog(context: context, text: state.errorMessage);
                   }
                   if (state is PendingInviteAcceptedSuccessState) {
                     Navigator.pop(context);
                     showLightSnackBar(context, S.of(context).invite_accepted);
+
                   } else if (state is PendingInviteRejectedSuccessState) {
                     Navigator.pop(context);
                     showLightSnackBar(context, S.of(context).invite_rejected);
@@ -67,6 +71,7 @@ class PendingScreen extends StatelessWidget {
                       state is PendingInviteDeletedSuccessState) {
                     invitations.clear();
                     cubit.getInvites(context: context);
+                    _previousState = PendingUpdatedSuccessState();
                   }
                 },
                 builder: (context, state) {
@@ -74,6 +79,10 @@ class PendingScreen extends StatelessWidget {
                   var user = UserModel.fromJson(jsonDecode(userModelData));
           
                   if (state is PendingSuccessState) {
+                    if(_previousState is PendingUpdatedSuccessState){
+                      Navigator.pop(context);
+                    }
+
                     final invitationResponse = state.invitationResponse;
                     final invitesFromMe = invitationResponse.invitationsFromMe;
                     final invitesToMe = invitationResponse.invitationsToMe;

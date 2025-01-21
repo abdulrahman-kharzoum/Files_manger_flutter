@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as Dio;
+import 'package:files_manager/models/folder_model.dart';
 import 'package:files_manager/models/member_model.dart';
 import 'package:flutter/material.dart';
 import 'package:files_manager/core/functions/apis_error_handler.dart';
@@ -51,7 +52,14 @@ class BoardCubit extends Cubit<BoardState> {
     file.member = m;
     emit(BoardInitial());
   }
-
+  Future<void> changeFileName({required String fileName,required FileModel file}) async {
+    file.title = fileName;
+    emit(BoardInitial());
+  }
+  Future<void> changeFolderName({required String folderName,required FolderModel folder}) async {
+    folder.title = folderName;
+    emit(BoardInitial());
+  }
   Future<void> checkOut({required FileModel file}) async {
     file.member = null;
     emit(BoardInitial());

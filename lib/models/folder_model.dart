@@ -77,7 +77,10 @@ class FolderModel extends Application {
   IconData getIcon() {
     return Icons.folder;
   }
-
+  @override
+  void setApplicationName(String name) {
+    title = name;
+  }
   @override
   int getApplicationFilesCount() {
     return filesCount != null ? int.parse(filesCount!) : 0;

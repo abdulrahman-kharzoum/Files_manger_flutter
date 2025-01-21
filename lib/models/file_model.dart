@@ -70,7 +70,10 @@ class FileModel extends Application {
           fileApi.activeCheckin != null ? fileApi.activeCheckin : null,
     );
   }
-
+  @override
+  void setApplicationName(String name) {
+    title = name;
+  }
   @override
   ActiveCheckin? getCheckinInfo() {
     return activeCheckin;
@@ -123,7 +126,10 @@ class FileModel extends Application {
   int getApplicationId() {
     return id;
   }
-
+  @override
+  String getApplicationExtension() {
+    return mode;
+  }
   @override
   void pushToScreen({
     required BuildContext context,

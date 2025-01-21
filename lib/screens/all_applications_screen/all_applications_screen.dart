@@ -18,6 +18,7 @@ import '../../core/functions/statics.dart';
 
 Future<void> showFolderNameDialog({
   required BuildContext context,
+  bool isEdit=false,
   required Function(String folderName) onConfirm,
 }) async {
   final TextEditingController folderNameController = TextEditingController();
@@ -94,7 +95,13 @@ Future<void> showFolderNameDialog({
                 );
               }
             },
-            child: Text(S.of(context).create),
+            child: Text(
+              isEdit ? S.of(context).edit : S.of(context).create,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodySmall!.color,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       );
@@ -104,6 +111,7 @@ Future<void> showFolderNameDialog({
 
 Future<void> showFileNameDialog({
   required BuildContext context,
+  bool isEdit = false,
   required Function(String fileName) onConfirm,
 }) async {
   final TextEditingController fileNameController = TextEditingController();
@@ -180,7 +188,13 @@ Future<void> showFileNameDialog({
                 );
               }
             },
-            child: Text(S.of(context).create),
+            child: Text(
+              isEdit ? S.of(context).edit : S.of(context).create,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodySmall!.color,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       );
@@ -338,14 +352,12 @@ class AllApplicationsScreen extends StatelessWidget {
                           'webm'
                         ];
 
-
                         final selectedFile = result.files.first;
                         // Check if the file is an image or video
                         if (imageExtensions.contains(
-                            selectedFile.extension?.toLowerCase()) ||
+                                selectedFile.extension?.toLowerCase()) ||
                             videoExtensions.contains(
                                 selectedFile.extension?.toLowerCase())) {
-
                           // Show error if the file is an image or video
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -354,26 +366,25 @@ class AllApplicationsScreen extends StatelessWidget {
                               backgroundColor: Colors.red,
                             ),
                           );
-                        }else{
+                        } else {
                           await showFileNameDialog(
                             context: context,
                             onConfirm: (fileName) async {
                               await boardAddApplicationCubit
                                   .addApplicationFunction(
-                                  context: context,
-                                  fileName: fileName +
-                                      '.${selectedFile.extension!}',
-                                  file: selectedFile,
-                                  parent_id: applicationCubit
-                                      .folderHistory.isNotEmpty
-                                      ? applicationCubit.folderHistory.last
-                                      : 0,
-                                  is_folder: false,
-                                  group_id: boardCubit.currentBoard.id);
+                                      context: context,
+                                      fileName: fileName +
+                                          '.${selectedFile.extension!}',
+                                      file: selectedFile,
+                                      parent_id: applicationCubit
+                                              .folderHistory.isNotEmpty
+                                          ? applicationCubit.folderHistory.last
+                                          : 0,
+                                      is_folder: false,
+                                      group_id: boardCubit.currentBoard.id);
                             },
                           );
                         }
-
 
                         // boardCubit.currentBoard.allFiles.add(FileModel(
                         //     id: boardCubit.currentBoard.allFiles.isEmpty

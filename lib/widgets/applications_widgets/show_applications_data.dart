@@ -7,6 +7,8 @@ import 'package:files_manager/generated/l10n.dart';
 import 'package:files_manager/interfaces/applications_abstract.dart';
 import 'package:files_manager/models/Api_user.dart';
 import 'package:files_manager/models/file_model.dart';
+import 'package:files_manager/models/folder_model.dart';
+import 'package:files_manager/screens/all_applications_screen/all_applications_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -144,6 +146,7 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
           } else if (state is BoardMultiCheckApplicationSuccess) {
             showLightSnackBar(context, S.of(context).checked);
             Navigator.of(context).pop();
+
             setState(() {
               selectedFiles.clear();
             });
@@ -152,7 +155,6 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
             Navigator.of(context).pop();
           }
           if (state is BoardCheckApplicationSuccess && currentIndex != -1) {
-
             await boardCubit.checkIn(
                 m: Member.fromUserModel(user),
                 file: boardCubit.currentBoard.allFiles[currentIndex]
@@ -180,6 +182,12 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
               await boardCubit.checkIn(
                   m: Member.fromUserModel(user),
                   file: boardCubit.currentBoard.allFiles[indexx] as FileModel);
+
+              await applicationCubit.getFileApplicationFunction(
+                  context: context,
+                  fileName: boardCubit.currentBoard.allFiles[indexx]
+                      .getApplicationName(),
+                  filePath: boardCubit.currentBoard.allFiles[indexx].getPath());
             }
           }
         },
@@ -231,8 +239,9 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                             onPressed: () async {
                               await applicationCubit
                                   .checkMultiApplicationFunction(
-                                      context: context, filesId: selectedFiles,
-                              groupId: boardCubit.currentBoard.id);
+                                      context: context,
+                                      filesId: selectedFiles,
+                                      groupId: boardCubit.currentBoard.id);
 
                               print("Check In: $selectedFiles");
                             },
@@ -300,6 +309,26 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                       //   }
                                       // },
                                       itemBuilder: (context) => [
+                                        PopupMenuItem(
+                                          value: 'Edit Name',
+                                          child: ListTile(
+                                            leading: const Icon(Icons.edit),
+                                            title: Text('Edit'),
+                                            onTap: () {
+                                              showFolderNameDialog(
+                                                  context: context,
+                                                  isEdit: true,
+                                                  onConfirm: (folderNa) async {
+                                                    boardCubit.changeFolderName(
+                                                        folderName: folderNa,
+                                                        folder: boardCubit
+                                                                .currentBoard
+                                                                .allFiles[index]
+                                                            as FolderModel);
+                                                  });
+                                            },
+                                          ),
+                                        ),
                                         PopupMenuItem(
                                           value: 'Delete',
                                           child: ListTile(
@@ -468,7 +497,8 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
 
                                             await applicationCubit
                                                 .checkOutApplicationFunction(
-                                              groupId: boardCubit.currentBoard.id,
+                                                    groupId: boardCubit
+                                                        .currentBoard.id,
                                                     context: context,
                                                     fileId: boardCubit
                                                         .currentBoard
@@ -476,18 +506,17 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                                         .getApplicationId(),
                                                     file: selectedFile);
                                             currentIndex = index;
-                                          }
-                                          else{
-
+                                          } else {
                                             await applicationCubit
                                                 .checkOutApplicationFunction(
-                                                groupId: boardCubit.currentBoard.id,
-                                                context: context,
-                                                fileId: boardCubit
-                                                    .currentBoard
-                                                    .allFiles[index]
-                                                    .getApplicationId(),
-                                                file: null);
+                                                    groupId: boardCubit
+                                                        .currentBoard.id,
+                                                    context: context,
+                                                    fileId: boardCubit
+                                                        .currentBoard
+                                                        .allFiles[index]
+                                                        .getApplicationId(),
+                                                    file: null);
                                             currentIndex = index;
                                           }
                                         } else if (value == 'checkIn') {
@@ -498,29 +527,12 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                               .getPath());
                                           await applicationCubit
                                               .checkApplicationFunction(
-                                            index: index,
-                                                  context: context,
-                                                  fileId: boardCubit
-                                                      .currentBoard
-                                                      .allFiles[index]
-                                                      .getApplicationId(),
-                                                  groupId: boardCubit
-                                                      .currentBoard.id);
-                                          currentIndex = index;
-                                        } else if (value == 'checkIn') {
-                                          print(
-                                              "===========File Path==============");
-                                          print(boardCubit
-                                              .currentBoard.allFiles[index]
-                                              .getPath());
-                                          await applicationCubit
-                                              .checkApplicationFunction(
-                                                  context: context,
-                                                  fileId: boardCubit
-                                                      .currentBoard
-                                                      .allFiles[index]
-                                                      .getApplicationId(),
                                                   index: index,
+                                                  context: context,
+                                                  fileId: boardCubit
+                                                      .currentBoard
+                                                      .allFiles[index]
+                                                      .getApplicationId(),
                                                   groupId: boardCubit
                                                       .currentBoard.id);
                                           currentIndex = index;
@@ -554,25 +566,72 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                           ),
                                         ),
                                         PopupMenuItem(
-                                          value: 'Download',
+                                          value: 'Edit Name',
                                           child: ListTile(
                                             leading: const Icon(Icons.edit),
+                                            title: Text('Edit'),
+                                            onTap: () {
+                                              showFileNameDialog(
+                                                  context: context,
+                                                  isEdit: true,
+                                                  onConfirm: (fileName) async {
+                                                    boardCubit.changeFileName(
+                                                        fileName: fileName +
+                                                            '.${boardCubit.currentBoard.allFiles[index].getApplicationExtension()}',
+                                                        file: boardCubit
+                                                                .currentBoard
+                                                                .allFiles[index]
+                                                            as FileModel);
+                                                  });
+                                            },
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 'Download',
+                                          child: ListTile(
+                                            leading: const Icon(
+                                                Icons.download_rounded),
                                             title: Text('Download'),
+                                            onTap: () async {
+                                              await applicationCubit
+                                                  .getFileApplicationFunction(
+                                                      context: context,
+                                                      fileName: boardCubit
+                                                          .currentBoard
+                                                          .allFiles[index]
+                                                          .getApplicationName(),
+                                                      filePath: boardCubit
+                                                          .currentBoard
+                                                          .allFiles[index]
+                                                          .getPath());
+                                              currentIndex = index;
+                                            },
                                           ),
                                         ),
                                         PopupMenuItem(
                                           value: 'Delete',
                                           child: ListTile(
                                             onTap: () async {
-                                              await applicationCubit
-                                                  .deleteApplicationFunction(
-                                                      context: context,
-                                                      fileId: boardCubit
-                                                          .currentBoard
-                                                          .allFiles[index]
-                                                          .getApplicationId(),
-                                                      groupId: boardCubit
-                                                          .currentBoard.id);
+                                              if (boardCubit.currentBoard
+                                                      .allFiles[index]
+                                                      .getApplicationOwner() !=
+                                                  null) {
+                                                showLightSnackBar(
+                                                    context,
+                                                    S
+                                                        .of(context)
+                                                        .error_cant_delete_file);
+                                              } else {
+                                                await applicationCubit
+                                                    .deleteApplicationFunction(
+                                                        context: context,
+                                                        fileId: boardCubit
+                                                            .currentBoard
+                                                            .allFiles[index]
+                                                            .getApplicationId(),
+                                                        groupId: boardCubit
+                                                            .currentBoard.id);
+                                              }
                                             },
                                             leading: const Icon(Icons.delete),
                                             title: Text('Delete'),

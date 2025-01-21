@@ -30,9 +30,11 @@ String getPath(){
   }
   void setApplicationOwner(Member? m) {
    m = null;
-
   }
 
+  void setApplicationName(String name) {
+    name = '';
+  }
 
   bool isFolder() {
     return false;
@@ -73,6 +75,9 @@ String getPath(){
     return 0;
   }
 
+  String getApplicationExtension() {
+    return '';
+  }
   void pushToScreen({
     required BuildContext context,
     Application? application,

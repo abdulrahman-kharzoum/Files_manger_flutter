@@ -659,8 +659,8 @@
   "create_file": "إنشاء ملف جديد",
   "folder_name_not_empty": "اسم الملف يجب أن لايكون فارغاً",
   "create": "إنشاء",
-  "enter_folder_name": "أدخل اسم المجلد الجديد الخاص بك",
-  "enter_file_name": "أدخل اسم الملف الجديد الخاص بك",
+  "enter_folder_name": "أدخل اسم المجلد الخاص بك",
+  "enter_file_name": "أدخل اسم الملف الخاص بك",
   "wrongEmailOrPass": "بريد إلكتروني أو كلمة مرور خاطئة",
   "invite": "دعوة",
   "inviting": "يتم الدعوة",
@@ -676,5 +676,6 @@
   "rejected": "تم رفض الملف بنجاح",
   "checked": "تم حجز الملف بنجاح",
   "kick": "طرد",
-  "error_Images_video_not_allowed": "خطأ: لا يُسمح بالصور ومقاطع الفيديو."
+  "error_Images_video_not_allowed": "خطأ: لا يُسمح بالصور ومقاطع الفيديو.",
+  "error_cant_delete_file": "خطأ: تم حجز الملف، لا يمكنك حذفه"
 }
