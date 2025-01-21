@@ -13,6 +13,8 @@ final class AllBoardsExpiredState extends AllBoardsState {}
 
 final class AllBoardsNoInternetState extends AllBoardsState {}
 
+
+
 final class AllBoardsSuccessState extends AllBoardsState {
   final List<Board> newBoards;
   final bool isReachMax;

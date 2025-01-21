@@ -35,6 +35,7 @@ class BoardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final allBoardsCubit = context.read<AllBoardsCubit>();
     final addBoardCubit = context.read<AddBoardCubit>();
+    final leaveFromBoardCubit = context.read<LeaveFromBoardCubit>();
     final favoriteCubit = context.read<BoardFavoriteCubit>();
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
@@ -193,9 +194,20 @@ class BoardScreen extends StatelessWidget {
             allBoardsCubit.removeBoard(
                 index: state.index,
                 id: allBoardsCubit.allBoards[state.index].id);
-          } else if (state is LeaveFromBoardFailedState) {
+            print("Leave board");
+
+          } else if (state is BoardDeleteSuccessState) {
+            Navigator.pop(context);
+            allBoardsCubit.removeBoard(
+                index: state.index,
+                id: allBoardsCubit.allBoards[state.index].id);
+            print("Leave board");
+
+          }else if (state is LeaveFromBoardFailedState) {
             // Navigator.pop(context);
             errorDialog(context: context, text: state.errorMessage);
+          }else if(state is BoardDeleteLoadingState){
+            loadingDialog(context: context, mediaQuery: mediaQuery,title: S.of(context).delete);
           } else if (state is LeaveFromBoardExpiredState) {
             showExpiredDialog(
               context: context,
@@ -216,7 +228,8 @@ class BoardScreen extends StatelessWidget {
               }
               if (state is AllBoardsFailedState) {
                 errorDialog(context: context, text: state.errorMessage);
-              } else if (state is AllBoardsExpiredState) {
+              }
+              else if (state is AllBoardsExpiredState) {
                 showExpiredDialog(
                   context: context,
                   onConfirmBtnTap: () async {
@@ -245,7 +258,6 @@ class BoardScreen extends StatelessWidget {
               }
             },
             builder: (context, state) {
-              print("===========Platform============${Statics.isPlatformDesktop}");
               return RefreshIndicator(
                 onRefresh: () async {
                   // await allBoardsCubit.refreshData();
@@ -260,6 +272,7 @@ class BoardScreen extends StatelessWidget {
                               addBoardCubit: addBoardCubit,
                               favoriteCubit: favoriteCubit,
                               currentBoard: allBoardsCubit.allBoards[index],
+                              leaveFromBoardCubit: leaveFromBoardCubit,
                               currentIndex: index,
                             ).animate().fade(
                                   duration: const Duration(milliseconds: 500),
@@ -271,6 +284,7 @@ class BoardScreen extends StatelessWidget {
                         children: List.generate(
                           allBoardsCubit.allBoards.length,
                           (index) => BoardWidget(
+                            leaveFromBoardCubit: leaveFromBoardCubit,
                             allBoardsCubit: allBoardsCubit,
                             addBoardCubit: addBoardCubit,
                             favoriteCubit: favoriteCubit,

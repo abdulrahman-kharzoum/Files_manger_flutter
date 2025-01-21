@@ -23,6 +23,7 @@ class BoardWidget extends StatelessWidget {
   final Board? currentBoard;
   final int currentIndex;
   final AllBoardsCubit allBoardsCubit;
+  final LeaveFromBoardCubit leaveFromBoardCubit;
   final BoardCubit? boardCubit;
   final AddBoardCubit? addBoardCubit;
   final BoardFavoriteCubit? favoriteCubit;
@@ -39,6 +40,7 @@ class BoardWidget extends StatelessWidget {
     required this.currentBoard,
     required this.currentIndex,
     required this.allBoardsCubit,
+    required this.leaveFromBoardCubit,
     this.favoriteCubit,
   });
 
@@ -94,13 +96,12 @@ class BoardWidget extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child:  Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(
                     child: Row(
-
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       // mainAxisSize: MainAxisSize.min,
                       children: [
@@ -137,8 +138,9 @@ class BoardWidget extends StatelessWidget {
                                                 color: Colors.white,
                                               ),
                                             ),
-                                            errorWidget: (context, url, error) =>
-                                                const Icon(Icons.error),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
                                             fit: BoxFit.contain,
                                           ),
                                         )
@@ -205,8 +207,7 @@ class BoardWidget extends StatelessWidget {
                                           : mediaQuery.width / 90,
                                     ),
                                     Text(
-
-                                      '${currentBoard!.filesNumber == null ?0:currentBoard!.filesNumber}',
+                                      '${currentBoard!.filesNumber == null ? 0 : currentBoard!.filesNumber}',
                                       style: const TextStyle(
                                         color: Colors.black38,
                                         fontSize: 13,
@@ -220,10 +221,10 @@ class BoardWidget extends StatelessWidget {
                           ],
                         ),
                         SizedBox(
-                          width: Statics.isPlatformDesktop? mediaQuery.width / 30: mediaQuery.width/10,
-
+                          width: Statics.isPlatformDesktop
+                              ? mediaQuery.width / 30
+                              : mediaQuery.width / 10,
                           child: PopupMenuButton(
-
                               icon: const Icon(Icons.more_vert),
                               onSelected: (value) async {
                                 if (value == 'settings') {
@@ -233,12 +234,14 @@ class BoardWidget extends StatelessWidget {
                                       builder: (context) => MultiBlocProvider(
                                         providers: [
                                           BlocProvider(
-                                            create: (context) => BoardSettingsCubit(
-                                                currentBoard: currentBoard!)
-                                              ..initState(),
+                                            create: (context) =>
+                                                BoardSettingsCubit(
+                                                    currentBoard: currentBoard!)
+                                                  ..initState(),
                                           ),
                                           BlocProvider(
-                                              create: (context) => AddBoardCubit()),
+                                              create: (context) =>
+                                                  AddBoardCubit()),
                                         ],
                                         child: BoardSettingsScreen(
                                           allBoardCubit: allBoardsCubit,
@@ -247,8 +250,15 @@ class BoardWidget extends StatelessWidget {
                                     ),
                                   );
                                 } else if (value == 'leave') {
-                                  await allBoardsCubit.removeBoard(
-                                      id: currentBoard!.id, index: currentIndex);
+                                  await leaveFromBoardCubit.leaveBoard(
+                                      context: context,
+                                      currentBoard: currentBoard!,
+                                      index: currentIndex);
+                                } else if (value == 'delete') {
+                                  await leaveFromBoardCubit.deleteBoard(
+                                      context: context,
+                                      currentBoard: currentBoard!,
+                                      index: currentIndex);
                                 }
                               },
                               itemBuilder: (context) => [
@@ -256,14 +266,26 @@ class BoardWidget extends StatelessWidget {
                                       value: 'leave',
                                       child: ListTile(
                                         leading: const Icon(Icons.exit_to_app),
-                                        title: Text(S.of(context).leave_the_board),
+                                        title:
+                                            Text(S.of(context).leave_the_board),
                                       ),
                                     ),
                                     PopupMenuItem(
                                       value: 'settings',
                                       child: ListTile(
                                         leading: const Icon(Icons.settings),
-                                        title: Text(S.of(context).board_settings),
+                                        title:
+                                            Text(S.of(context).board_settings),
+                                      ),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'delete',
+                                      child: ListTile(
+                                        leading: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                        title: Text(S.of(context).delete),
                                       ),
                                     ),
                                   ]),

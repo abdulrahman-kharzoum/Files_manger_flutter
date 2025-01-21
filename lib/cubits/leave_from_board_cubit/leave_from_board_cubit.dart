@@ -15,12 +15,13 @@ class LeaveFromBoardCubit extends Cubit<LeaveFromBoardState> {
   Future<void> leaveBoard(
       {required BuildContext context,
       required Board currentBoard,
+
       required int index}) async {
     try {
       emit(LeaveFromBoardLoadingState());
       String? token = CashNetwork.getCashData(key: 'token');
       final response = await dio().delete(
-        'boards/leave-board/${currentBoard.uuid}',
+        '/groups/${currentBoard.id}/leave',
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -47,6 +48,51 @@ class LeaveFromBoardCubit extends Cubit<LeaveFromBoardState> {
       print(e);
       emit(LeaveFromBoardFailedState(errorMessage: 'Catch exception'));
       print(e);
+    }
+  }
+
+  Future<void> deleteBoard({
+    required BuildContext context,
+    required Board currentBoard,
+    required int index,
+  }) async {
+    try {
+      print("=============Delete Board====================");
+      emit(BoardDeleteLoadingState());
+      String? token = CashNetwork.getCashData(key: 'token');
+
+      print("token get boards: $token");
+      final response = await dio().delete(
+        '/groups/delete/${currentBoard.id}',
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      print('The status code is => ${response.statusCode}');
+      print(response.data);
+
+      if (response.statusCode == 200) {
+
+        emit(BoardDeleteSuccessState(index: index));
+      } else {
+        print('Failed to fetch boards: ${response.statusCode}');
+        emit(LeaveFromBoardFailedState(errorMessage: response.data['message']));
+      }
+    } on DioException catch (e) {
+      Navigator.pop(context);
+      errorHandler(e: e, context: context);
+      if (e.response!.statusCode == 401) {
+        emit(LeaveFromBoardExpiredState());
+        return;
+      }
+     print('The response is => ${e.response!.data}');
+      print('The failed status code is ${e.response!.statusCode}');
+      emit(LeaveFromBoardFailedState(errorMessage: e.response!.data['message']));
+    } catch (e) {
+      print('================ catch exception =================');
+      print(e);
+      emit(LeaveFromBoardFailedState(errorMessage: 'Catch exception'));
     }
   }
 }

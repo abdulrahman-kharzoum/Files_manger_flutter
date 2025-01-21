@@ -6,10 +6,16 @@ sealed class LeaveFromBoardState {}
 final class LeaveFromBoardInitial extends LeaveFromBoardState {}
 
 final class LeaveFromBoardLoadingState extends LeaveFromBoardState {}
+final class BoardDeleteLoadingState extends LeaveFromBoardState {}
 
 final class LeaveFromBoardSuccessState extends LeaveFromBoardState {
   final int index;
   LeaveFromBoardSuccessState({required this.index});
+}
+
+final class BoardDeleteSuccessState extends LeaveFromBoardState {
+  final int index;
+  BoardDeleteSuccessState({required this.index});
 }
 
 final class LeaveFromBoardFailedState extends LeaveFromBoardState {

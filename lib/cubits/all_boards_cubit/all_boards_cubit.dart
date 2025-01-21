@@ -333,4 +333,8 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
       emit(AllBoardsFailedState(errorMessage: 'Catch exception'));
     }
   }
+
+
+
+
 }
