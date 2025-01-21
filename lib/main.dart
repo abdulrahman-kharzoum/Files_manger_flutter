@@ -41,7 +41,7 @@ void main() async {
     ),
   );
   final notificationCubit = NotificationCubit();
-  final notificationService = NotificationService();
+  final notificationService = NotificationService(notificationCubit);
 notificationService.initialize();
   // final notificationService = NotificationService();
   // // await notificationService.listenNotifications();
@@ -75,6 +75,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<NotificationCubit>(
           create: (context) => NotificationCubit(),
+        ),
+        BlocProvider<BoardFavoriteCubit>(
+          create: (context) => BoardFavoriteCubit(),
         ),
         BlocProvider(
             create: (context) => FileReportCubit()..loadFileReportData()),

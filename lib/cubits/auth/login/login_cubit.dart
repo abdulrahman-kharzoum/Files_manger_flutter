@@ -37,8 +37,8 @@ class LoginCubit extends Cubit<LoginState> {
   }) async {
     try {
       emit(LoginLoading());
-      // final notificationCubit = NotificationCubit();
-      final notificationService = NotificationService();
+      final notificationCubit = NotificationCubit();
+      final notificationService = NotificationService(notificationCubit);
 
       notificationService.initialize();
       String? fcmToken =

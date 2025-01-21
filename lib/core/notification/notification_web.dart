@@ -47,9 +47,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NotificationService {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final NotificationCubit _cubit;
 
-
-  NotificationService();
+  NotificationService(this._cubit);
 
   Future<void> initialize() async {
     await _setupInteractedMessage();
@@ -79,7 +79,7 @@ class NotificationService {
       time: DateTime.now(),
     );
 
-    // _cubit.addNotification(notification);
+    _cubit.addNotification(notification);
   }
 
   Future<void> _requestPermissions() async {
