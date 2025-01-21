@@ -1,3 +1,4 @@
+import 'package:files_manager/theme/color.dart';
 import 'package:flutter/material.dart';
 
 class DiffViewer extends StatefulWidget {
@@ -11,208 +12,336 @@ class _DiffViewerState extends State<DiffViewer> {
   @override
   void initState() {
     super.initState();
-    const diff = "--- Original\n+++ New\n@@ @@\n hello this is a new folder \r\n- so what \r\n+ \r\n \r\n-i am still a rockstar..\r\n \r\n-ad\r\n-dd\r\n+/////i am still a rockstar..\r\n+\r\n+abodododdododod\r\n+\r\n+hwuhe\r\n+\r\n+dfsdsf\n";
-
-    // Parse the diff string into line-based differences
+    const diff = """
+--- Original
++++ New
+@@ @@
+1
+2
+3
+-4
++4a
+5
+6
+-7
++7b
+8
+-9
++9c
+10
+11
+12
+-13
++13d
+14
+15
+16
+-17
++17e
+18
+19
+20
+-21
++21f
+22
+23
+24
+-25
++25g
+26
+27
+28
+-29
++29h
+30
+31
+32
+-33
++33i
+34
+35
+36
+-37
++37j
+38
+39
+40
+-41
++41k
+42
+43
+44
+-45
++45l
+46
+47
+48
+-49
++49m
+50
+51
+52
+-53
++53n
+54
+55
+56
+-57
++57o
+58
+59
+60
+-61
++61p
+62
+63
+64
+-65
++65q
+66
+67
+68
+-69
++69r
+70
+71
+72
+-73
++73s
+74
+75
+76
+-77
++77t
+78
+79
+80
+-81
++81u
+82
+83
+84
+-85
++85v
+86
+87
+88
+-89
++89w
+90
+91
+92
+-93
++93x
+94
+95
+96
+-97
++97y
+98
+99
+100
+""";
     generateLineDiffs(diff);
   }
 
   void generateLineDiffs(String diffString) {
     final lines = diffString.split('\n');
-
     final processedDiffs = <Map<String, dynamic>>[];
-    int originalLineNumber = 0;
-    int newLineNumber = 0;
+    int originalLine = 1;
+    int newLine = 1;
 
     for (var line in lines) {
-      // Ignore metadata lines
       if (line.startsWith('---') || line.startsWith('+++') || line.startsWith('@@')) continue;
 
       if (line.startsWith('-')) {
-        originalLineNumber++;
         processedDiffs.add({
           'type': 'removed',
           'original': line.substring(1).trim(),
           'new': '',
-          'originalLine': originalLineNumber,
+          'originalLine': originalLine++,
           'newLine': null,
         });
       } else if (line.startsWith('+')) {
-        newLineNumber++;
         processedDiffs.add({
           'type': 'added',
           'original': '',
           'new': line.substring(1).trim(),
           'originalLine': null,
-          'newLine': newLineNumber,
+          'newLine': newLine++,
         });
       } else {
-        originalLineNumber++;
-        newLineNumber++;
         processedDiffs.add({
           'type': 'unchanged',
           'original': line.trim(),
           'new': line.trim(),
-          'originalLine': originalLineNumber,
-          'newLine': newLineNumber,
+          'originalLine': originalLine++,
+          'newLine': newLine++,
         });
       }
     }
 
-    // Filter out lines without line numbers on either side
-    final filteredDiffs = processedDiffs.where((diff) {
-      return (diff['originalLine'] != null && diff['originalLine'] > 0) || (diff['newLine'] != null && diff['newLine'] > 0);
-    }).toList();
-
     setState(() {
-      _lineDiffs = filteredDiffs;
+      _lineDiffs = processedDiffs.where((diff) => diff['originalLine'] != null || diff['newLine'] != null).toList();
     });
-  }
-
-  List<TextSpan> _highlightChangedWords(String original, String updated) {
-    final originalWords = original.split(' ');
-    final updatedWords = updated.split(' ');
-
-    List<TextSpan> spans = [];
-    for (int i = 0; i < originalWords.length || i < updatedWords.length; i++) {
-      if (i < originalWords.length &&
-          i < updatedWords.length &&
-          originalWords[i] == updatedWords[i]) {
-        spans.add(TextSpan(text: '${originalWords[i]} ', style: TextStyle(color: Colors.black)));
-      } else {
-        if (i < originalWords.length) {
-          spans.add(TextSpan(
-              text: '${originalWords[i]} ',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)));
-        }
-        if (i < updatedWords.length) {
-          spans.add(TextSpan(
-              text: '${updatedWords[i]} ',
-              style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)));
-        }
-      }
-    }
-    return spans;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Line Diff Viewer')),
+      appBar: AppBar(
+        title: Text('Diff Viewer', style: TextStyle(color: Colors.white)),
+        backgroundColor: AppColors.dark,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          _buildHeader(),
+          Expanded(
+            child: _buildDiffColumns(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      padding: EdgeInsets.all(8),
+      color: Colors.black12,
+      child: Row(
+        children: [
+          // Original Header
+          Expanded(
+            child: _buildLineNumberHeader('Original', Colors.red),
+          ),
+          // Vertical Divider
+          Container(
+            width: 3,
+            color: Colors.white,
+          ),
+          // New Header
+          Expanded(
+            child: _buildLineNumberHeader('New', Colors.green),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLineNumberHeader(String text, Color color) {
+    return Expanded(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            // width: 50,
+
+            child: Center(child: Text(text, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))),
+          ),
+          Expanded(child: Container()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDiffColumns() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          left: BorderSide(color: Colors.grey, width: 1),
+          right: BorderSide(color: Colors.grey, width: 1),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildOriginalColumn(),
+          Container(
+            width: 1,
+            color: Colors.grey,
+          ),
+          _buildNewColumn(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOriginalColumn() {
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: _lineDiffs.length,
+        itemBuilder: (context, index) {
+          final diff = _lineDiffs[index];
+          return _buildLineItem(
+            lineNumber: diff['originalLine'],
+            content: diff['original'],
+            backgroundColor: diff['type'] == 'removed' ? Colors.red.withOpacity(0.1) : null,
+            textColor: diff['type'] == 'removed' ? Colors.red : Colors.white, // Unchanged lines are black
+            prefix: diff['type'] == 'removed' ? '-' : null,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildNewColumn() {
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: _lineDiffs.length,
+        itemBuilder: (context, index) {
+          final diff = _lineDiffs[index];
+          return _buildLineItem(
+            lineNumber: diff['newLine'],
+            content: diff['new'],
+            backgroundColor: diff['type'] == 'added' ? Colors.green.withOpacity(0.1) : null,
+            textColor: diff['type'] == 'added' ? Colors.green : Colors.white, // Unchanged lines are black
+            prefix: diff['type'] == 'added' ? '+' : null,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildLineItem({
+    required dynamic lineNumber,
+    required String content,
+    Color? backgroundColor,
+    Color textColor = Colors.white,
+    String? prefix,
+  }) {
+    return Container(
+      color: backgroundColor,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 50,
+            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: const [
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (prefix != null) Text(prefix, style: TextStyle(color: textColor, fontWeight: FontWeight.bold)),
+                SizedBox(width: 4),
                 Text(
-                  'Original',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                Text(
-                  'New',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  lineNumber?.toString() ?? '',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ],
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(16.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Left Column: Original (Removed and Unchanged Lines)
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: _lineDiffs.map((diff) {
-                        Color bgColor = diff['type'] == 'removed'
-                            ? Colors.red.withOpacity(0.1)
-                            : Colors.transparent;
-
-                        return Container(
-                          color: bgColor,
-                          margin: EdgeInsets.symmetric(vertical: 4.0),
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                diff['originalLine'] != null
-                                    ? '${diff['originalLine']} -'
-                                    : '',
-                                style:
-                                TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: diff['type'] == 'unchanged'
-                                    ? SelectableText(
-                                  diff['original'],
-                                  style: TextStyle(fontSize: 16),
-                                )
-                                    : SelectableText.rich(
-                                  TextSpan(
-                                    children: _highlightChangedWords(
-                                      diff['original'],
-                                      diff['new'],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  const SizedBox(width: 16), // Space between columns
-                  // Right Column: New (Added and Unchanged Lines)
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: _lineDiffs.map((diff) {
-                        Color bgColor = diff['type'] == 'added'
-                            ? Colors.green.withOpacity(0.1)
-                            : Colors.transparent;
-
-                        return Container(
-                          color: bgColor,
-                          margin: EdgeInsets.symmetric(vertical: 4.0),
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                diff['newLine'] != null
-                                    ? '${diff['newLine']} +'
-                                    : '',
-                                style:
-                                TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: diff['type'] == 'unchanged'
-                                    ? SelectableText(
-                                  diff['new'],
-                                  style: TextStyle(fontSize: 16),
-                                )
-                                    : SelectableText.rich(
-                                  TextSpan(
-                                    children: _highlightChangedWords(
-                                      diff['original'],
-                                      diff['new'],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              child: SelectableText(
+                content,
+                style: TextStyle(
+                  color: textColor, // Text color for the content
+                ),
               ),
             ),
           ),
