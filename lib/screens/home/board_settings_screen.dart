@@ -58,12 +58,18 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
           );
         } else if (addBoardState is AddBoardSuccessState) {
           Navigator.pop(context);
+          Navigator.pop(context);
           showLightSnackBar(context, S.of(context).adding_board);
+
         } else if (addBoardState is AddBoardFailedState) {
           errorDialog(context: context, text: addBoardState.errorMessage);
+          Navigator.pop(context);
         }
       },
       builder: (context, addBoardState) {
+        bool isTheGroupCreated =  boardSettingsCubit.currentBoard.uuid == "created"?true:false;
+        print("is the group Created !?!? $isTheGroupCreated");
+
         return BlocConsumer<BoardSettingsCubit, BoardSettingsState>(
           listener: (context, boardState) {
             if (boardState is BoardSettingsLoadingState) {
@@ -94,8 +100,8 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                   : Locale(boardSettingsCubit.currentBoard.language.code),
               context: context,
               child: DefaultTabController(
-                length:
-                    boardSettingsCubit.currentBoard.parentId != null ? 1 : 3,
+
+                length: isTheGroupCreated ? 2 : 1,
                 child: BlocBuilder<AppThemeCubit, AppThemeState>(
                   builder: (context, state) {
                     final isDarkTheme = state is AppThemeDark;
@@ -180,9 +186,7 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                                 );
                               }
                             } else {
-
-
-                              int id =
+                                 int id =
                                   await context.read<AddBoardCubit>().addBoard(
                                         context: context,
                                         title: newBoard.title,
@@ -191,8 +195,10 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                                         lang: newBoard.language.code,
                                       );
                               newBoard.id = id;
-                              widget.allBoardCubit
-                                  .addNewBoard(newBoard: newBoard);
+                              widget.allBoardCubit.allBoards.clear();
+                            await  widget.allBoardCubit.getAllBoards(context: context);
+                              // widget.allBoardCubit
+                              //     .addNewBoard(newBoard: newBoard);
                             }
 
                             widget.allBoardCubit.refresh();
@@ -221,7 +227,7 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                                 ? mediaQuery.width / 90
                                 : mediaQuery.width / 30,
                           ),
-                          tabs: boardSettingsCubit.currentBoard.parentId != null
+                          tabs: !isTheGroupCreated
                               ? [
                                   Tab(
                                     text: S.of(context).settings,
@@ -236,6 +242,7 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                                       size: mediaQuery.width / 32,
                                     ),
                                   ),
+
                                   Tab(
                                     text: S.of(context).users,
                                     icon: Icon(
@@ -253,7 +260,7 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                                 ],
                         ),
                       ),
-                      body: boardSettingsCubit.currentBoard.parentId != null
+                      body:  !isTheGroupCreated
                           ? TabBarView(
                               children: [
                                 BoardSettingsSection(
@@ -272,10 +279,10 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
                                   mediaQuery: mediaQuery,
                                   boardSettingsCubit: boardSettingsCubit,
                                 ),
-                                BoardPrivacySection(
-                                  boardSettingsCubit: boardSettingsCubit,
-                                  mediaQuery: mediaQuery,
-                                ),
+                                // BoardPrivacySection(
+                                //   boardSettingsCubit: boardSettingsCubit,
+                                //   mediaQuery: mediaQuery,
+                                // ),
                               ],
                             ),
                     );
@@ -288,4 +295,5 @@ class _BoardSettingsScreenState extends State<BoardSettingsScreen> {
       },
     );
   }
+
 }

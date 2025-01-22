@@ -1,131 +1,195 @@
+import 'package:files_manager/cubits/user_report_cubit/user_report_cubit.dart';
+import 'package:files_manager/cubits/user_report_cubit/user_report_state.dart';
+import 'package:files_manager/models/member_model.dart';
+import 'package:files_manager/models/user_report_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../cubits/search_filter_cubit/filter_cubit.dart';
-import '../../cubits/user_report_cubit/user_report_cubit.dart';
-import '../../models/user_report_model.dart';
+import '../../core/animation/dialogs/dialogs.dart';
 
-class UserReportScreen extends StatelessWidget {
+class UserReportScreen extends StatefulWidget {
+  const UserReportScreen({Key? key}) : super(key: key);
+
+  @override
+  _UserReportScreenState createState() => _UserReportScreenState();
+}
+
+class _UserReportScreenState extends State<UserReportScreen> {
+  final TextEditingController _userNameController = TextEditingController();
+  final ScrollController _horizontalScrollController = ScrollController();
+  final ScrollController _verticalScrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final mediaQuery = MediaQuery.of(context).size;
+
     return Scaffold(
-      appBar: AppBar(title: Text('User Report')),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: InputDecoration(
-                labelText: "Search by User Name",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (value) => context.read<FilterCubit>().updateSearchQuery(value),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: DropdownButton<Process?>(
-                    hint: Text("Filter by Process"),
-                    value: context.select<FilterCubit, Process?>((cubit) => cubit.state.selectedProcess),
-                    isExpanded: true,
-                    items: [null, ...Process.values].map((process) {
-                      return DropdownMenuItem<Process?>(
-                        value: process,
-                        child: Text(process == null ? "All" : process.toString().split('.').last),
-                      );
-                    }).toList(),
-                    onChanged: (value) => context.read<FilterCubit>().updateProcessFilter(value),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      DateTime? picked = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now(),
-                      );
-                      if (picked != null) context.read<FilterCubit>().updateStartDate(picked);
-                    },
-                    child: Text("Select Start Date"),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      DateTime? picked = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now(),
-                      );
-                      if (picked != null) context.read<FilterCubit>().updateEndDate(picked);
-                    },
-                    child: Text("Select End Date"),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: BlocBuilder<UserReportCubit, UserReportModel>(
-              builder: (context, report) {
-                return BlocBuilder<FilterCubit, FilterState>(
-                  builder: (context, filterState) {
-                    final filteredFiles = report.files.where((file) {
-                      final matchesSearch = file.title.toLowerCase().contains(filterState.searchQuery);
-                      final matchesProcess = filterState.selectedProcess == null ||
-                          report.processes[report.files.indexOf(file)] == filterState.selectedProcess;
-
-                      final fileStartDate = report.start[report.files.indexOf(file)];
-                      final fileEndDate = report.end[report.files.indexOf(file)];
-
-                      final matchesStartDate = filterState.startDate == null ||
-                          (fileStartDate != null && fileStartDate.isAfter(filterState.startDate!));
-                      final matchesEndDate = filterState.endDate == null ||
-                          (fileEndDate != null && fileEndDate.isBefore(filterState.endDate!));
-
-                      return matchesSearch && matchesProcess && matchesStartDate && matchesEndDate;
-                    }).toList();
-
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-                        child: DataTable(
-                          headingRowColor:
-                          MaterialStateColor.resolveWith((states) => Colors.orange[500]!),
-                          columns: [
-                            DataColumn(label: Text('User Name', style: TextStyle(fontWeight: FontWeight.bold))),
-                            DataColumn(label: Text('Process', style: TextStyle(fontWeight: FontWeight.bold))),
-                            DataColumn(label: Text('Start Time', style: TextStyle(fontWeight: FontWeight.bold))),
-                            DataColumn(label: Text('End Time', style: TextStyle(fontWeight: FontWeight.bold))),
-                          ],
-                          rows: filteredFiles.map((file) {
-                            final index = report.files.indexOf(file);
-                            return DataRow(cells: [
-                              DataCell(Text(file.title)),
-                              DataCell(Text(report.processes[index].toString().split('.').last)),
-                              DataCell(Text(report.start[index].toString())),
-                              DataCell(Text(report.end[index].toString())),
-                            ]);
-                          }).toList(),
-                        ),
-                      ),
+      appBar: AppBar(
+        title: Text('User Report', style: theme.textTheme.titleLarge),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.picture_as_pdf),
+            onPressed: () {
+              final userId = context.read<UserReportCubit>().userId;
+              if (userId != null) {
+                context.read<UserReportCubit>().getAllUserReports(
+                      context: context,
+                      userId: userId,
+                      pdf: 1,
                     );
-                  },
-                );
-              },
-            ),
+              }
+            },
           ),
         ],
+      ),
+      body: BlocConsumer<UserReportCubit, UserReportState>(
+        listener: (context, state) {
+          if (state is UserReportLoadingState) {
+            loadingDialog(context: context, mediaQuery: mediaQuery);
+          } else if (state is UserReportSuccessState ||
+              state is UserReportFailureState) {
+            Navigator.of(context, rootNavigator: true).pop();
+          }
+        },
+        builder: (context, state) {
+          return Column(
+            children: [
+              _buildFilterRow(context, state),
+              Expanded(
+                child: _buildContent(context, state, theme),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildFilterRow(BuildContext context, UserReportState state) {
+    final UserReportCubit userReportCubit = context.read<UserReportCubit>();
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _userNameController,
+                  decoration: InputDecoration(
+                    labelText: 'User Name',
+                    hintText: 'Enter user name',
+                    fillColor: Theme.of(context).focusColor,
+                    focusColor: Theme.of(context).focusColor,
+                    hoverColor: Theme.of(context).hoverColor,
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    userReportCubit.search(context: context, userName: value);
+                  },
+                ),
+              ),
+              SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: () {
+                  userReportCubit.applyFilter(context);
+                },
+                child: Text('Apply Filter'),
+              ),
+            ],
+          ),
+          if (state is UserReportSearchResultsState)
+            _buildSearchResults(state.members),
+        ],
+      ),
+    );
+  }
+  Widget _buildSearchResults(List<Member> members) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Scrollbar(
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: members.length,
+          itemBuilder: (context, index) {
+            final member = members[index];
+            return Container(
+              margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).hoverColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ListTile(
+                focusColor: Theme.of(context).focusColor,
+                title: Text(
+                  member.firstName ?? 'No Name',
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.headlineSmall!.color,
+                  ),
+                ),
+                subtitle: Text(
+                  member.email ?? 'No Email',
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.headlineSmall!.color,
+                  ),
+                ),
+                onTap: () {
+                  context.read<UserReportCubit>().selectMember(member);
+                },
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent(
+      BuildContext context, UserReportState state, ThemeData theme) {
+    if (state is UserReportLoadingState) {
+      return Center(child: CircularProgressIndicator());
+    } else if (state is UserReportFailureState) {
+      return Center(child: Text(state.errorMessage));
+    } else if (state is UserReportSuccessState) {
+      return _buildReportTable(state.userReportModel, theme);
+    } else if (state is UserReportMemberSelectedState) {
+      return Center(child: Text('Selected User: ${state.member.firstName}'));
+    }
+    return Center(child: Text('Search for a user to view report'));
+  }
+
+  Widget _buildReportTable(UserReportModel report, ThemeData theme) {
+    return Scrollbar(
+      controller: _verticalScrollController,
+      child: SingleChildScrollView(
+        controller: _verticalScrollController,
+        child: Scrollbar(
+          controller: _horizontalScrollController,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+              columns: [
+                DataColumn(label: Text('Message')),
+                DataColumn(label: Text('Date')),
+                DataColumn(label: Text('Type')),
+              ],
+              rows: report.data
+                  .map((entry) => DataRow(
+                        cells: [
+                          DataCell(Text(entry.message)),
+                          DataCell(Text(entry.date)),
+                          DataCell(Text(entry.type)),
+                        ],
+                      ))
+                  .toList(),
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -318,6 +318,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "feed_back": MessageLookupByLibrary.simpleMessage("ملاحظات"),
         "field_empty": MessageLookupByLibrary.simpleMessage("حقل البحث فارغ"),
         "file_name": MessageLookupByLibrary.simpleMessage("اسم الملف"),
+        "file_report": MessageLookupByLibrary.simpleMessage("تقرير الملف"),
         "files_to_approve": MessageLookupByLibrary.simpleMessage(
             "ملفات بانتظار موافقة مسؤول المجموعة"),
         "filter_by": MessageLookupByLibrary.simpleMessage("تصفية حسب:"),
@@ -350,6 +351,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "gift_price": MessageLookupByLibrary.simpleMessage("سعر الهدية"),
         "give_your_rating": MessageLookupByLibrary.simpleMessage("أعط تقييمك"),
         "group": MessageLookupByLibrary.simpleMessage("جماعية"),
+        "group_report": MessageLookupByLibrary.simpleMessage("تقرير المجموعة"),
         "guest": MessageLookupByLibrary.simpleMessage("ضيف"),
         "guest_desc": MessageLookupByLibrary.simpleMessage(
             "سيتمكن من الاطلاع على محتوى اللوحات فقط, دون أي صلاحيات إضافية."),
@@ -668,6 +670,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "remove": MessageLookupByLibrary.simpleMessage("حذف"),
         "removeAccount": MessageLookupByLibrary.simpleMessage("إزالة الحساب"),
         "remove_account": MessageLookupByLibrary.simpleMessage("إزالة الحساب"),
+        "renamed":
+            MessageLookupByLibrary.simpleMessage("تم إعادة التسمية بنجاح"),
         "reorder": MessageLookupByLibrary.simpleMessage("أعد الطلب"),
         "replying_to": MessageLookupByLibrary.simpleMessage("الرد على"),
         "report": MessageLookupByLibrary.simpleMessage("تقرير"),

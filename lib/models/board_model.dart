@@ -111,7 +111,7 @@ class Board {
     return Board(
       CreatorId: group.creatorId.toString(),
       id: group.id,
-      uuid: '', // UUID is not available in Group; leave empty or generate one.
+      uuid: 'created', // UUID is not available in Group; leave empty or generate one.
       parentId: null, // Parent ID is not available; leave as null.
       userId: group.creatorId, // Use the creator's ID as userId.
       language: Language(id: 1, name: 'english', code: group.lang, direction: 'lr'), // Map `lang` to `Language`.

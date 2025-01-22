@@ -235,6 +235,7 @@ class AllBoardsCubit extends Cubit<AllBoardsState> {
       print(response.data);
 
       if (response.statusCode == 200) {
+        allBoards.clear();
         final groupData = response.data['data'];
 
         if (groupData == null || groupData is! List) {

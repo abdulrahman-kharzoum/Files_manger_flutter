@@ -6782,6 +6782,36 @@ class S {
     );
   }
 
+  /// `Renamed Successfully`
+  String get renamed {
+    return Intl.message(
+      'Renamed Successfully',
+      name: 'renamed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `File Report`
+  String get file_report {
+    return Intl.message(
+      'File Report',
+      name: 'file_report',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Group Report`
+  String get group_report {
+    return Intl.message(
+      'Group Report',
+      name: 'group_report',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `All versions`
   String get all_versions {
     return Intl.message(

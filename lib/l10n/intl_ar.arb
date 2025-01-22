@@ -679,5 +679,8 @@
   "error_Images_video_not_allowed": "خطأ: لا يُسمح بالصور ومقاطع الفيديو.",
   "error_cant_delete_file": "خطأ: تم حجز الملف، لا يمكنك حذفه",
   "all_versions":"جميع الإصادارات",
-  "compare":"مقارنة"
+  "compare":"مقارنة",
+  "renamed": "تم إعادة التسمية بنجاح",
+  "file_report": "تقرير الملف",
+  "group_report": "تقرير المجموعة"
 }

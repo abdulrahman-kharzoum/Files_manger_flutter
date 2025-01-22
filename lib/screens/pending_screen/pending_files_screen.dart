@@ -16,17 +16,42 @@ import 'package:files_manager/cubits/pending_cubit/pending_cubit.dart';
 
 import '../../core/functions/snackbar_function.dart';
 import '../../core/functions/statics.dart';
+import '../../cubits/application_cubit/application_cubit.dart';
 
 class PendingFilesScreen extends StatelessWidget {
-  const PendingFilesScreen({super.key});
+  final ApplicationCubit applicationCubit;
+  final int groupId;
+
+  const PendingFilesScreen(
+      {super.key, required this.applicationCubit, required this.groupId});
 
   @override
   Widget build(BuildContext context) {
-    bool accepted = false;
+    PendingState? _previousState;
     final mediaQuery = MediaQuery.of(context).size;
     final cubit = context.read<PendingCubit>();
     return Scaffold(
-      appBar: CustomAppBar(title: S.of(context).pending),
+      appBar: CustomAppBar(
+        title: S.of(context).pending,
+        leading: IconButton(
+          tooltip: S.of(context).back,
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () async {
+            applicationCubit.newBoardsApp.clear();
+            if (applicationCubit.folderHistory.isEmpty) {
+              await applicationCubit.getAllFilesBoard(
+                  context: context, groupId: groupId);
+            } else {
+              await applicationCubit.getAllFilesFolder(
+                  context: context,
+                  groupId: groupId,
+                  folderId: applicationCubit.folderHistory.last);
+            }
+
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       backgroundColor: Theme.of(context).textTheme.headlineSmall!.color,
       body: Column(
         children: [
@@ -34,20 +59,39 @@ class PendingFilesScreen extends StatelessWidget {
             listener: (BuildContext context, PendingState state) {
               if (state is PendingLoading) {
                 loadingDialog(context: context, mediaQuery: mediaQuery);
-              } else if (state is PendingFileAcceptedOrRejectedSuccessState) {
+              } else if(state is PendingFileAcceptedOrRejectedLoadingState){
+                ///
+              }else if (state is PendingFileAcceptedOrRejectedSuccessState) {
+
+                if (state.accepted) {
+                  showLightSnackBar(context, S.of(context).accepted);
+                } else {
+                  showLightSnackBar(context, S.of(context).rejected);
+                }
                 Navigator.pop(context);
-                Navigator.pop(context);
-                accepted
-                    ? showLightSnackBar(context, S.of(context).accepted)
-                    : showLightSnackBar(context, S.of(context).rejected);
+
               } else if (state is PendingNoData) {
                 NoData(iconData: Icons.search, text: S.of(context).no_data);
+                if(_previousState is PendingFileAcceptedOrRejectedSuccessState){
+                  Navigator.pop(context);
+                }
               } else if (state is PendingFailedState) {
                 errorDialog(context: context, text: state.errorMessage);
               }
             },
             builder: (context, state) {
+              if (cubit.applicationsToApprove.isEmpty) {
+                if (state is PendingLoading) {
+                } else {
+                  return Center(
+                      child: NoData(
+                          iconData: Icons.search, text: S.of(context).no_data));
+                }
+              }
               if (state is PendingToAprroveFilesSucces) {
+                if(_previousState is PendingFileAcceptedOrRejectedSuccessState){
+                  Navigator.pop(context);
+                }
                 return Expanded(
                   child: ListView.builder(
                       itemCount: state.applicationsToApprove.length,
@@ -110,7 +154,6 @@ class PendingFilesScreen extends StatelessWidget {
                                               status: "accepted",
                                               groupId: cubit.group_id!,
                                               fileId: file.getApplicationId());
-                                          accepted = true;
                                         },
                                         child: const Text('Accept',
                                             style:
@@ -123,7 +166,6 @@ class PendingFilesScreen extends StatelessWidget {
                                               status: "rejected",
                                               groupId: cubit.group_id!,
                                               fileId: file.getApplicationId());
-                                          accepted = false;
                                         },
                                         child: const Text('Denied',
                                             style:
@@ -149,8 +191,15 @@ class PendingFilesScreen extends StatelessWidget {
                                           width: Statics.isPlatformDesktop
                                               ? mediaQuery.width / 2.5
                                               : mediaQuery.width / 1.5,
-                                          child:
-                                              Text(file.getApplicationName()),
+                                          child: Text(
+                                            file.getApplicationName(),
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineSmall!
+                                                  .color,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       Statics.isPlatformDesktop

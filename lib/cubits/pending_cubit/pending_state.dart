@@ -9,7 +9,11 @@ final class PendingNoData extends PendingState {}
 final class PendingFailedServerError extends PendingState {}
 final class PendingFailedNoInternet extends PendingState {}
 final class PendingInviteAcceptedSuccessState extends PendingState {}
-final class PendingFileAcceptedOrRejectedSuccessState extends PendingState {}
+final class PendingFileAcceptedOrRejectedLoadingState extends PendingState {}
+final class PendingFileAcceptedOrRejectedSuccessState extends PendingState {
+  final bool accepted;
+  PendingFileAcceptedOrRejectedSuccessState({required this.accepted});
+}
 final class PendingInviteRejectedSuccessState extends PendingState {}
 final class PendingInviteDeletedSuccessState extends PendingState {}
 final class PendingUpdatedSuccessState extends PendingState {}

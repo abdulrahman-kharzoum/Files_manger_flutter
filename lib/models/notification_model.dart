@@ -1,41 +1,74 @@
+// class NotificationModel {
+//   final String id;
+//   final String type;
+//   final String notifiableType;
+//   final int notifiableId;
+//   final TaskData task;
+//   final DateTime createdAt;
+//   final DateTime updatedAt;
+//   final DateTime? readAt;
+//
+//   NotificationModel({
+//     required this.id,
+//     required this.type,
+//     required this.notifiableType,
+//     required this.notifiableId,
+//     required this.task,
+//     required this.createdAt,
+//     required this.updatedAt,
+//     this.readAt,
+//   });
+//
+//   factory NotificationModel.fromJson(Map<String, dynamic> json) {
+//     return NotificationModel(
+//       id: json['id'] ?? '',
+//       type: json['type'] ?? '',
+//       notifiableType: json['notifiable_type'] ?? '',
+//       notifiableId: json['notifiable_id'] ?? 0,
+//       task: TaskData.fromJson(json['data']['task'] ?? {}),
+//       createdAt: json['created_at'] != null
+//           ? DateTime.parse(json['created_at'])
+//           : DateTime.now(),
+//       updatedAt: json['updated_at'] != null
+//           ? DateTime.parse(json['updated_at'])
+//           : DateTime.now(),
+//       readAt: json['read_at'] != null ? DateTime.parse(json['read_at']) : null,
+//     );
+//   }
+// }
 class NotificationModel {
-  final String id;
-  final String type;
-  final String notifiableType;
-  final int notifiableId;
-  final TaskData task;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final DateTime? readAt;
+  final String title;
+  final String body;
+  final DateTime time;
+  final bool isRead;
 
   NotificationModel({
-    required this.id,
-    required this.type,
-    required this.notifiableType,
-    required this.notifiableId,
-    required this.task,
-    required this.createdAt,
-    required this.updatedAt,
-    this.readAt,
+    required this.title,
+    required this.body,
+    required this.time,
+    this.isRead = false,
   });
 
+  // Add fromJson constructor
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-      id: json['id'] ?? '',
-      type: json['type'] ?? '',
-      notifiableType: json['notifiable_type'] ?? '',
-      notifiableId: json['notifiable_id'] ?? 0,
-      task: TaskData.fromJson(json['data']['task'] ?? {}),
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
-          : DateTime.now(),
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'])
-          : DateTime.now(),
-      readAt: json['read_at'] != null ? DateTime.parse(json['read_at']) : null,
+      title: json['title'] ?? 'No Title',
+      body: json['body'] ?? 'No Content',
+      time: DateTime.parse(json['created_at']), // Adapt to your API field name
+      isRead: json['is_read'] ?? false,
     );
   }
+
+  // Optionally add toJson if needed
+  Map<String, dynamic> toJson() => {
+    'title': title,
+    'body': body,
+    'created_at': time.toIso8601String(),
+    'is_read': isRead,
+  };
 }
+
+
 
 class TaskData {
   final int id;

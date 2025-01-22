@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 
 import 'package:dio/dio.dart' as Dio;
 import 'package:file_picker/file_picker.dart';
+import 'package:files_manager/generated/l10n.dart';
 import 'package:files_manager/models/group.dart';
 import 'package:flutter/material.dart';
 import 'package:files_manager/core/functions/apis_error_handler.dart';
@@ -79,12 +80,13 @@ class BoardAddApplicationCubit extends Cubit<BoardAddApplicationState> {
         print("===========message ====================");
         print(response.data['message']);
         var message = response.data['message'];
+
         final fileApi = FileApiModel.fromJson(response.data['data']);
         Application createdApplication = fileApi.extension == null
             ? FolderModel.fromFileApi(fileApi, group_id)
             : FileModel.fromFileApi(fileApi, group_id);
         if (message ==
-            'Success!, waiting for group admin\'s approval.') {
+            S.of(context).waiting_admin) {
           emit(BoardAddApplicationSuccessNeedWaiting());
         } else {
           emit(

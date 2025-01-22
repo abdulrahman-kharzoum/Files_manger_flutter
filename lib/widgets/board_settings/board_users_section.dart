@@ -242,63 +242,7 @@ class BoardUsersSection extends StatelessWidget {
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              trailing: PopupMenuButton(
-                                                icon:
-                                                    const Icon(Icons.more_vert),
-                                                onSelected: (value) {
-                                                  if (value == 'edit') {
-                                                    Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            MultiBlocProvider(
-                                                          providers: [
-                                                            BlocProvider(
-                                                              create: (context) =>
-                                                                  AddMemberCubit()
-                                                                    ..initState(boardSettingsCubit
-                                                                        .searchMembers[
-                                                                            index]
-                                                                        .role),
-                                                            ),
-                                                          ],
-                                                          child:
-                                                              UpdateMemberScreen(
-                                                            currentMember:
-                                                                boardSettingsCubit
-                                                                        .searchMembers[
-                                                                    index],
-                                                            boardSettingsCubit:
-                                                                boardSettingsCubit,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  } else if (value ==
-                                                      'delete') {
-                                                    print('delete');
-                                                  }
-                                                },
-                                                itemBuilder: (context) => [
-                                                  PopupMenuItem(
-                                                    value: 'edit',
-                                                    child: ListTile(
-                                                      leading: const Icon(
-                                                          Icons.settings),
-                                                      title: Text(
-                                                          S.of(context).edit),
-                                                    ),
-                                                  ),
-                                                  PopupMenuItem(
-                                                    value: 'delete',
-                                                    child: ListTile(
-                                                      leading: const Icon(
-                                                          Icons.delete),
-                                                      title: Text(
-                                                          S.of(context).delete),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+
                                             ),
                                     ),
                                     isAdmin && !isThisMe

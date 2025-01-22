@@ -1,6 +1,7 @@
 import 'package:files_manager/core/notification/notification_web.dart';
 import 'package:files_manager/core/shared/local_network.dart';
 import 'package:files_manager/core/functions/statics.dart';
+import 'package:files_manager/cubits/notification_cubit/notification_cubit.dart';
 
 import 'package:files_manager/cubits/theme_cubit/app_theme_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +18,7 @@ import '../generated/l10n.dart';
 import '../simple_bloc_observer.dart';
 import '../theme/theme.dart';
 import 'cubits/file_report_cubit/file_report_cubit.dart';
+
 import 'cubits/user_report_cubit/user_report_cubit.dart';
 import 'routes/routes.dart';
 
@@ -38,10 +40,13 @@ void main() async {
         appId: "1:838693518963:web:0f5a0eee9a2a64803eb406",
         measurementId: "G-JY8BYQKVCK"),
   );
-  final notificationService = NotificationService();
-  await notificationService.listenNotifications();
-  // print("==========fcm==========");
-  // print(await notificationService.getToken());
+  final notificationCubit = NotificationCubit();
+  final notificationService = NotificationService(notificationCubit);
+  notificationService.initialize();
+  // final notificationService = NotificationService();
+  // // await notificationService.listenNotifications();
+  print("==========fcm==========");
+  print(await notificationService.getToken());
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   Bloc.observer = SimpleBlocObserver();
   runApp(
@@ -65,16 +70,17 @@ class MyApp extends StatelessWidget {
         BlocProvider<AllBoardsCubit>(
           create: (context) => AllBoardsCubit(),
         ),
-        // BlocProvider<AllBoardsCubit>(
-        //   create: (context) => AllBoardsCubit()..initState(context: context),
-        // ),
+        BlocProvider<AllBoardsCubit>(
+          create: (context) => AllBoardsCubit(),
+        ),
+        BlocProvider<NotificationCubit>(
+          create: (context) => NotificationCubit(),
+        ),
         BlocProvider<BoardFavoriteCubit>(
           create: (context) => BoardFavoriteCubit(),
         ),
-        BlocProvider(
-            create: (context) => FileReportCubit()..loadFileReportData()),
-        BlocProvider(
-            create: (context) => UserReportCubit()..loadUserReportData()),
+        BlocProvider(create: (context) => FileReportCubit()),
+        BlocProvider(create: (context) => UserReportCubit()),
       ],
       child: BlocConsumer<LocaleCubit, LocaleState>(
         listener: (context, state) {

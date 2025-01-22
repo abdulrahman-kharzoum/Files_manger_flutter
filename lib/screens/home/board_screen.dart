@@ -1,6 +1,10 @@
 import 'package:files_manager/core/functions/statics.dart';
 import 'package:files_manager/cubits/auth/delete_account/delete_account_cubit.dart';
+import 'package:files_manager/cubits/notification_cubit/notification_cubit.dart';
+import 'package:files_manager/cubits/user_report_cubit/user_report_cubit.dart';
 import 'package:files_manager/models/member_model.dart';
+import 'package:files_manager/screens/notifications/notification_screen.dart';
+import 'package:files_manager/screens/report_screen/user_report_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,21 +15,20 @@ import 'package:files_manager/core/animation/dialogs/expired_dialog.dart';
 import 'package:files_manager/core/shared/local_network.dart';
 import 'package:files_manager/cubits/add_board_cubit/add_board_cubit.dart';
 import 'package:files_manager/cubits/all_boards_cubit/all_boards_cubit.dart';
-import 'package:files_manager/cubits/application_cubit/application_cubit.dart';
+
 import 'package:files_manager/cubits/board_favorite_cubit/board_favorite_cubit.dart';
 import 'package:files_manager/generated/l10n.dart';
 import 'package:files_manager/widgets/home/board_card.dart';
 import 'package:files_manager/widgets/home/custom_appbar.dart';
-import '../../core/functions/color_to_hex.dart';
-import '../../cubits/board_cubit/board_cubit.dart';
+
 import '../../cubits/board_settings_cubit/board_settings_cubit.dart';
 import '../../cubits/leave_from_board_cubit/leave_from_board_cubit.dart';
 import '../../models/board_model.dart';
 import '../../theme/color.dart';
 import '../../widgets/theme_toggle_button.dart';
-import '../../models/member_model.dart';
+
 import '../../models/user_model.dart';
-import '../add_board_screen/add_board_screen.dart';
+
 import 'board_settings_screen.dart';
 
 class BoardScreen extends StatelessWidget {
@@ -42,8 +45,7 @@ class BoardScreen extends StatelessWidget {
       appBar: CustomAppBar(
         title: S.of(context).my_boards,
         leading: BlocConsumer<AddBoardCubit, AddBoardState>(
-          listener: (context, state) {
-                     },
+          listener: (context, state) {},
           builder: (context, state) {
             return IconButton(
               tooltip: S.of(context).add_board,
@@ -89,8 +91,7 @@ class BoardScreen extends StatelessWidget {
                           create: (context) =>
                               BoardSettingsCubit(currentBoard: newBoard),
                         ),
-                        BlocProvider(
-                            create: (context) => AddBoardCubit()),
+                        BlocProvider(create: (context) => AddBoardCubit()),
                       ],
                       child: BoardSettingsScreen(
                         allBoardCubit: allBoardsCubit,
@@ -108,7 +109,20 @@ class BoardScreen extends StatelessWidget {
           IconButton(
             tooltip: S.of(context).daily_report,
             onPressed: () {
-              Navigator.of(context).pushNamed('/diff_screen');
+              // Navigator.of(context).pushNamed('/diff_screen');
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) => UserReportCubit(),
+                      ),
+                      // Add other BlocProviders if needed
+                    ],
+                    child: UserReportScreen(),
+                  ),
+                ),
+              );
             },
             icon: Icon(
               Icons.edit_document,
@@ -123,7 +137,15 @@ class BoardScreen extends StatelessWidget {
                     IconButton(
                       tooltip: S.of(context).notifications,
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/report_screen');
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => MultiBlocProvider(providers: [
+                              BlocProvider(
+                                create: (context) => NotificationCubit(),
+                              ),
+                            ], child: const NotificationScreen()),
+                          ),
+                        );
                       },
                       icon: Icon(Icons.notifications,
                           size: mediaQuery.width / 50),
@@ -195,19 +217,20 @@ class BoardScreen extends StatelessWidget {
                 index: state.index,
                 id: allBoardsCubit.allBoards[state.index].id);
             print("Leave board");
-
           } else if (state is BoardDeleteSuccessState) {
             Navigator.pop(context);
             allBoardsCubit.removeBoard(
                 index: state.index,
                 id: allBoardsCubit.allBoards[state.index].id);
             print("Leave board");
-
-          }else if (state is LeaveFromBoardFailedState) {
+          } else if (state is LeaveFromBoardFailedState) {
             // Navigator.pop(context);
             errorDialog(context: context, text: state.errorMessage);
-          }else if(state is BoardDeleteLoadingState){
-            loadingDialog(context: context, mediaQuery: mediaQuery,title: S.of(context).delete);
+          } else if (state is BoardDeleteLoadingState) {
+            loadingDialog(
+                context: context,
+                mediaQuery: mediaQuery,
+                title: S.of(context).delete);
           } else if (state is LeaveFromBoardExpiredState) {
             showExpiredDialog(
               context: context,
@@ -228,8 +251,7 @@ class BoardScreen extends StatelessWidget {
               }
               if (state is AllBoardsFailedState) {
                 errorDialog(context: context, text: state.errorMessage);
-              }
-              else if (state is AllBoardsExpiredState) {
+              } else if (state is AllBoardsExpiredState) {
                 showExpiredDialog(
                   context: context,
                   onConfirmBtnTap: () async {
@@ -241,7 +263,6 @@ class BoardScreen extends StatelessWidget {
               } else if (state is AllBoardsNoInternetState) {
                 internetDialog(context: context, mediaQuery: mediaQuery);
               } else if (state is AllBoardsSuccessState) {
-
                 final isLastPage = state.isReachMax;
                 print('Is the last page => $isLastPage');
                 if (isLastPage) {
@@ -264,7 +285,7 @@ class BoardScreen extends StatelessWidget {
                 },
                 child: Statics.isPlatformDesktop
                     ? SingleChildScrollView(
-                      child: Wrap(
+                        child: Wrap(
                           children: List.generate(
                             allBoardsCubit.allBoards.length,
                             (index) => BoardWidget(
@@ -279,7 +300,7 @@ class BoardScreen extends StatelessWidget {
                                 ),
                           ),
                         ),
-                    )
+                      )
                     : ListView(
                         children: List.generate(
                           allBoardsCubit.allBoards.length,
@@ -303,9 +324,10 @@ class BoardScreen extends StatelessWidget {
     );
   }
 }
+
 void showDialogLogout(BuildContext context) {
   const textStyle =
-  TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.w600);
+      TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.w600);
   showDialog(
     context: context,
     builder: (context) => AlertDialog(

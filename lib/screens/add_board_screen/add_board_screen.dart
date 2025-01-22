@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:files_manager/cubits/group_report_cubit/group_report_cubit.dart';
 import 'package:files_manager/cubits/pending_cubit/pending_cubit.dart';
 import 'package:files_manager/models/Api_user.dart';
+import 'package:files_manager/screens/report_screen/group_report_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -103,9 +105,8 @@ class AddBoardScreen extends StatelessWidget {
           return BlocConsumer<BoardCubit, BoardState>(
             listener: (context, state) {},
             builder: (context, state) {
-              var user_model =  CashNetwork.getCashData(key: 'user_model');
+              var user_model = CashNetwork.getCashData(key: 'user_model');
               var user = UserModel.fromJson(jsonDecode(user_model));
-
 
               return boardCubit.currentBoard.parentId != null
                   ? SubBoardScreen(
@@ -139,6 +140,31 @@ class AddBoardScreen extends StatelessWidget {
                             ),
                             centerTitle: true,
                             actions: [
+                              user.id.toString() == boardCubit.currentBoard.CreatorId?
+                              IconButton(
+                                tooltip: S.of(context).group_report,
+                                icon:  Icon(Icons.group),
+                                onPressed: () async {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider(
+                                            create: (context) =>
+                                                GroupReportCubit(),
+                                          ),
+                                          // Add other BlocProviders if needed
+                                        ],
+                                        child: GroupReportScreen(
+                                          members:
+                                              boardCubit.currentBoard.members,
+                                          groupId: boardCubit.currentBoard.id,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ):SizedBox(),
                               IconButton(
                                 tooltip: S.of(context).add_application,
                                 icon: const Icon(Icons.add),
@@ -195,26 +221,38 @@ class AddBoardScreen extends StatelessWidget {
                                   });
                                 },
                               ),
-                             user.id.toString() == boardCubit.currentBoard.CreatorId?
-                             IconButton(
-                                tooltip: S.of(context).files_to_approve,
-                                icon: const Icon(Icons.pending),
-                                onPressed: () async {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => MultiBlocProvider(
-                                        providers: [
-                                          BlocProvider(
-                                            create: (context) =>
-                                                PendingCubit()..getAllFilesToApprove(context: context, groupId: boardCubit.currentBoard.id),
+                              user.id.toString() ==
+                                      boardCubit.currentBoard.CreatorId
+                                  ? IconButton(
+                                      tooltip: S.of(context).files_to_approve,
+                                      icon: const Icon(Icons.pending),
+                                      onPressed: () async {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                MultiBlocProvider(
+                                                    providers: [
+                                                  BlocProvider(
+                                                    create: (context) =>
+                                                        PendingCubit()
+                                                          ..getAllFilesToApprove(
+                                                              context: context,
+                                                              groupId: boardCubit
+                                                                  .currentBoard
+                                                                  .id),
+                                                  ),
+                                                ],
+                                                    child: PendingFilesScreen(
+                                                      applicationCubit:
+                                                          applicationCubit,
+                                                      groupId: boardCubit
+                                                          .currentBoard.id,
+                                                    )),
                                           ),
-                                        ],
-                                        child: PendingFilesScreen()
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ):Container(),
+                                        );
+                                      },
+                                    )
+                                  : Container(),
                             ],
                           ),
                           body: TabBarView(
@@ -222,7 +260,6 @@ class AddBoardScreen extends StatelessWidget {
                               //Applications Data
                               ShowApplicationsData(
                                 allBoardsCubit: allBoardsCubit,
-
                               ),
                             ],
                           ),

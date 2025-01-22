@@ -1,16 +1,46 @@
-import 'package:files_manager/models/Process.dart';
-import 'file_model.dart';
-
 class UserReportModel {
-  final List<FileModel> files;
-  final List<Process> processes;
-  final List<DateTime> start;
-  final List<DateTime> end;
+  final List<UserReportData> data;
+  final String message;
 
-  UserReportModel({
-    required this.files,
-    required this.processes,
-    required this.start,
-    required this.end,
+  UserReportModel({required this.data, required this.message});
+
+  factory UserReportModel.fromJson(Map<String, dynamic> json) {
+    return UserReportModel(
+      data: (json['data'] as List)
+          .map((e) => UserReportData.fromJson(e))
+          .toList(),
+      message: json['message'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'data': data.map((e) => e.toJson()).toList(),
+    'message': message,
+  };
+}
+
+class UserReportData {
+  final String message;
+  final String date;
+  final String type;
+
+  UserReportData({
+    required this.message,
+    required this.date,
+    required this.type,
   });
+
+  factory UserReportData.fromJson(Map<String, dynamic> json) {
+    return UserReportData(
+      message: json['message'] ?? '',
+      date: json['date'] ?? '',
+      type: json['type'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'message': message,
+    'date': date,
+    'type': type,
+  };
 }

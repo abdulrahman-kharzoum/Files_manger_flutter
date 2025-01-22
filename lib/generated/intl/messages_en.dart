@@ -330,6 +330,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "field_empty":
             MessageLookupByLibrary.simpleMessage("Search field is empty"),
         "file_name": MessageLookupByLibrary.simpleMessage("File Name"),
+        "file_report": MessageLookupByLibrary.simpleMessage("File Report"),
         "files_to_approve": MessageLookupByLibrary.simpleMessage(
             "Files awaiting approval by the admin group"),
         "filter_by": MessageLookupByLibrary.simpleMessage("Filter by:"),
@@ -362,6 +363,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "give_your_rating":
             MessageLookupByLibrary.simpleMessage("Give your rating"),
         "group": MessageLookupByLibrary.simpleMessage("Group"),
+        "group_report": MessageLookupByLibrary.simpleMessage("Group Report"),
         "guest": MessageLookupByLibrary.simpleMessage("Guest"),
         "guest_desc": MessageLookupByLibrary.simpleMessage(
             "He will be able to view the content of the boards only, without any additional permissions."),
@@ -699,6 +701,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "removeAccount": MessageLookupByLibrary.simpleMessage("Remove account"),
         "remove_account":
             MessageLookupByLibrary.simpleMessage("Remove account"),
+        "renamed": MessageLookupByLibrary.simpleMessage("Renamed Successfully"),
         "reorder": MessageLookupByLibrary.simpleMessage("Reorder"),
         "replying_to": MessageLookupByLibrary.simpleMessage("Replying to"),
         "report": MessageLookupByLibrary.simpleMessage("Report"),

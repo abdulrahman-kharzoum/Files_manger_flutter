@@ -31,7 +31,7 @@ class Validate {
     // final hasLetter = RegExp(r'[A-Za-z]').hasMatch(password);
     // final hasDigit = RegExp(r'\d').hasMatch(password);
     // final hasSpecialChar = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password);
-
+    //
     // if (!hasLetter || !hasDigit || !hasSpecialChar) {
     //   return S.of(context).password_length;
     // }
