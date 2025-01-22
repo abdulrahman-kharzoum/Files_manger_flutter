@@ -6801,6 +6801,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Group Report`
+  String get group_report {
+    return Intl.message(
+      'Group Report',
+      name: 'group_report',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

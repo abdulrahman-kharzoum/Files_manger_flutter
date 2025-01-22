@@ -275,10 +275,7 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                       children: List.generate(
                         boardCubit.currentBoard.allFiles.length,
                         (index) {
-                          print(
-                              'File ID: ${boardCubit.currentBoard.allFiles[index].getApplicationId()}, '
-                              'Owner: ${boardCubit.currentBoard.allFiles[index].getApplicationOwner()}, '
-                              'CheckinInfo: ${boardCubit.currentBoard.allFiles[index].getCheckinInfo()}');
+
 
                           return boardCubit.currentBoard.allFiles[index]
                                   .isFolder()

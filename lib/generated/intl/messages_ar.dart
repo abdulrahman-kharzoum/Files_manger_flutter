@@ -349,6 +349,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "gift_price": MessageLookupByLibrary.simpleMessage("سعر الهدية"),
         "give_your_rating": MessageLookupByLibrary.simpleMessage("أعط تقييمك"),
         "group": MessageLookupByLibrary.simpleMessage("جماعية"),
+        "group_report": MessageLookupByLibrary.simpleMessage("تقرير المجموعة"),
         "guest": MessageLookupByLibrary.simpleMessage("ضيف"),
         "guest_desc": MessageLookupByLibrary.simpleMessage(
             "سيتمكن من الاطلاع على محتوى اللوحات فقط, دون أي صلاحيات إضافية."),

@@ -361,6 +361,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "give_your_rating":
             MessageLookupByLibrary.simpleMessage("Give your rating"),
         "group": MessageLookupByLibrary.simpleMessage("Group"),
+        "group_report": MessageLookupByLibrary.simpleMessage("Group Report"),
         "guest": MessageLookupByLibrary.simpleMessage("Guest"),
         "guest_desc": MessageLookupByLibrary.simpleMessage(
             "He will be able to view the content of the boards only, without any additional permissions."),
