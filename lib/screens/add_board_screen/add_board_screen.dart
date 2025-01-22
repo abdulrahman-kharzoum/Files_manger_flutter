@@ -140,9 +140,10 @@ class AddBoardScreen extends StatelessWidget {
                             ),
                             centerTitle: true,
                             actions: [
+                              user.id.toString() == boardCubit.currentBoard.CreatorId?
                               IconButton(
                                 tooltip: S.of(context).group_report,
-                                icon: const Icon(Icons.group),
+                                icon:  Icon(Icons.group),
                                 onPressed: () async {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
@@ -163,7 +164,7 @@ class AddBoardScreen extends StatelessWidget {
                                     ),
                                   );
                                 },
-                              ),
+                              ):SizedBox(),
                               IconButton(
                                 tooltip: S.of(context).add_application,
                                 icon: const Icon(Icons.add),

@@ -67,8 +67,7 @@ class GroupReportCubit extends Cubit<GroupReportState> {
       if (response.statusCode == 200) {
         if (pdf == 1) {
           print("convering..........");
-          await convertToPdf(
-              context: context, groupId: groupId, response: response);
+          await _convertToPdf(response: response, groupId: groupId);
         }
         final groupReportModel = GroupReportModel(
           data: response.data['data'] != null
@@ -114,47 +113,37 @@ class GroupReportCubit extends Cubit<GroupReportState> {
     this.userId = userId ?? this.userId;
   }
 
-  Future<void> convertToPdf({
-    required BuildContext context,
-    required int groupId,
+  Future<void> _convertToPdf({
     required Response<dynamic> response,
+    required int groupId,
   }) async {
-    try {
-      // emit(FileReportPdfLoadingState());
-      String? token = CashNetwork.getCashData(key: 'token');
-      print("================== Group Report Pdf===========");
+    if (response.statusCode == 200) {
+      try {
+        List<int> bytes;
+        if (response.data is List<int>) {
+          bytes = response.data;
+        } else if (response.data is String) {
+          bytes = utf8.encode(response.data);
+        } else {
+          final jsonString = jsonEncode(response.data);
+          bytes = utf8.encode(jsonString);
+        }
 
-      if (response.statusCode == 200) {
-        print('Response data type: ${response.data.runtimeType}');
-        print('Response data: ${response.data}');
-        print('Response data: ${response.data['data']}');
+       final content = base64Encode(bytes);
 
-        final bytes = response.data is String
-            ? utf8.encode(response.data)
-            : response.data;
-
-        final content = base64Encode(bytes);
-
-        final mimeType = 'application/pdf';
-
+        // Create a download link and trigger the download
         final anchor = html.AnchorElement(
-          href: 'data:$mimeType;base64,$content',
+          href: 'data:application/pdf;base64,$content',
         )
           ..target = 'blank'
           ..download = "Group_${groupId}_Report.pdf";
-
         anchor.click();
-        print('File downloaded successfully as File_${groupId}_Report.pdf');
-        // emit(FileReportPdfSuccessState());
-      } else {
-        // emit(FileReportFailureState(errorMessage: response.data['message']));
+      } catch (e) {
+        print('Error converting to PDF: $e');
+        throw Exception('Failed to convert response to PDF: $e');
       }
-    } on DioException catch (e) {
-      // errorHandler(e: e, context: context);
-      // emit(FileReportFailureState(
-      //     errorMessage: e.response?.data['message'] ?? 'An error occurred'));
-    } catch (e) {
-      // emit(FileReportFailureState(errorMessage: e.toString()));
+    } else {
+      throw Exception('Failed to fetch PDF: ${response.statusCode}');
     }
   }
 }

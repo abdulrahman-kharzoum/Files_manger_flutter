@@ -135,8 +135,6 @@ class BoardSettingsCubit extends Cubit<BoardSettingsState> {
       }
     });
   }
-
-
   Future<void> getBoardInfo(
       {required BuildContext context, required int groupId}) async {
     try {

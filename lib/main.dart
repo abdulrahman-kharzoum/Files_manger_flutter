@@ -18,6 +18,7 @@ import '../generated/l10n.dart';
 import '../simple_bloc_observer.dart';
 import '../theme/theme.dart';
 import 'cubits/file_report_cubit/file_report_cubit.dart';
+
 import 'cubits/user_report_cubit/user_report_cubit.dart';
 import 'routes/routes.dart';
 
@@ -82,7 +83,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (context) => FileReportCubit()),
         BlocProvider(
-            create: (context) => UserReportCubit()..loadUserReportData()),
+            create: (context) => UserReportCubit()
+        ),
 
       ],
       child: BlocConsumer<LocaleCubit, LocaleState>(
