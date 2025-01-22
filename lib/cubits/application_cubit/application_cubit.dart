@@ -770,6 +770,9 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       print("token get boards: $token");
       final response = await dio().post(
         'files/${app.getApplicationId()}/rename',
+        data: {
+          'name':appName
+        },
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -779,15 +782,8 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       print(response.data);
 
       if (response.statusCode == 200) {
-        if(isFolder){
-          var a = app as FolderModel;
-          a.title = appName;
-
-        }else{
-          var a = app as FileModel;
-          a.title = appName;
-        }
-
+        app.setApplicationName(appName);
+     
         emit(RenameAppSuccess());
       } else {
         print('Failed to fetch boards: ${response.statusCode}');

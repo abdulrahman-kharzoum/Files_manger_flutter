@@ -12,136 +12,7 @@ class _DiffViewerState extends State<DiffViewer> {
   @override
   void initState() {
     super.initState();
-    const diff = """
---- Original
-+++ New
-@@ @@
-1
-2
-3
--4
-+4a
-5
-6
--7
-+7b
-8
--9
-+9c
-10
-11
-12
--13
-+13d
-14
-15
-16
--17
-+17e
-18
-19
-20
--21
-+21f
-22
-23
-24
--25
-+25g
-26
-27
-28
--29
-+29h
-30
-31
-32
--33
-+33i
-34
-35
-36
--37
-+37j
-38
-39
-40
--41
-+41k
-42
-43
-44
--45
-+45l
-46
-47
-48
--49
-+49m
-50
-51
-52
--53
-+53n
-54
-55
-56
--57
-+57o
-58
-59
-60
--61
-+61p
-62
-63
-64
--65
-+65q
-66
-67
-68
--69
-+69r
-70
-71
-72
--73
-+73s
-74
-75
-76
--77
-+77t
-78
-79
-80
--81
-+81u
-82
-83
-84
--85
-+85v
-86
-87
-88
--89
-+89w
-90
-91
-92
--93
-+93x
-94
-95
-96
--97
-+97y
-98
-99
-100
-""";
+    const diff = "--- Original\n+++ New\n@@ @@\n \r\n /////i am still a rockstar..\r\n \r\n-abodododdododod\r\n+hwuhe\r\n \r\n-hwuhe\r\n+new line herre\r\n+dfsdsf some edit here\r\n \r\n-dfsdsf\n+some otehr +sf+asd+fas\t\n";
     generateLineDiffs(diff);
   }
 
@@ -230,18 +101,16 @@ class _DiffViewerState extends State<DiffViewer> {
   }
 
   Widget _buildLineNumberHeader(String text, Color color) {
-    return Expanded(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            // width: 50,
-
-            child: Center(child: Text(text, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))),
+    return Container(
+      color: Colors.black12,
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
-          Expanded(child: Container()),
-        ],
+        ),
       ),
     );
   }
@@ -279,7 +148,7 @@ class _DiffViewerState extends State<DiffViewer> {
             lineNumber: diff['originalLine'],
             content: diff['original'],
             backgroundColor: diff['type'] == 'removed' ? Colors.red.withOpacity(0.1) : null,
-            textColor: diff['type'] == 'removed' ? Colors.red : Colors.white, // Unchanged lines are black
+            textColor: diff['type'] == 'removed' ? Colors.red : Colors.white,
             prefix: diff['type'] == 'removed' ? '-' : null,
           );
         },
@@ -298,7 +167,7 @@ class _DiffViewerState extends State<DiffViewer> {
             lineNumber: diff['newLine'],
             content: diff['new'],
             backgroundColor: diff['type'] == 'added' ? Colors.green.withOpacity(0.1) : null,
-            textColor: diff['type'] == 'added' ? Colors.green : Colors.white, // Unchanged lines are black
+            textColor: diff['type'] == 'added' ? Colors.green : Colors.white,
             prefix: diff['type'] == 'added' ? '+' : null,
           );
         },
@@ -340,7 +209,7 @@ class _DiffViewerState extends State<DiffViewer> {
               child: SelectableText(
                 content,
                 style: TextStyle(
-                  color: textColor, // Text color for the content
+                  color: textColor,
                 ),
               ),
             ),
