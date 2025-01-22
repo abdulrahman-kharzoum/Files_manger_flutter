@@ -90,7 +90,7 @@ final Map<String, WidgetBuilder> routes = {
   '/report_screen': (context) => MultiBlocProvider(
         providers: [
           BlocProvider(
-              create: (context) => FileReportCubit()..loadFileReportData()),
+              create: (context) => FileReportCubit()),
           BlocProvider(
               create: (context) => UserReportCubit()..loadUserReportData()),
         ],

@@ -6791,6 +6791,16 @@ class S {
       args: [],
     );
   }
+
+  /// `File Report`
+  String get file_report {
+    return Intl.message(
+      'File Report',
+      name: 'file_report',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

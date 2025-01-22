@@ -316,6 +316,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "feed_back": MessageLookupByLibrary.simpleMessage("ملاحظات"),
         "field_empty": MessageLookupByLibrary.simpleMessage("حقل البحث فارغ"),
         "file_name": MessageLookupByLibrary.simpleMessage("اسم الملف"),
+        "file_report": MessageLookupByLibrary.simpleMessage("تقرير الملف"),
         "files_to_approve": MessageLookupByLibrary.simpleMessage(
             "ملفات بانتظار موافقة مسؤول المجموعة"),
         "filter_by": MessageLookupByLibrary.simpleMessage("تصفية حسب:"),

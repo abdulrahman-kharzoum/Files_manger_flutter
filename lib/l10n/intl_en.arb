@@ -672,7 +672,8 @@
   "kick": "Kick",
   "error_Images_video_not_allowed": "Error: Images and videos are not allowed.",
   "error_cant_delete_file": "Error: The file is Checked in, you can't delete it",
-  "renamed": "Renamed Successfully"
+  "renamed": "Renamed Successfully",
+  "file_report": "File Report"
 
 
 }

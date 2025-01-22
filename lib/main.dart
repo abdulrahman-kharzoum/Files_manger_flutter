@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
           create: (context) => BoardFavoriteCubit(),
         ),
         BlocProvider(
-            create: (context) => FileReportCubit()..loadFileReportData()),
+            create: (context) => FileReportCubit()),
         BlocProvider(
             create: (context) => UserReportCubit()..loadUserReportData()),
 

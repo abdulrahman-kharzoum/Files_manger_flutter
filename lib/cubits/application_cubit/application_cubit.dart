@@ -2,26 +2,26 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:file_saver/file_saver.dart';
+
 import 'dart:typed_data';
-import 'dart:html' as html; // For web-specific operations
-import 'package:flutter/foundation.dart'; // For kIsWeb
+import 'dart:html' as html;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http; // For fetching file content
-import 'package:file_picker/file_picker.dart'; // For file save path on mobile/desktop
+import 'package:http/http.dart' as http;
+import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart'; // For default paths on mobile/desktop
+import 'package:path_provider/path_provider.dart';
 
 import 'package:dio/dio.dart' as Dio;
-import 'package:flutter/foundation.dart';
+
 import 'package:permission_handler/permission_handler.dart';
-import 'package:file_picker/file_picker.dart';
+
 import 'package:files_manager/core/server/file_server.dart';
 import 'package:files_manager/models/folder_model.dart';
 import 'package:files_manager/models/file_model.dart';
 import 'package:files_manager/models/group.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:files_manager/core/functions/apis_error_handler.dart';
 import 'package:files_manager/core/server/dio_settings.dart';
@@ -783,7 +783,7 @@ class ApplicationCubit extends Cubit<ApplicationState> {
 
       if (response.statusCode == 200) {
         app.setApplicationName(appName);
-     
+
         emit(RenameAppSuccess());
       } else {
         print('Failed to fetch boards: ${response.statusCode}');

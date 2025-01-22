@@ -8,6 +8,7 @@ final ThemeData DarkThemeData = ThemeData(
   visualDensity: VisualDensity.standard,
   useMaterial3: true,
 
+
   //======= Text Theme =======/
   textTheme: TextTheme(
     bodyLarge: GoogleFonts.cairo(color: Colors.white),

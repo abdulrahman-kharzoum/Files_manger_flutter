@@ -226,8 +226,16 @@ class AllApplicationsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
-          onPressed: () {
+          onPressed: () async {
+            applicationCubit.newBoardsApp.clear();
+            if( applicationCubit.folderHistory.isEmpty){
+              await  applicationCubit.getAllFilesBoard(context: context, groupId: boardCubit.currentBoard.id);
+
+            }else{
+              await applicationCubit.getAllFilesFolder(context: context, groupId:  boardCubit.currentBoard.id, folderId: applicationCubit.folderHistory.last);
+            }
             Navigator.pop(context);
+
           },
           icon: const Icon(
             Icons.cancel_outlined,
@@ -271,6 +279,7 @@ class AllApplicationsScreen extends StatelessWidget {
                 loadingDialog(context: context, mediaQuery: mediaQuery);
               } else if (state is BoardAddApplicationSuccess) {
                 showLightSnackBar(context, S.of(context).added);
+
                 boardCubit.currentBoard.allFiles.add(state.addedApplication);
 
                 applicationCubit.pagingController
@@ -284,6 +293,7 @@ class AllApplicationsScreen extends StatelessWidget {
               }
             },
             builder: (context, state) {
+
               return Wrap(
                 alignment: WrapAlignment.end,
                 children: [
@@ -382,6 +392,13 @@ class AllApplicationsScreen extends StatelessWidget {
                                           : 0,
                                       is_folder: false,
                                       group_id: boardCubit.currentBoard.id);
+                              applicationCubit.newBoardsApp.clear();
+                              if( applicationCubit.folderHistory.isEmpty){
+                                await  applicationCubit.getAllFilesBoard(context: context, groupId: boardCubit.currentBoard.id);
+
+                              }else{
+                                await applicationCubit.getAllFilesFolder(context: context, groupId:  boardCubit.currentBoard.id, folderId: applicationCubit.folderHistory.last);
+                              }
                             },
                           );
                         }
@@ -445,6 +462,13 @@ class AllApplicationsScreen extends StatelessWidget {
                                         : 0,
                                     is_folder: true,
                                     group_id: boardCubit.currentBoard.id);
+                            applicationCubit.newBoardsApp.clear();
+                            if( applicationCubit.folderHistory.isEmpty){
+                              await  applicationCubit.getAllFilesBoard(context: context, groupId: boardCubit.currentBoard.id);
+
+                            }else{
+                              await applicationCubit.getAllFilesFolder(context: context, groupId:  boardCubit.currentBoard.id, folderId: applicationCubit.folderHistory.last);
+                            }
                           },
                         );
                         Navigator.pop(context);

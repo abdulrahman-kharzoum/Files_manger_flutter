@@ -328,6 +328,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "field_empty":
             MessageLookupByLibrary.simpleMessage("Search field is empty"),
         "file_name": MessageLookupByLibrary.simpleMessage("File Name"),
+        "file_report": MessageLookupByLibrary.simpleMessage("File Report"),
         "files_to_approve": MessageLookupByLibrary.simpleMessage(
             "Files awaiting approval by the admin group"),
         "filter_by": MessageLookupByLibrary.simpleMessage("Filter by:"),

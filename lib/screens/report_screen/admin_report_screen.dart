@@ -21,7 +21,7 @@ class AdminReportScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (_) => BlocProvider(
                       create: (_) => FilterCubit(),
-                      child: FileReportScreen(),
+                      child: FileReportScreen(fileId: 1,),
                     ),
                   ),
                 );
