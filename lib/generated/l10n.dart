@@ -6781,6 +6781,26 @@ class S {
       args: [],
     );
   }
+
+  /// `All versions`
+  String get all_versions {
+    return Intl.message(
+      'All versions',
+      name: 'all_versions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Compare`
+  String get compare {
+    return Intl.message(
+      'Compare',
+      name: 'compare',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

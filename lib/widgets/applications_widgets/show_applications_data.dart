@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:files_manager/core/functions/snackbar_function.dart';
+import 'package:files_manager/cubits/file_versions_cubit/file_versions_cubit.dart';
 import 'package:files_manager/generated/l10n.dart';
 import 'package:files_manager/interfaces/applications_abstract.dart';
 import 'package:files_manager/models/Api_user.dart';
 import 'package:files_manager/models/file_model.dart';
 import 'package:files_manager/models/folder_model.dart';
 import 'package:files_manager/screens/all_applications_screen/all_applications_screen.dart';
+import 'package:files_manager/screens/file_profile_screen/file_profile_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -405,281 +407,311 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                 ).animate().fade(
                                     duration: const Duration(milliseconds: 500),
                                   )
-                              : Card(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .labelLarge!
-                                      .color,
-                                  child: ListTile(
-                                    leading: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Checkbox(
-                                          value: selectedFiles.contains(
-                                              boardCubit
+                              : InkWell(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider(
+                                            create: (context) =>
+                                                FileVersionsCubit(
+                                                    fileId: boardCubit
+                                                        .currentBoard
+                                                        .allFiles[index]
+                                                        .getApplicationId())
+                                                  ..getAllVersions(
+                                                      context: context),
+                                          )
+                                        ],
+                                        child: FileProfileScreen(
+                                          fileName: boardCubit
+                                              .currentBoard.allFiles[index]
+                                              .getApplicationName(),
+                                        ),
+                                      ),
+                                    ));
+                                  },
+                                  child: Card(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge!
+                                        .color,
+                                    child: ListTile(
+                                      leading: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Checkbox(
+                                            value: selectedFiles.contains(
+                                                boardCubit.currentBoard
+                                                    .allFiles[index]
+                                                    .getApplicationId()
+                                                    .toString()),
+                                            onChanged: (isSelected) {
+                                              selectedIndexes.add(index);
+                                              toggleSelection(boardCubit
                                                   .currentBoard.allFiles[index]
                                                   .getApplicationId()
-                                                  .toString()),
-                                          onChanged: (isSelected) {
-                                            selectedIndexes.add(index);
-                                            toggleSelection(boardCubit
-                                                .currentBoard.allFiles[index]
-                                                .getApplicationId()
-                                                .toString());
-                                          },
-                                        ),
-                                        Icon(boardCubit
-                                            .currentBoard.allFiles[index]
-                                            .getIcon()),
-                                      ],
-                                    ),
-                                    subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        if (boardCubit
-                                                .currentBoard.allFiles[index]
-                                                .getApplicationOwner() !=
-                                            null)
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Booked by ${boardCubit.currentBoard.allFiles[index].getCheckinInfo()?.user?.name ?? 'Unknown'}',
-                                                style: TextStyle(
-                                                    color: Colors.red),
-                                              ),
-                                              Text(
-                                                'Check At ${boardCubit.currentBoard.allFiles[index].getCheckinInfo()?.checkedInAt != null ? DateFormat('yyyy-MM-dd HH:mm').format(boardCubit.currentBoard.allFiles[index].getCheckinInfo()!.checkedInAt!) : 'No Check-in Info'}',
-                                                style: TextStyle(
-                                                    color: Colors.redAccent),
-                                              ),
-                                            ],
-                                          )
-                                        else if (boardCubit
-                                                .currentBoard.allFiles[index]
-                                                .getApplicationOwner() ==
-                                            null)
-                                          Text(
-                                            'Free for editing',
-                                            style:
-                                                TextStyle(color: Colors.green),
+                                                  .toString());
+                                            },
                                           ),
-                                        if (boardCubit
-                                                .currentBoard.allFiles[index]
-                                                .getApplicationOwner() !=
-                                            null)
-                                          memberWidget(
-                                            member: boardCubit
-                                                .currentBoard.allFiles[index]
-                                                .getApplicationOwner()!,
-                                            mediaQuery: mediaQuery,
-                                          )
-                                        else
-                                          const SizedBox(),
-                                      ],
-                                    ),
-                                    trailing: PopupMenuButton(
-                                      icon: const Icon(Icons.more_vert),
-                                      onSelected: (value) async {
-                                        if (value == 'checkout') {
-                                          FilePickerResult? result =
-                                              await FilePicker.platform
-                                                  .pickFiles();
-
-                                          if (result != null) {
-                                            final selectedFile =
-                                                result.files.first;
-
-                                            await applicationCubit
-                                                .checkOutApplicationFunction(
-                                                    groupId: boardCubit
-                                                        .currentBoard.id,
-                                                    context: context,
-                                                    fileId: boardCubit
-                                                        .currentBoard
-                                                        .allFiles[index]
-                                                        .getApplicationId(),
-                                                    file: selectedFile);
-                                            currentIndex = index;
-                                          } else {
-                                            await applicationCubit
-                                                .checkOutApplicationFunction(
-                                                    groupId: boardCubit
-                                                        .currentBoard.id,
-                                                    context: context,
-                                                    fileId: boardCubit
-                                                        .currentBoard
-                                                        .allFiles[index]
-                                                        .getApplicationId(),
-                                                    file: null);
-                                            currentIndex = index;
-                                          }
-                                        } else if (value == 'checkIn') {
-                                          print(
-                                              "===========File Path==============");
-                                          print(boardCubit
+                                          Icon(boardCubit
                                               .currentBoard.allFiles[index]
-                                              .getPath());
-                                          await applicationCubit
-                                              .checkApplicationFunction(
-                                                  index: index,
-                                                  context: context,
-                                                  fileId: boardCubit
-                                                      .currentBoard
-                                                      .allFiles[index]
-                                                      .getApplicationId(),
-                                                  groupId: boardCubit
-                                                      .currentBoard.id);
-                                          currentIndex = index;
-                                        } else if (value == 'share') {
-                                          print('Share');
-                                          // share();
-                                        }
-                                      },
-                                      itemBuilder: (context) => [
-                                        PopupMenuItem(
-                                          value: boardCubit.currentBoard
-                                                      .allFiles[index]
-                                                      .getApplicationOwner() !=
-                                                  null
-                                              ? 'checkout'
-                                              : 'checkIn',
-                                          child: ListTile(
-                                            leading: Icon(boardCubit
+                                              .getIcon()),
+                                        ],
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (boardCubit
+                                                  .currentBoard.allFiles[index]
+                                                  .getApplicationOwner() !=
+                                              null)
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Booked by ${boardCubit.currentBoard.allFiles[index].getCheckinInfo()?.user?.name ?? 'Unknown'}',
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                                Text(
+                                                  'Check At ${boardCubit.currentBoard.allFiles[index].getCheckinInfo()?.checkedInAt != null ? DateFormat('yyyy-MM-dd HH:mm').format(boardCubit.currentBoard.allFiles[index].getCheckinInfo()!.checkedInAt!) : 'No Check-in Info'}',
+                                                  style: TextStyle(
+                                                      color: Colors.redAccent),
+                                                ),
+                                              ],
+                                            )
+                                          else if (boardCubit
+                                                  .currentBoard.allFiles[index]
+                                                  .getApplicationOwner() ==
+                                              null)
+                                            Text(
+                                              'Free for editing',
+                                              style: TextStyle(
+                                                  color: Colors.green),
+                                            ),
+                                          if (boardCubit
+                                                  .currentBoard.allFiles[index]
+                                                  .getApplicationOwner() !=
+                                              null)
+                                            memberWidget(
+                                              member: boardCubit
+                                                  .currentBoard.allFiles[index]
+                                                  .getApplicationOwner()!,
+                                              mediaQuery: mediaQuery,
+                                            )
+                                          else
+                                            const SizedBox(),
+                                        ],
+                                      ),
+                                      trailing: PopupMenuButton(
+                                        icon: const Icon(Icons.more_vert),
+                                        onSelected: (value) async {
+                                          if (value == 'checkout') {
+                                            FilePickerResult? result =
+                                                await FilePicker.platform
+                                                    .pickFiles();
+
+                                            if (result != null) {
+                                              final selectedFile =
+                                                  result.files.first;
+
+                                              await applicationCubit
+                                                  .checkOutApplicationFunction(
+                                                      groupId: boardCubit
+                                                          .currentBoard.id,
+                                                      context: context,
+                                                      fileId: boardCubit
+                                                          .currentBoard
+                                                          .allFiles[index]
+                                                          .getApplicationId(),
+                                                      file: selectedFile);
+                                              currentIndex = index;
+                                            } else {
+                                              await applicationCubit
+                                                  .checkOutApplicationFunction(
+                                                      groupId: boardCubit
+                                                          .currentBoard.id,
+                                                      context: context,
+                                                      fileId: boardCubit
+                                                          .currentBoard
+                                                          .allFiles[index]
+                                                          .getApplicationId(),
+                                                      file: null);
+                                              currentIndex = index;
+                                            }
+                                          } else if (value == 'checkIn') {
+                                            print(
+                                                "===========File Path==============");
+                                            print(boardCubit
+                                                .currentBoard.allFiles[index]
+                                                .getPath());
+                                            await applicationCubit
+                                                .checkApplicationFunction(
+                                                    index: index,
+                                                    context: context,
+                                                    fileId: boardCubit
                                                         .currentBoard
                                                         .allFiles[index]
-                                                        .getApplicationOwner() !=
-                                                    null
-                                                ? Icons.done_all
-                                                : Icons.check_circle_rounded),
-                                            title: boardCubit.currentBoard
+                                                        .getApplicationId(),
+                                                    groupId: boardCubit
+                                                        .currentBoard.id);
+                                            currentIndex = index;
+                                          } else if (value == 'share') {
+                                            print('Share');
+                                            // share();
+                                          }
+                                        },
+                                        itemBuilder: (context) => [
+                                          PopupMenuItem(
+                                            value: boardCubit.currentBoard
                                                         .allFiles[index]
                                                         .getApplicationOwner() !=
                                                     null
-                                                ? Text('Check out')
-                                                : Text('Check in'),
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'Edit Name',
-                                          child: ListTile(
-                                            leading: const Icon(Icons.edit),
-                                            title: Text('Edit'),
-                                            onTap: () {
-                                              showFileNameDialog(
-                                                  context: context,
-                                                  isEdit: true,
-                                                  onConfirm: (fileName) async {
-                                                    boardCubit.changeFileName(
-                                                        fileName: fileName +
-                                                            '.${boardCubit.currentBoard.allFiles[index].getApplicationExtension()}',
-                                                        file: boardCubit
-                                                                .currentBoard
-                                                                .allFiles[index]
-                                                            as FileModel);
-                                                  });
-                                            },
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'Download',
-                                          child: ListTile(
-                                            leading: const Icon(
-                                                Icons.download_rounded),
-                                            title: Text('Download'),
-                                            onTap: () async {
-                                              await applicationCubit
-                                                  .getFileApplicationFunction(
-                                                      context: context,
-                                                      fileName: boardCubit
+                                                ? 'checkout'
+                                                : 'checkIn',
+                                            child: ListTile(
+                                              leading: Icon(boardCubit
                                                           .currentBoard
                                                           .allFiles[index]
-                                                          .getApplicationName(),
-                                                      filePath: boardCubit
-                                                          .currentBoard
+                                                          .getApplicationOwner() !=
+                                                      null
+                                                  ? Icons.done_all
+                                                  : Icons.check_circle_rounded),
+                                              title: boardCubit.currentBoard
                                                           .allFiles[index]
-                                                          .getPath());
-                                              currentIndex = index;
-                                            },
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'Delete',
-                                          child: ListTile(
-                                            onTap: () async {
-                                              if (boardCubit.currentBoard
-                                                      .allFiles[index]
-                                                      .getApplicationOwner() !=
-                                                  null) {
-                                                showLightSnackBar(
-                                                    context,
-                                                    S
-                                                        .of(context)
-                                                        .error_cant_delete_file);
-                                              } else {
-                                                await applicationCubit
-                                                    .deleteApplicationFunction(
-                                                        context: context,
-                                                        fileId: boardCubit
-                                                            .currentBoard
-                                                            .allFiles[index]
-                                                            .getApplicationId(),
-                                                        groupId: boardCubit
-                                                            .currentBoard.id);
-                                              }
-                                            },
-                                            leading: const Icon(Icons.delete),
-                                            title: Text('Delete'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    title: Row(
-                                      children: [
-                                        Flexible(
-                                          child: SizedBox(
-                                            width: Statics.isPlatformDesktop
-                                                ? mediaQuery.width / 2.5
-                                                : mediaQuery.width / 1.5,
-                                            child: Text(
-                                              boardCubit
-                                                  .currentBoard.allFiles[index]
-                                                  .getApplicationName(),
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineSmall!
-                                                    .color,
-                                              ),
+                                                          .getApplicationOwner() !=
+                                                      null
+                                                  ? Text('Check out')
+                                                  : Text('Check in'),
                                             ),
                                           ),
-                                        ),
-                                        Statics.isPlatformDesktop
-                                            ? Text(
-                                                DateFormat('yyyy-MM-d HH:mm:ss')
-                                                    .format(boardCubit
-                                                        .currentBoard
+                                          PopupMenuItem(
+                                            value: 'Edit Name',
+                                            child: ListTile(
+                                              leading: const Icon(Icons.edit),
+                                              title: Text('Edit'),
+                                              onTap: () {
+                                                showFileNameDialog(
+                                                    context: context,
+                                                    isEdit: true,
+                                                    onConfirm:
+                                                        (fileName) async {
+                                                      boardCubit.changeFileName(
+                                                          fileName: fileName +
+                                                              '.${boardCubit.currentBoard.allFiles[index].getApplicationExtension()}',
+                                                          file: boardCubit
+                                                                  .currentBoard
+                                                                  .allFiles[index]
+                                                              as FileModel);
+                                                    });
+                                              },
+                                            ),
+                                          ),
+                                          PopupMenuItem(
+                                            value: 'Download',
+                                            child: ListTile(
+                                              leading: const Icon(
+                                                  Icons.download_rounded),
+                                              title: Text('Download'),
+                                              onTap: () async {
+                                                await applicationCubit
+                                                    .getFileApplicationFunction(
+                                                        context: context,
+                                                        fileName: boardCubit
+                                                            .currentBoard
+                                                            .allFiles[index]
+                                                            .getApplicationName(),
+                                                        filePath: boardCubit
+                                                            .currentBoard
+                                                            .allFiles[index]
+                                                            .getPath());
+                                                currentIndex = index;
+                                              },
+                                            ),
+                                          ),
+                                          PopupMenuItem(
+                                            value: 'Delete',
+                                            child: ListTile(
+                                              onTap: () async {
+                                                if (boardCubit.currentBoard
                                                         .allFiles[index]
-                                                        .getApplicationCreateDate()),
+                                                        .getApplicationOwner() !=
+                                                    null) {
+                                                  showLightSnackBar(
+                                                      context,
+                                                      S
+                                                          .of(context)
+                                                          .error_cant_delete_file);
+                                                } else {
+                                                  await applicationCubit
+                                                      .deleteApplicationFunction(
+                                                          context: context,
+                                                          fileId: boardCubit
+                                                              .currentBoard
+                                                              .allFiles[index]
+                                                              .getApplicationId(),
+                                                          groupId: boardCubit
+                                                              .currentBoard.id);
+                                                }
+                                              },
+                                              leading: const Icon(Icons.delete),
+                                              title: Text('Delete'),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      title: Row(
+                                        children: [
+                                          Flexible(
+                                            child: SizedBox(
+                                              width: Statics.isPlatformDesktop
+                                                  ? mediaQuery.width / 2.5
+                                                  : mediaQuery.width / 1.5,
+                                              child: Text(
+                                                boardCubit.currentBoard
+                                                    .allFiles[index]
+                                                    .getApplicationName(),
                                                 style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
                                                       .headlineSmall!
                                                       .color,
                                                 ),
-                                              )
-                                            : const SizedBox()
-                                      ],
+                                              ),
+                                            ),
+                                          ),
+                                          Statics.isPlatformDesktop
+                                              ? Text(
+                                                  DateFormat(
+                                                          'yyyy-MM-d HH:mm:ss')
+                                                      .format(boardCubit
+                                                          .currentBoard
+                                                          .allFiles[index]
+                                                          .getApplicationCreateDate()),
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineSmall!
+                                                        .color,
+                                                  ),
+                                                )
+                                              : const SizedBox()
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ).animate().fade(
-                                    duration: const Duration(milliseconds: 500),
-                                  );
+                                  ).animate().fade(
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                      ),
+                                );
                         },
                       ),
                     )),

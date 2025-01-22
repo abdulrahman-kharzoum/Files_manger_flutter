@@ -36,8 +36,7 @@ void main() async {
         storageBucket: "flutter-1cda7.firebasestorage.app",
         messagingSenderId: "838693518963",
         appId: "1:838693518963:web:0f5a0eee9a2a64803eb406",
-        measurementId: "G-JY8BYQKVCK"
-    ),
+        measurementId: "G-JY8BYQKVCK"),
   );
   final notificationService = NotificationService();
   await notificationService.listenNotifications();
@@ -76,7 +75,6 @@ class MyApp extends StatelessWidget {
             create: (context) => FileReportCubit()..loadFileReportData()),
         BlocProvider(
             create: (context) => UserReportCubit()..loadUserReportData()),
-
       ],
       child: BlocConsumer<LocaleCubit, LocaleState>(
         listener: (context, state) {
@@ -88,14 +86,13 @@ class MyApp extends StatelessWidget {
           Statics.isPlatformDesktop = mediaQuery.width > 700;
           return BlocBuilder<AppThemeCubit, AppThemeState>(
             builder: (themeContext, themeState) {
-             return MaterialApp(
+              return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: 'Files Manager App',
                 initialRoute: '/',
                 routes: routes,
-                theme: themeState is AppThemeDark
-                    ? DarkThemeData
-                    : LightThemeData,
+                theme:
+                    themeState is AppThemeDark ? DarkThemeData : LightThemeData,
                 localizationsDelegates: const [
                   S.delegate,
                   GlobalMaterialLocalizations.delegate,

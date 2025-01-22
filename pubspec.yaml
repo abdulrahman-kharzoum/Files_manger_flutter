@@ -59,6 +59,7 @@ dependencies:
   file_saver: ^0.2.14
   bloc: ^8.1.4
   meta: ^1.12.0
+  webview_flutter: ^4.0.5
   dropdown_search: ^6.0.1
   image_picker: ^1.1.2
   infinite_scroll_pagination: ^4.0.0
@@ -95,7 +96,6 @@ dependencies:
   image_cropper: ^8.0.2
   open_file: ^3.5.8
   record: ^5.1.2
-  # video_thumbnail: ^0.5.3
   quill_html_editor_v2: ^2.2.10
   chat_bubbles: ^1.6.0
   collection: ^1.18.0
@@ -105,6 +105,11 @@ dependencies:
   share_plus: ^10.0.2
   flutter_launcher_icons: ^0.14.1
   pointycastle: ^3.9.1
+  flutter_widget_from_html: ^0.15.3
+  webview_flutter_plus: ^0.4.7
+  simple_html_css: ^5.0.0
+  html: ^0.15.5
+  flutter_inappwebview: ^6.1.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

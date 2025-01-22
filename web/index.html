@@ -1,25 +1,48 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <base href="$FLUTTER_BASE_HREF">
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <title>files_manager</title>
-  <link rel="manifest" href="manifest.json">
-</head>
-<body>
-<script src="flutter_bootstrap.js" async></script>
-<script src="firebase-messaging-sw.js" async></script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('firebase-messaging-sw.js').then((registration) => {
-        console.log("Service Worker registered with scope:", registration.scope);
-      }).catch((error) => {
-        console.error("Service Worker registration failed:", error);
-      });
-    });
-  }
-</script>
-</body>
+  <head>
+    <base href="$FLUTTER_BASE_HREF" />
+    <meta charset="UTF-8" />
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+    <title>files_manager</title>
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html.min.js"></script>
+    <script>
+      // JavaScript function to generate HTML using diff2html
+      function getHtml(diffData) {
+        const html = Diff2Html.html(diffData, {
+          drawFileList: false,
+          matching: "lines",
+          outputFormat: "line-by-line",
+        });
+        return html;
+      }
+    </script>
+  </head>
+  <body>
+    <script src="flutter_bootstrap.js" async></script>
+    <script src="firebase-messaging-sw.js" async></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker
+            .register("firebase-messaging-sw.js")
+            .then((registration) => {
+              console.log(
+                "Service Worker registered with scope:",
+                registration.scope
+              );
+            })
+            .catch((error) => {
+              console.error("Service Worker registration failed:", error);
+            });
+        });
+      }
+    </script>
+  </body>
 </html>

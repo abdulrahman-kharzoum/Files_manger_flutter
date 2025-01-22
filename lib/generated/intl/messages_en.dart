@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "all_packages": MessageLookupByLibrary.simpleMessage("All Packages"),
         "all_products": MessageLookupByLibrary.simpleMessage("All Products"),
         "all_reviews": MessageLookupByLibrary.simpleMessage("All Reviews"),
+        "all_versions": MessageLookupByLibrary.simpleMessage("All versions"),
         "already_have_data":
             MessageLookupByLibrary.simpleMessage("You already have the data"),
         "am": MessageLookupByLibrary.simpleMessage("am"),
@@ -163,6 +164,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "company_name": MessageLookupByLibrary.simpleMessage("Company name"),
         "company_website":
             MessageLookupByLibrary.simpleMessage("Company website"),
+        "compare": MessageLookupByLibrary.simpleMessage("Compare"),
         "conferences": MessageLookupByLibrary.simpleMessage("Conferences"),
         "conferences_error_message":
             MessageLookupByLibrary.simpleMessage("Failed to fetch conferences"),

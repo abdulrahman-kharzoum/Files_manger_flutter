@@ -71,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "all_packages": MessageLookupByLibrary.simpleMessage("جميع الطرود"),
         "all_products": MessageLookupByLibrary.simpleMessage("جميع المنتجات"),
         "all_reviews": MessageLookupByLibrary.simpleMessage("جميع المراجعات"),
+        "all_versions": MessageLookupByLibrary.simpleMessage("جميع الإصادارات"),
         "already_have_data":
             MessageLookupByLibrary.simpleMessage("لديك بيانات البحث بالفعل"),
         "am": MessageLookupByLibrary.simpleMessage("ص"),
@@ -159,6 +160,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("بريد الشركة الإلكتروني"),
         "company_name": MessageLookupByLibrary.simpleMessage("اسم الشركة"),
         "company_website": MessageLookupByLibrary.simpleMessage("موقع الشركة"),
+        "compare": MessageLookupByLibrary.simpleMessage("مقارنة"),
         "conferences": MessageLookupByLibrary.simpleMessage("مؤتمرات"),
         "confirm": MessageLookupByLibrary.simpleMessage("تأكيد"),
         "congratulations":
