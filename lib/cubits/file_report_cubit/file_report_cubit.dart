@@ -10,7 +10,9 @@ import 'package:files_manager/models/file_report_model.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'dart:html' as html;
 import '../../core/server/dio_settings.dart';
+
 part 'file_report_state.dart';
+
 class FileReportCubit extends Cubit<FileReportState> {
   FileReportCubit() : super(FileReportInitial());
 
@@ -37,17 +39,19 @@ class FileReportCubit extends Cubit<FileReportState> {
       }
     } on DioException catch (e) {
       errorHandler(e: e, context: context);
-      emit(FileReportFailureState(errorMessage: e.response?.data['message'] ?? 'An error occurred'));
+      emit(FileReportFailureState(
+          errorMessage: e.response?.data['message'] ?? 'An error occurred'));
     } catch (e) {
       emit(FileReportFailureState(errorMessage: 'Catch exception'));
     }
   }
+
   Future<void> getAllFileReportsPdf({
     required BuildContext context,
     required int fileId,
   }) async {
     try {
-      emit(FileReportPdfLoadingState());
+      // emit(FileReportPdfLoadingState());
       String? token = CashNetwork.getCashData(key: 'token');
       print("==================All File Reports Pdf===========");
       final response = await dio().get(
@@ -58,30 +62,39 @@ class FileReportCubit extends Cubit<FileReportState> {
       );
 
       if (response.statusCode == 200) {
+        print('Response data type: ${response.data.runtimeType}');
+        print('Response data: ${response.data}');
+        print('Response data: ${response.data['data']}');
+
         final bytes = response.data is String
-            ? utf8.encode(response.data) // Convert String to List<int>
+            ? utf8.encode(response.data)
             : response.data;
 
-        // Encode as base64
         final content = base64Encode(bytes);
 
-        // Create a download link and trigger a download
+        final mimeType =
+            'application/pdf';
+
         final anchor = html.AnchorElement(
-          href: 'data:application/octet-stream;base64,$content',
+          href: 'data:$mimeType;base64,$content',
         )
           ..target = 'blank'
-          ..download = "File ${fileId} Report Pdf"; // File name for the download
+          ..download =
+              "File_${fileId}_Report.pdf";
+
         anchor.click();
-        print('File downloaded successfully as File ${fileId} Report Pdf');
-        emit(FileReportPdfSuccessState());
+        print('File downloaded successfully as File_${fileId}_Report.pdf');
+        // emit(FileReportPdfSuccessState());
+
       } else {
-        emit(FileReportFailureState(errorMessage: response.data['message']));
+        // emit(FileReportFailureState(errorMessage: response.data['message']));
       }
     } on DioException catch (e) {
-      errorHandler(e: e, context: context);
-      emit(FileReportFailureState(errorMessage: e.response?.data['message'] ?? 'An error occurred'));
+      // errorHandler(e: e, context: context);
+      // emit(FileReportFailureState(
+      //     errorMessage: e.response?.data['message'] ?? 'An error occurred'));
     } catch (e) {
-      emit(FileReportFailureState(errorMessage: 'Catch exception'));
+      // emit(FileReportFailureState(errorMessage: e.toString()));
     }
   }
 }

@@ -59,7 +59,15 @@ class _FileReportScreenState extends State<FileReportScreen> {
           ),
         ],
       ),
-      body: BlocBuilder<FileReportCubit, FileReportState>(
+      body: BlocConsumer<FileReportCubit, FileReportState>(
+        listener: (context,state){
+          if (state is FileReportLoadingState) {
+          loadingDialog(context: context, mediaQuery: mediaQuery);
+          } else if (state is FileReportFailureState) {
+            // Return an error message widget
+           errorDialog(context: context, text: state.errorMessage);
+          }
+        },
         builder: (context, state) {
           if (state is FileReportLoadingState) {
             // Return a loading indicator widget
