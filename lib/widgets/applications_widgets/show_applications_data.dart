@@ -372,9 +372,10 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                                 ? mediaQuery.width / 2.5
                                                 : mediaQuery.width / 1.5,
                                             child: Text(
-                                              boardCubit
-                                                  .currentBoard.allFiles[index]
-                                                  .getApplicationName(),
+                                              boardCubit.currentBoard
+                                                      .allFiles[index]
+                                                      .getApplicationName() +
+                                                  '.${boardCubit.currentBoard.allFiles[index].getApplicationExtension()}',
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               style: TextStyle(
@@ -454,7 +455,6 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                           CrossAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-
                                         if (boardCubit
                                                 .currentBoard.allFiles[index]
                                                 .getApplicationOwner() !=
@@ -468,7 +468,6 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                                 style: TextStyle(
                                                     color: Colors.red),
                                               ),
-
                                               Statics.isPlatformDesktop
                                                   ? Text(
                                                       'Check At ${boardCubit.currentBoard.allFiles[index].getCheckinInfo()?.checkedInAt != null ? DateFormat('yyyy-MM-dd HH:mm').format(boardCubit.currentBoard.allFiles[index].getCheckinInfo()!.checkedInAt!) : 'No Check-in Info'}',
@@ -477,22 +476,6 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                                               Colors.redAccent),
                                                     )
                                                   : SizedBox(),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            FileReportScreen(
-                                                                fileId: boardCubit
-                                                                    .currentBoard
-                                                                    .allFiles[
-                                                                index]
-                                                                    .getApplicationId()),
-                                                      ),
-                                                    );
-                                                  },
-                                                  icon: Icon(Icons.history,)),
 
                                             ],
                                           )
@@ -502,29 +485,14 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                             null)
                                           Row(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
                                                 'Free for editing',
-                                                style:
-                                                    TextStyle(color: Colors.green),
+                                                style: TextStyle(
+                                                    color: Colors.green),
                                               ),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            FileReportScreen(
-                                                                fileId: boardCubit
-                                                                    .currentBoard
-                                                                    .allFiles[
-                                                                index]
-                                                                    .getApplicationId()),
-                                                      ),
-                                                    );
-                                                  },
-                                                  icon: Icon(Icons.history,)),
+                                           
                                             ],
                                           ),
                                         if (boardCubit
@@ -539,164 +507,186 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                           )
                                         else
                                           const SizedBox(),
-
                                       ],
                                     ),
-                                    trailing: PopupMenuButton(
-                                      icon: const Icon(Icons.more_vert),
-                                      onSelected: (value) async {
-                                        if (value == 'checkout') {
-                                          FilePickerResult? result =
-                                              await FilePicker.platform
-                                                  .pickFiles();
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          tooltip: S.of(context).file_report,
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => FileReportScreen(
+                                                  fileId: boardCubit.currentBoard.allFiles[index].getApplicationId(),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          icon: Icon(
+                                            Icons.history,
+                                            color: Theme.of(context).popupMenuTheme.iconColor,
+                                          ),
+                                        ),
 
-                                          if (result != null) {
-                                            final selectedFile =
-                                                result.files.first;
+                                        PopupMenuButton(
+                                          icon: const Icon(Icons.more_vert),
+                                          onSelected: (value) async {
+                                            if (value == 'checkout') {
+                                              FilePickerResult? result =
+                                                  await FilePicker.platform
+                                                      .pickFiles();
 
-                                            await applicationCubit
-                                                .checkOutApplicationFunction(
-                                                    groupId: boardCubit
-                                                        .currentBoard.id,
-                                                    context: context,
-                                                    fileId: boardCubit
-                                                        .currentBoard
-                                                        .allFiles[index]
-                                                        .getApplicationId(),
-                                                    file: selectedFile);
-                                            currentIndex = index;
-                                          } else {
-                                            await applicationCubit
-                                                .checkOutApplicationFunction(
-                                                    groupId: boardCubit
-                                                        .currentBoard.id,
-                                                    context: context,
-                                                    fileId: boardCubit
-                                                        .currentBoard
-                                                        .allFiles[index]
-                                                        .getApplicationId(),
-                                                    file: null);
-                                            currentIndex = index;
-                                          }
-                                        } else if (value == 'checkIn') {
-                                          print(
-                                              "===========File Path==============");
-                                          print(boardCubit
-                                              .currentBoard.allFiles[index]
-                                              .getPath());
-                                          await applicationCubit
-                                              .checkApplicationFunction(
-                                                  index: index,
-                                                  context: context,
-                                                  fileId: boardCubit
-                                                      .currentBoard
-                                                      .allFiles[index]
-                                                      .getApplicationId(),
-                                                  groupId: boardCubit
-                                                      .currentBoard.id);
-                                          currentIndex = index;
-                                        } else if (value == 'share') {
-                                          print('Share');
-                                          // share();
-                                        }
-                                      },
-                                      itemBuilder: (context) => [
-                                        PopupMenuItem(
-                                          value: boardCubit.currentBoard
-                                                      .allFiles[index]
-                                                      .getApplicationOwner() !=
-                                                  null
-                                              ? 'checkout'
-                                              : 'checkIn',
-                                          child: ListTile(
-                                            leading: Icon(boardCubit
-                                                        .currentBoard
-                                                        .allFiles[index]
-                                                        .getApplicationOwner() !=
-                                                    null
-                                                ? Icons.done_all
-                                                : Icons.check_circle_rounded),
-                                            title: boardCubit.currentBoard
-                                                        .allFiles[index]
-                                                        .getApplicationOwner() !=
-                                                    null
-                                                ? Text('Check out')
-                                                : Text('Check in'),
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'Edit Name',
-                                          child: ListTile(
-                                            leading: const Icon(Icons.edit),
-                                            title: Text('Edit'),
-                                            onTap: () {
-                                              showFileNameDialog(
-                                                  context: context,
-                                                  isEdit: true,
-                                                  onConfirm: (fileName) async {
-                                                    await applicationCubit
-                                                        .renameApplicationName(
-                                                            isFolder: true,
-                                                            appName: fileName +
-                                                                '.${boardCubit.currentBoard.allFiles[index].getApplicationExtension()}',
-                                                            app: boardCubit
-                                                                .currentBoard
-                                                                .allFiles[index],
-                                                            context: context);
-                                                  });
-                                            },
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'Download',
-                                          child: ListTile(
-                                            leading: const Icon(
-                                                Icons.download_rounded),
-                                            title: Text('Download'),
-                                            onTap: () async {
-                                              await applicationCubit
-                                                  .getFileApplicationFunction(
-                                                      context: context,
-                                                      fileName: boardCubit
-                                                          .currentBoard
-                                                          .allFiles[index]
-                                                          .getApplicationName(),
-                                                      filePath: boardCubit
-                                                          .currentBoard
-                                                          .allFiles[index]
-                                                          .getPath());
-                                              currentIndex = index;
-                                            },
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'Delete',
-                                          child: ListTile(
-                                            onTap: () async {
-                                              if (boardCubit.currentBoard
-                                                      .allFiles[index]
-                                                      .getApplicationOwner() !=
-                                                  null) {
-                                                showLightSnackBar(
-                                                    context,
-                                                    S
-                                                        .of(context)
-                                                        .error_cant_delete_file);
-                                              } else {
+                                              if (result != null) {
+                                                final selectedFile =
+                                                    result.files.first;
+
                                                 await applicationCubit
-                                                    .deleteApplicationFunction(
+                                                    .checkOutApplicationFunction(
+                                                        groupId: boardCubit
+                                                            .currentBoard.id,
                                                         context: context,
                                                         fileId: boardCubit
                                                             .currentBoard
                                                             .allFiles[index]
                                                             .getApplicationId(),
+                                                        file: selectedFile);
+                                                currentIndex = index;
+                                              } else {
+                                                await applicationCubit
+                                                    .checkOutApplicationFunction(
                                                         groupId: boardCubit
-                                                            .currentBoard.id);
+                                                            .currentBoard.id,
+                                                        context: context,
+                                                        fileId: boardCubit
+                                                            .currentBoard
+                                                            .allFiles[index]
+                                                            .getApplicationId(),
+                                                        file: null);
+                                                currentIndex = index;
                                               }
-                                            },
-                                            leading: const Icon(Icons.delete),
-                                            title: Text('Delete'),
-                                          ),
+                                            } else if (value == 'checkIn') {
+                                              print(
+                                                  "===========File Path==============");
+                                              print(boardCubit
+                                                  .currentBoard.allFiles[index]
+                                                  .getPath());
+                                              await applicationCubit
+                                                  .checkApplicationFunction(
+                                                      index: index,
+                                                      context: context,
+                                                      fileId: boardCubit
+                                                          .currentBoard
+                                                          .allFiles[index]
+                                                          .getApplicationId(),
+                                                      groupId: boardCubit
+                                                          .currentBoard.id);
+                                              currentIndex = index;
+                                            } else if (value == 'share') {
+                                              print('Share');
+                                              // share();
+                                            }
+                                          },
+                                          itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                              value: boardCubit.currentBoard
+                                                          .allFiles[index]
+                                                          .getApplicationOwner() !=
+                                                      null
+                                                  ? 'checkout'
+                                                  : 'checkIn',
+                                              child: ListTile(
+                                                leading: Icon(boardCubit
+                                                            .currentBoard
+                                                            .allFiles[index]
+                                                            .getApplicationOwner() !=
+                                                        null
+                                                    ? Icons.done_all
+                                                    : Icons.check_circle_rounded),
+                                                title: boardCubit.currentBoard
+                                                            .allFiles[index]
+                                                            .getApplicationOwner() !=
+                                                        null
+                                                    ? Text('Check out')
+                                                    : Text('Check in'),
+                                              ),
+                                            ),
+                                            PopupMenuItem(
+                                              value: 'Edit Name',
+                                              child: ListTile(
+                                                leading: const Icon(Icons.edit),
+                                                title: Text('Edit'),
+                                                onTap: () {
+                                                  showFileNameDialog(
+                                                      context: context,
+                                                      isEdit: true,
+                                                      onConfirm: (fileName) async {
+                                                        await applicationCubit
+                                                            .renameApplicationName(
+                                                                isFolder: true,
+                                                                appName: fileName +
+                                                                    '.${boardCubit.currentBoard.allFiles[index].getApplicationExtension()}',
+                                                                app: boardCubit
+                                                                    .currentBoard
+                                                                    .allFiles[index],
+                                                                context: context);
+                                                      });
+                                                },
+                                              ),
+                                            ),
+                                            PopupMenuItem(
+                                              value: 'Download',
+                                              child: ListTile(
+                                                leading: const Icon(
+                                                    Icons.download_rounded),
+                                                title: Text('Download'),
+                                                onTap: () async {
+                                                  await applicationCubit
+                                                      .getFileApplicationFunction(
+                                                          context: context,
+                                                          fileName: boardCubit
+                                                              .currentBoard
+                                                              .allFiles[index]
+                                                              .getApplicationName(),
+                                                          filePath: boardCubit
+                                                              .currentBoard
+                                                              .allFiles[index]
+                                                              .getPath());
+                                                  currentIndex = index;
+                                                },
+                                              ),
+                                            ),
+                                            PopupMenuItem(
+                                              value: 'Delete',
+                                              child: ListTile(
+                                                onTap: () async {
+                                                  if (boardCubit.currentBoard
+                                                          .allFiles[index]
+                                                          .getApplicationOwner() !=
+                                                      null) {
+                                                    showLightSnackBar(
+                                                        context,
+                                                        S
+                                                            .of(context)
+                                                            .error_cant_delete_file);
+                                                  } else {
+                                                    await applicationCubit
+                                                        .deleteApplicationFunction(
+                                                            context: context,
+                                                            fileId: boardCubit
+                                                                .currentBoard
+                                                                .allFiles[index]
+                                                                .getApplicationId(),
+                                                            groupId: boardCubit
+                                                                .currentBoard.id);
+                                                  }
+                                                },
+                                                leading: const Icon(Icons.delete),
+                                                title: Text('Delete'),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -710,7 +700,7 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                             child: Text(
                                               boardCubit
                                                   .currentBoard.allFiles[index]
-                                                  .getApplicationName(),
+                                                  .getApplicationName()+ '.${boardCubit.currentBoard.allFiles[index].getApplicationExtension()}',
                                               style: TextStyle(
                                                 color: Theme.of(context)
                                                     .textTheme

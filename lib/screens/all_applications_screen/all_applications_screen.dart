@@ -383,8 +383,8 @@ class AllApplicationsScreen extends StatelessWidget {
                               await boardAddApplicationCubit
                                   .addApplicationFunction(
                                       context: context,
-                                      fileName: fileName +
-                                          '.${selectedFile.extension!}',
+                                      fileName: fileName,
+
                                       file: selectedFile,
                                       parent_id: applicationCubit
                                               .folderHistory.isNotEmpty
