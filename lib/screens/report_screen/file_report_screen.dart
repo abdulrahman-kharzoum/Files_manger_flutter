@@ -43,6 +43,7 @@ class _FileReportScreenState extends State<FileReportScreen> {
     final bool isDesktop = Statics.isPlatformDesktop;
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.of(context).size;
+    final fileReportCubit = context.read<FileReportCubit>();
 
     return Scaffold(
       appBar: AppBar(
@@ -51,7 +52,10 @@ class _FileReportScreenState extends State<FileReportScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.picture_as_pdf, color: theme.iconTheme.color),
-            onPressed: () => {}, // Add PDF export functionality here
+            onPressed: () async  {
+              await fileReportCubit.getAllFileReportsPdf(context: context, fileId: widget.fileId);
+
+            },
           ),
         ],
       ),

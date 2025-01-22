@@ -492,7 +492,7 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                                 style: TextStyle(
                                                     color: Colors.green),
                                               ),
-                                           
+
                                             ],
                                           ),
                                         if (boardCubit

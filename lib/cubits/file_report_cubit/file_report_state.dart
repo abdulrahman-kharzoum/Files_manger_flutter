@@ -5,6 +5,8 @@ sealed class FileReportState {}
 
 final class FileReportInitial extends FileReportState {}
 final class FileReportLoadingState extends FileReportState {}
+final class FileReportPdfLoadingState extends FileReportState {}
+final class FileReportPdfSuccessState extends FileReportState {}
 final class FileReportFailureState extends FileReportState {
   final String errorMessage;
 
