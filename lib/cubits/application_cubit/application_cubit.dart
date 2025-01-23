@@ -293,6 +293,7 @@ class ApplicationCubit extends Cubit<ApplicationState> {
     required BuildContext context,
     required String filePath,
     required String fileName,
+    String? ext
   }) async {
     // emit(BoardCheckApplicationLoading());
     try {
@@ -313,6 +314,11 @@ class ApplicationCubit extends Cubit<ApplicationState> {
         );
 
         if (response.statusCode == 200) {
+          print("==============Ext $ext============");
+          if(ext!=null){
+
+            fileName = fileName+'.$ext';
+          }
 
           final bytes = response.data is String
               ? utf8.encode(response.data) // Convert String to List<int>

@@ -168,6 +168,7 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                 file: boardCubit.currentBoard.allFiles[currentIndex]
                     as FileModel);
             await applicationCubit.getFileApplicationFunction(
+                ext: boardCubit.currentBoard.allFiles[currentIndex].getApplicationExtension(),
                 context: context,
                 fileName: boardCubit.currentBoard.allFiles[currentIndex]
                     .getApplicationName(),
@@ -192,6 +193,7 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                   file: boardCubit.currentBoard.allFiles[indexx] as FileModel);
 
               await applicationCubit.getFileApplicationFunction(
+                ext: boardCubit.currentBoard.allFiles[indexx].getApplicationExtension(),
                   context: context,
                   fileName: boardCubit.currentBoard.allFiles[indexx]
                       .getApplicationName(),
@@ -676,8 +678,16 @@ class _ShowApplicationsDataState extends State<ShowApplicationsData> {
                                                       Icons.download_rounded),
                                                   title: Text('Download'),
                                                   onTap: () async {
+                                                    print("before sending ${boardCubit
+                                                        .currentBoard
+                                                        .allFiles[index]
+                                                        .getApplicationExtension()}");
                                                     await applicationCubit
                                                         .getFileApplicationFunction(
+                                                            ext: boardCubit
+                                                                .currentBoard
+                                                                .allFiles[index]
+                                                                .getApplicationExtension(),
                                                             context: context,
                                                             fileName: boardCubit
                                                                 .currentBoard

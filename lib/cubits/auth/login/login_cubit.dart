@@ -93,7 +93,13 @@ class LoginCubit extends Cubit<LoginState> {
         await CashNetwork.insertToCash(
             key: 'user_model', value: jsonEncode(userResponse.user));
         var user_model = await CashNetwork.getCashData(key: 'user_model');
+
         var uu = UserModel.fromJson(jsonDecode(user_model));
+        await CashNetwork.insertToCash(
+          key: 'token_model',
+          value: jsonEncode(userResponse.token),
+        );
+
         print("email :${uu.email}");
         print("username  :${uu.name}");
 

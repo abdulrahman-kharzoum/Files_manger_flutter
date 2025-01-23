@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:files_manager/core/functions/statics.dart';
 import 'package:files_manager/cubits/auth/delete_account/delete_account_cubit.dart';
 import 'package:files_manager/cubits/notification_cubit/notification_cubit.dart';
@@ -23,6 +25,7 @@ import 'package:files_manager/widgets/home/custom_appbar.dart';
 
 import '../../cubits/board_settings_cubit/board_settings_cubit.dart';
 import '../../cubits/leave_from_board_cubit/leave_from_board_cubit.dart';
+import '../../models/Api_user.dart';
 import '../../models/board_model.dart';
 import '../../theme/color.dart';
 import '../../widgets/theme_toggle_button.dart';
@@ -36,6 +39,9 @@ class BoardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var tokenModelJson =  CashNetwork.getCashData(key: 'token_model');
+    var tokenModel = TokenModel.fromJson(jsonDecode(tokenModelJson));
+
     final allBoardsCubit = context.read<AllBoardsCubit>();
     final addBoardCubit = context.read<AddBoardCubit>();
     final leaveFromBoardCubit = context.read<LeaveFromBoardCubit>();
@@ -106,7 +112,7 @@ class BoardScreen extends StatelessWidget {
         ),
         actions: [
           ThemeToggleButton(),
-          IconButton(
+         tokenModel.type == "super"? IconButton(
             tooltip: S.of(context).daily_report,
             onPressed: () {
               // Navigator.of(context).pushNamed('/diff_screen');
@@ -130,7 +136,7 @@ class BoardScreen extends StatelessWidget {
                   ? mediaQuery.width / 50
                   : mediaQuery.width / 15,
             ),
-          ),
+          ):SizedBox(),
           Statics.isPlatformDesktop
               ? Row(
                   children: [
