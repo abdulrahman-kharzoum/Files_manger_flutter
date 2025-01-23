@@ -40,7 +40,7 @@ class LoginCubit extends Cubit<LoginState> {
       final notificationCubit = NotificationCubit();
       final notificationService = NotificationService(notificationCubit);
 
-      notificationService.initialize();
+      // notificationService.initialize();
       String? fcmToken =
           "jsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdffffffffffffffffffffffffffffdsfffffffffjsdklfjsdklfjsdklfjsdklfjsdkljsdfffffffffffffffffffffffffffffffffffffffffffdsfffffffff";
       fcmToken  =  await notificationService.getToken();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubits/theme_cubit/app_theme_cubit.dart';
+import '../generated/l10n.dart';
 
 class ThemeToggleButton extends StatelessWidget {
   @override
@@ -22,6 +23,7 @@ class ThemeToggleButton extends StatelessWidget {
             ),
           ),
           child: IconButton(
+            tooltip: S.of(context).theme,
             icon: Icon(
               isDarkTheme ? Icons.dark_mode : Icons.light_mode,
               color: isDarkTheme ? Colors.white : Colors.black,

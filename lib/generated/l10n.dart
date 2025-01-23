@@ -6812,6 +6812,16 @@ class S {
     );
   }
 
+  /// `Change Theme`
+  String get theme {
+    return Intl.message(
+      'Change Theme',
+      name: 'theme',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `All versions`
   String get all_versions {
     return Intl.message(

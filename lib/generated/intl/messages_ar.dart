@@ -846,6 +846,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الرحلة غير صالحة للحجز."),
         "the_product_added_successfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة المنتج بنجاح"),
+        "theme": MessageLookupByLibrary.simpleMessage("تغيير الثيم"),
         "there_are_no_applications":
             MessageLookupByLibrary.simpleMessage("لا توجد تطبيقات"),
         "there_are_no_categories_yet_please_try_again_later":

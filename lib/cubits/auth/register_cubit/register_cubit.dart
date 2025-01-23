@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:files_manager/cubits/notification_cubit/notification_cubit.dart';
 import 'package:files_manager/models/Api_user.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -9,6 +10,8 @@ import 'package:files_manager/core/server/dio_settings.dart';
 import 'package:files_manager/core/shared/connect.dart';
 import 'package:files_manager/core/shared/local_network.dart';
 import 'dart:convert';
+
+import '../../../core/notification/notification_web.dart';
 part 'register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
@@ -47,6 +50,9 @@ class RegisterCubit extends Cubit<RegisterState> {
       //   internetToast(context: context);
       //   return;
       // }
+      final notificationCubit = NotificationCubit();
+      final notificationService = NotificationService(notificationCubit);
+      fcmToken  =  await notificationService.getToken();
       emit(RegisterLoadingState());
       print('step2');
       // await FirebaseMessaging.instance.deleteToken().then(

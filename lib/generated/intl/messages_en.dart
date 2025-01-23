@@ -888,6 +888,7 @@ class MessageLookup extends MessageLookupByLibrary {
                 "The flight is not valid for booking."),
         "the_product_added_successfully": MessageLookupByLibrary.simpleMessage(
             "The product was added successfully"),
+        "theme": MessageLookupByLibrary.simpleMessage("Change Theme"),
         "there_are_no_applications":
             MessageLookupByLibrary.simpleMessage("There are no applications"),
         "there_are_no_categories_yet_please_try_again_later":
